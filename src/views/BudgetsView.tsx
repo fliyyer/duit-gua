@@ -56,22 +56,22 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
   return (
     <div className="flex flex-col gap-4 pb-28">
       {/* Header Info Banner */}
-      <div className="rounded-xl bg-slate-900 text-white p-5 shadow-elevated border border-slate-800">
+      <Card className="p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-muted-foreground">
             Rencana Anggaran Bulan Ini
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-md bg-white/10 font-medium">
+          <span className="text-xs px-2 py-0.5 rounded-md bg-muted font-medium text-foreground">
             {state.budgets.length} Pos Aktif
           </span>
         </div>
 
         <div className="flex items-baseline justify-between mb-2">
           <div>
-            <p className="text-2xl font-extrabold tabular-nums">
+            <p className="text-2xl font-extrabold tabular-nums text-foreground">
               {formatRupiah(totalBudgetSpent)}
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               dari total pagu {formatRupiah(totalBudgetLimit)}
             </p>
           </div>
@@ -84,10 +84,10 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
         </div>
 
         {/* Overall Progress Bar */}
-        <div className="w-full bg-white/10 h-2.5 rounded-md overflow-hidden mb-4">
+        <div className="w-full bg-muted h-2 rounded-md overflow-hidden mb-4">
           <div
             className={`h-full rounded-md transition-all duration-300 ${
-              isOverallOver ? 'bg-rose-500' : overallPercent > 80 ? 'bg-amber-400' : 'bg-emerald-500'
+              isOverallOver ? 'bg-rose-500' : overallPercent > 80 ? 'bg-amber-400' : 'bg-primary'
             }`}
             style={{ width: `${overallPercent}%` }}
           />
@@ -95,12 +95,12 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
         <Button
           onClick={onOpenAddBudget}
-          className="w-full h-10 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs gap-1.5 shadow-sm"
+          className="w-full h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs gap-1.5 shadow-sm"
         >
           <Icon name="plus" className="w-4 h-4" />
           <span>Pasang Anggaran Pos Baru</span>
         </Button>
-      </div>
+      </Card>
 
       {/* List Pos Anggaran */}
       {budgetStats.length === 0 ? (

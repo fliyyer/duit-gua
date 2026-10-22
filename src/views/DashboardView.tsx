@@ -72,35 +72,40 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Top Banner on Desktop & Mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Kartu Saldo Utama (Main Hero Card) */}
-        <div className="lg:col-span-2 relative overflow-hidden rounded-xl bg-slate-900 text-white p-5 shadow-elevated border border-slate-800 flex flex-col justify-between">
-          <div className="relative z-10 flex flex-col gap-4">
+        <Card className="lg:col-span-2 p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm flex flex-col justify-between">
+          <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-                Total Saldo Semua Dompet
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-muted-foreground">
+                  Total Saldo Semua Dompet
+                </span>
+                <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                  {formatMonthIndo(currentMonth)}
+                </span>
+              </div>
               <button
                 onClick={() => onSelectTab('wallets')}
-                className="text-xs font-medium text-slate-300 hover:text-white flex items-center gap-1 bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-md transition-colors"
+                className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2.5 py-1 rounded-md transition-colors"
               >
-                <span>{state.wallets.length} Akun Dompet</span>
+                <span>{state.wallets.length} Akun</span>
                 <Icon name="chevron-right" className="w-3.5 h-3.5" />
               </button>
             </div>
 
             <div>
-              <div className="text-3xl sm:text-4xl font-extrabold tabular-nums tracking-tight text-white">
+              <div className="text-3xl sm:text-4xl font-extrabold tabular-nums tracking-tight text-foreground">
                 {formatRupiah(totalBalance)}
               </div>
-              <p className="text-xs text-slate-400 mt-1">
-                Aktif periode {formatMonthIndo(currentMonth)}
+              <p className="text-xs text-muted-foreground mt-1">
+                Saldo akumulasi seluruh rekening & uang tunai aktif
               </p>
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-white/10">
+            <div className="grid grid-cols-2 gap-2.5 pt-3 border-t">
               <Button
                 onClick={onOpenAddTransaction}
-                className="h-9 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold gap-1.5 shadow-sm"
+                className="h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold gap-1.5 shadow-sm"
               >
                 <Icon name="plus" className="w-4 h-4" />
                 <span>Catat Transaksi</span>
@@ -108,14 +113,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <Button
                 variant="outline"
                 onClick={onOpenTransfer}
-                className="h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border-slate-700 hover:border-slate-600 text-xs font-semibold gap-1.5"
+                className="h-9 rounded-lg text-xs font-semibold gap-1.5 hover:bg-accent"
               >
-                <Icon name="arrow-left-right" className="w-4 h-4" />
+                <Icon name="arrow-left-right" className="w-4 h-4 text-primary" />
                 <span>Pindah Saldo</span>
               </Button>
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Quick Shortcut Card to OTWSATUMILYAR Trackers */}
         <Card className="p-5 rounded-xl border bg-card flex flex-col justify-between shadow-sm space-y-3">

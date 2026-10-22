@@ -40,38 +40,38 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
   return (
     <div className="flex flex-col gap-4 pb-28">
       {/* Total Saldo Card */}
-      <div className="rounded-xl bg-slate-900 text-white p-5 shadow-elevated border border-slate-800">
+      <Card className="p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-muted-foreground">
             Total Kekayaan Bersih (Net Worth)
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-md bg-white/10 font-medium">
+          <span className="text-xs px-2 py-0.5 rounded-md bg-muted font-medium text-foreground">
             {state.wallets.length} Dompet
           </span>
         </div>
 
-        <p className="text-3xl font-extrabold tabular-nums tracking-tight mb-4 text-white">
+        <p className="text-3xl font-extrabold tabular-nums tracking-tight mb-4 text-foreground">
           {formatRupiah(totalBalance)}
         </p>
 
-        <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-white/10">
+        <div className="grid grid-cols-2 gap-2.5 pt-3 border-t">
           <Button
             variant="outline"
             onClick={onOpenTransfer}
-            className="h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border-slate-700 hover:border-slate-600 text-xs font-semibold gap-1.5"
+            className="h-9 rounded-lg text-xs font-semibold gap-1.5 hover:bg-accent"
           >
-            <Icon name="arrow-left-right" className="w-4 h-4" />
+            <Icon name="arrow-left-right" className="w-4 h-4 text-primary" />
             <span>Pindah Saldo</span>
           </Button>
           <Button
             onClick={onOpenAddWallet}
-            className="h-9 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold gap-1.5 shadow-sm"
+            className="h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold gap-1.5 shadow-sm"
           >
             <Icon name="plus" className="w-4 h-4" />
             <span>Tambah Dompet</span>
           </Button>
         </div>
-      </div>
+      </Card>
 
       {/* List of Wallets */}
       <div className="flex flex-col gap-3">
