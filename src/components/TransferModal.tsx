@@ -10,6 +10,14 @@ import {
 } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { DatePicker } from './ui/date-picker';
 
 interface TransferModalProps {
   isOpen: boolean;
@@ -145,18 +153,18 @@ export const TransferModal: React.FC<TransferModalProps> = ({
                 </span>
               )}
             </div>
-            <select
-              id="source-wallet"
-              value={fromWalletId}
-              onChange={(e) => setFromWalletId(e.target.value)}
-              className="w-full p-2.5 rounded-lg border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-ring"
-            >
-              {wallets.map((w) => (
-                <option key={w.id} value={w.id}>
-                  {w.name} ({formatRupiah(w.balance)})
-                </option>
-              ))}
-            </select>
+            <Select value={fromWalletId} onValueChange={setFromWalletId}>
+              <SelectTrigger id="source-wallet">
+                <SelectValue placeholder="Pilih dompet asal" />
+              </SelectTrigger>
+              <SelectContent>
+                {wallets.map((w) => (
+                  <SelectItem key={w.id} value={w.id}>
+                    {w.name} ({formatRupiah(w.balance)})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Dompet Tujuan */}
@@ -164,20 +172,20 @@ export const TransferModal: React.FC<TransferModalProps> = ({
             <label htmlFor="dest-wallet" className="block text-xs font-bold text-foreground mb-1.5">
               Ke Dompet (Tujuan)
             </label>
-            <select
-              id="dest-wallet"
-              value={toWalletId}
-              onChange={(e) => setToWalletId(e.target.value)}
-              className="w-full p-2.5 rounded-lg border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-ring"
-            >
-              {wallets
-                .filter((w) => w.id !== fromWalletId)
-                .map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name} ({formatRupiah(w.balance)})
-                  </option>
-                ))}
-            </select>
+            <Select value={toWalletId} onValueChange={setToWalletId}>
+              <SelectTrigger id="dest-wallet">
+                <SelectValue placeholder="Pilih dompet tujuan" />
+              </SelectTrigger>
+              <SelectContent>
+                {wallets
+                  .filter((w) => w.id !== fromWalletId)
+                  .map((w) => (
+                    <SelectItem key={w.id} value={w.id}>
+                      {w.name} ({formatRupiah(w.balance)})
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Tanggal */}
@@ -185,11 +193,10 @@ export const TransferModal: React.FC<TransferModalProps> = ({
             <label htmlFor="transfer-date" className="block text-xs font-bold text-foreground mb-1.5">
               Tanggal
             </label>
-            <Input
+            <DatePicker
               id="transfer-date"
-              type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={setDate}
             />
           </div>
 

@@ -105,3 +105,19 @@
 .dark ::-webkit-scrollbar-thumb {
   background: rgba(71, 85, 105, 0.5);
 }
+
+/* react-day-picker theme integration */
+.rdp-root {
+  --rdp-accent-color: hsl(var(--primary));
+  --rdp-accent-background-color: hsl(var(--primary) / 0.15);
+  --rdp-day-height: 2.25rem;
+  --rdp-day-width: 2.25rem;
+  --rdp-day_button-height: 2.25rem;
+  --rdp-day_button-width: 2.25rem;
+  --rdp-day_button-border-radius: 0.5rem;
+  --rdp-nav_button-height: 2rem;
+  --rdp-nav_button-width: 2rem;
+  font-family: inherit;
+  margin: 0 auto;
+}
+

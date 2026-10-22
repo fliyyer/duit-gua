@@ -9,6 +9,13 @@ import {
   DialogTitle,
 } from './ui/dialog';
 import { Button } from './ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
 
 interface BudgetModalProps {
   isOpen: boolean;
@@ -99,19 +106,22 @@ export const BudgetModal: React.FC<BudgetModalProps> = ({
             <label htmlFor="budget-category" className="block text-xs font-bold text-foreground mb-1.5">
               Pilih Kategori Pos Pengeluaran
             </label>
-            <select
-              id="budget-category"
+            <Select
               value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
+              onValueChange={setCategoryId}
               disabled={!!existingBudget}
-              className="w-full p-2.5 rounded-lg border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-ring disabled:opacity-60"
             >
-              {expenseCategories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger id="budget-category">
+                <SelectValue placeholder="Pilih kategori pos" />
+              </SelectTrigger>
+              <SelectContent>
+                {expenseCategories.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Batas Anggaran Bulanan */}

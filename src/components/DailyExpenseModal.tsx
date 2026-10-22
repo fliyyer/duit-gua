@@ -10,6 +10,14 @@ import {
 } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { DatePicker } from './ui/date-picker';
 
 interface DailyExpenseModalProps {
   isOpen: boolean;
@@ -122,29 +130,28 @@ export const DailyExpenseModal: React.FC<DailyExpenseModalProps> = ({
               <label htmlFor="de-date" className="block text-xs font-bold text-foreground mb-1.5">
                 Tanggal
               </label>
-              <Input
+              <DatePicker
                 id="de-date"
-                type="date"
                 value={date}
-                onChange={(e) => setDate(e.target.value)}
+                onChange={setDate}
               />
             </div>
             <div>
               <label htmlFor="de-wallet" className="block text-xs font-bold text-foreground mb-1.5">
                 Dompet / Sumber
               </label>
-              <select
-                id="de-wallet"
-                value={walletId}
-                onChange={(e) => setWalletId(e.target.value)}
-                className="w-full h-10 px-3 rounded-lg border bg-background text-foreground text-xs font-medium outline-none focus:ring-2 focus:ring-ring"
-              >
-                {wallets.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name} ({formatRupiah(w.balance)})
-                  </option>
-                ))}
-              </select>
+              <Select value={walletId} onValueChange={setWalletId}>
+                <SelectTrigger id="de-wallet">
+                  <SelectValue placeholder="Pilih dompet" />
+                </SelectTrigger>
+                <SelectContent>
+                  {wallets.map((w) => (
+                    <SelectItem key={w.id} value={w.id}>
+                      {w.name} ({formatRupiah(w.balance)})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

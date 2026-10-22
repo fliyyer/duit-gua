@@ -5,6 +5,13 @@ import { Icon } from '../components/Icon';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/ui/select';
 
 interface TransactionsViewProps {
   state: AppState;
@@ -148,28 +155,30 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
         </div>
 
         {/* Dompet & Bulan Selector */}
-        <div className="grid grid-cols-2 gap-2 pt-1 border-t text-xs">
-          <select
-            value={selectedWalletId}
-            onChange={(e) => setSelectedWalletId(e.target.value)}
-            className="p-2 rounded-lg bg-muted border-none text-foreground font-medium outline-none"
-          >
-            <option value="all">Semua Dompet</option>
-            {state.wallets.map((w) => (
-              <option key={w.id} value={w.id}>
-                {w.name}
-              </option>
-            ))}
-          </select>
+        <div className="grid grid-cols-2 gap-2 pt-2 border-t">
+          <Select value={selectedWalletId} onValueChange={setSelectedWalletId}>
+            <SelectTrigger className="h-9 text-xs bg-muted/60 border-input/40">
+              <SelectValue placeholder="Semua Dompet" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-xs">Semua Dompet</SelectItem>
+              {state.wallets.map((w) => (
+                <SelectItem key={w.id} value={w.id} className="text-xs">
+                  {w.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="p-2 rounded-lg bg-muted border-none text-foreground font-medium outline-none"
-          >
-            <option value="all">Semua Waktu</option>
-            <option value={getCurrentMonthString()}>Bulan Ini</option>
-          </select>
+          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+            <SelectTrigger className="h-9 text-xs bg-muted/60 border-input/40">
+              <SelectValue placeholder="Semua Waktu" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-xs">Semua Waktu</SelectItem>
+              <SelectItem value={getCurrentMonthString()} className="text-xs">Bulan Ini</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </Card>
 

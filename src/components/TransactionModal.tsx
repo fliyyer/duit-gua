@@ -10,6 +10,14 @@ import {
 } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { DatePicker } from './ui/date-picker';
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -247,18 +255,18 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   </span>
                 )}
               </div>
-              <select
-                id="wallet-select"
-                value={walletId}
-                onChange={(e) => setWalletId(e.target.value)}
-                className="w-full h-9 px-2 rounded-lg border bg-background text-foreground text-xs font-medium outline-none focus:ring-2 focus:ring-ring truncate"
-              >
-                {wallets.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name} ({formatRupiah(w.balance)})
-                  </option>
-                ))}
-              </select>
+              <Select value={walletId} onValueChange={setWalletId}>
+                <SelectTrigger id="wallet-select" className="h-9 text-xs px-2.5">
+                  <SelectValue placeholder="Pilih dompet" />
+                </SelectTrigger>
+                <SelectContent>
+                  {wallets.map((w) => (
+                    <SelectItem key={w.id} value={w.id} className="text-xs">
+                      {w.name} ({formatRupiah(w.balance)})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Tanggal Transaksi */}
@@ -277,12 +285,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   </button>
                 )}
               </div>
-              <Input
+              <DatePicker
                 id="tx-date"
-                type="date"
                 value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="h-9 text-xs px-2"
+                onChange={setDate}
+                className="h-9 text-xs px-2.5"
               />
             </div>
           </div>
