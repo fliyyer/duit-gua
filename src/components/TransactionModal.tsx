@@ -116,48 +116,46 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="pb-1">
+          <DialogTitle className="text-base font-bold">
             {editTransaction ? 'Ubah Catatan Transaksi' : 'Catat Transaksi Baru'}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 pt-0.5">
           {/* Type Toggle: Pengeluaran vs Pemasukan */}
-          <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted rounded-lg">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-muted rounded-lg">
             <button
               type="button"
               onClick={() => handleTypeChange('expense')}
-              className={`py-2 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-1.5 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 type === 'expense'
                   ? 'bg-rose-600 text-white shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon name="trending-down" className="w-4 h-4" />
+              <Icon name="trending-down" className="w-3.5 h-3.5" />
               <span>Pengeluaran</span>
             </button>
             <button
               type="button"
               onClick={() => handleTypeChange('income')}
-              className={`py-2 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-1.5 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 type === 'income'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon name="trending-up" className="w-4 h-4" />
+              <Icon name="trending-up" className="w-3.5 h-3.5" />
               <span>Pemasukan</span>
             </button>
           </div>
 
-          {/* Amount Display and Input */}
-          <div className="bg-muted/40 p-4 rounded-xl border flex flex-col items-center">
-            <label htmlFor="amount-input" className="text-xs font-medium text-muted-foreground mb-1">
-              Nominal {type === 'expense' ? 'Pengeluaran' : 'Pemasukan'}
-            </label>
-            <div className="w-full flex items-center justify-center">
+          {/* Compact Amount Input Box */}
+          <div className="bg-muted/40 p-3 rounded-xl border flex flex-col items-center gap-1.5">
+            <div className="w-full flex items-center justify-center gap-1.5">
+              <span className="text-sm font-bold text-muted-foreground">Rp</span>
               <input
                 id="amount-input"
                 type="text"
@@ -166,21 +164,20 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 onChange={handleAmountChange}
                 placeholder="0"
                 autoFocus
-                className={`w-full text-center text-2xl sm:text-3xl font-extrabold bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 ${
+                className={`w-full max-w-[240px] text-center text-2xl sm:text-3xl font-extrabold bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 ${
                   type === 'expense' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
                 }`}
               />
             </div>
-            <span className="text-xs text-muted-foreground mt-1 font-medium">Rupiah (IDR)</span>
 
-            {/* Quick buttons */}
-            <div className="flex flex-wrap justify-center gap-1.5 mt-3 pt-3 border-t w-full">
+            {/* Quick addition chips */}
+            <div className="flex flex-wrap justify-center gap-1 pt-1.5 border-t border-border/50 w-full">
               {[10000, 25000, 50000, 100000, 500000].map((val) => (
                 <button
                   key={val}
                   type="button"
                   onClick={() => handleQuickAdd(val)}
-                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-background border hover:bg-accent text-foreground transition-all active:scale-95"
+                  className="px-2 py-0.5 text-[11px] font-medium rounded-md bg-background border hover:bg-accent text-foreground transition-all active:scale-95"
                 >
                   +{val >= 1000 ? `${val / 1000}k` : val}
                 </button>
@@ -189,18 +186,25 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive flex items-center gap-2">
-              <Icon name="x" className="w-4 h-4 flex-shrink-0" />
+            <div className="p-2.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive flex items-center gap-2">
+              <Icon name="x" className="w-3.5 h-3.5 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Kategori Selector */}
+          {/* Kategori Selector as Compact Chips */}
           <div>
-            <label className="block text-xs font-bold text-foreground mb-2">
-              Pilih Kategori
-            </label>
-            <div className="grid grid-cols-3 gap-2 max-h-36 overflow-y-auto p-1">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs font-bold text-foreground">
+                Kategori
+              </label>
+              {categoryId && (
+                <span className="text-[11px] font-medium text-muted-foreground truncate max-w-[160px]">
+                  {filteredCategories.find((c) => c.id === categoryId)?.name}
+                </span>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-0.5">
               {filteredCategories.map((cat) => {
                 const isSelected = categoryId === cat.id;
                 return (
@@ -208,82 +212,84 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     key={cat.id}
                     type="button"
                     onClick={() => setCategoryId(cat.id)}
-                    className={`p-2.5 rounded-lg border text-left flex flex-col items-center justify-center gap-1.5 transition-all text-xs ${
+                    className={`px-2.5 py-1 rounded-lg border flex items-center gap-1.5 text-xs transition-all ${
                       isSelected
                         ? 'bg-foreground text-background border-foreground font-bold shadow-sm'
                         : 'bg-card border-border text-foreground hover:bg-accent'
                     }`}
                   >
                     <div
-                      className="w-7 h-7 rounded-md flex items-center justify-center"
+                      className="w-4 h-4 rounded flex items-center justify-center shrink-0"
                       style={{
-                        backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : `${cat.color}20`,
                         color: isSelected ? 'inherit' : cat.color,
                       }}
                     >
-                      <Icon name={cat.icon} className="w-4 h-4" />
+                      <Icon name={cat.icon} className="w-3.5 h-3.5" />
                     </div>
-                    <span className="truncate w-full text-center text-[11px]">{cat.name}</span>
+                    <span className="text-[11px] whitespace-nowrap">{cat.name}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Dompet / Rekening Selector */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="wallet-select" className="text-xs font-bold text-foreground">
-                Dompet / Rekening
-              </label>
-              {selectedWallet && (
-                <span className="text-[11px] text-muted-foreground tabular-nums">
-                  Saldo: {formatRupiah(selectedWallet.balance)}
-                </span>
-              )}
+          {/* Dompet & Tanggal (Side-by-Side 2 Columns) */}
+          <div className="grid grid-cols-2 gap-2.5">
+            {/* Dompet Selector */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="wallet-select" className="text-xs font-bold text-foreground">
+                  Dompet
+                </label>
+                {selectedWallet && (
+                  <span className="text-[10px] text-muted-foreground tabular-nums truncate">
+                    {formatRupiah(selectedWallet.balance)}
+                  </span>
+                )}
+              </div>
+              <select
+                id="wallet-select"
+                value={walletId}
+                onChange={(e) => setWalletId(e.target.value)}
+                className="w-full h-9 px-2 rounded-lg border bg-background text-foreground text-xs font-medium outline-none focus:ring-2 focus:ring-ring truncate"
+              >
+                {wallets.map((w) => (
+                  <option key={w.id} value={w.id}>
+                    {w.name} ({formatRupiah(w.balance)})
+                  </option>
+                ))}
+              </select>
             </div>
-            <select
-              id="wallet-select"
-              value={walletId}
-              onChange={(e) => setWalletId(e.target.value)}
-              className="w-full p-2.5 rounded-lg border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-ring"
-            >
-              {wallets.map((w) => (
-                <option key={w.id} value={w.id}>
-                  {w.name} (Sisa: {formatRupiah(w.balance)})
-                </option>
-              ))}
-            </select>
-          </div>
 
-          {/* Tanggal & Shortcut */}
-          <div>
-            <label htmlFor="tx-date" className="block text-xs font-bold text-foreground mb-1.5">
-              Tanggal Transaksi
-            </label>
-            <div className="flex gap-2">
+            {/* Tanggal Transaksi */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="tx-date" className="text-xs font-bold text-foreground">
+                  Tanggal
+                </label>
+                {date !== getTodayString() && (
+                  <button
+                    type="button"
+                    onClick={() => setDate(getTodayString())}
+                    className="text-[10px] text-primary hover:underline font-semibold"
+                  >
+                    Hari Ini
+                  </button>
+                )}
+              </div>
               <Input
                 id="tx-date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="flex-1"
+                className="h-9 text-xs px-2"
               />
-              <Button
-                type="button"
-                variant={date === getTodayString() ? "default" : "outline"}
-                size="sm"
-                onClick={() => setDate(getTodayString())}
-                className="rounded-lg px-3"
-              >
-                Hari Ini
-              </Button>
             </div>
           </div>
 
           {/* Catatan Tambahan */}
           <div>
-            <label htmlFor="tx-note" className="block text-xs font-bold text-foreground mb-1.5">
+            <label htmlFor="tx-note" className="block text-xs font-bold text-foreground mb-1">
               Catatan (Opsional)
             </label>
             <Input
@@ -291,23 +297,24 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Contoh: Makan siang bareng tim, Bensin, Gaji"
+              placeholder="Contoh: Makan siang, Bensin, Gaji"
+              className="h-9 text-xs"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-2 flex gap-2">
+          <div className="pt-1 flex gap-2">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1 rounded-lg"
+              className="flex-1 h-9 rounded-lg text-xs"
             >
               Batal
             </Button>
             <Button
               type="submit"
-              className="flex-[2] rounded-lg bg-primary text-primary-foreground font-semibold"
+              className="flex-[2] h-9 rounded-lg bg-primary text-primary-foreground text-xs font-semibold shadow-sm"
             >
               {editTransaction ? 'Simpan Perubahan' : 'Catat Transaksi'}
             </Button>
