@@ -132,10 +132,10 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {budgetStats.map((item) => (
             <Card key={item.id} className="p-4 flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0 flex-1">
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{
                       backgroundColor: `${item.categoryColor}20`,
                       color: item.categoryColor,
@@ -143,11 +143,11 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                   >
                     <Icon name={item.categoryIcon} className="w-4 h-4" />
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-foreground">
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-xs font-bold text-foreground truncate">
                       {item.categoryName}
                     </h4>
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground truncate">
                       {item.isOver ? (
                         <span className="text-rose-600 dark:text-rose-400 font-semibold">
                           Kelebihan {formatRupiah(Math.abs(item.remaining))}
@@ -159,7 +159,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <Badge
                     variant={item.isOver ? "destructive" : item.percent > 80 ? "warning" : "success"}
                     className="tabular-nums font-bold"
@@ -201,9 +201,9 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                 }
               />
 
-              <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground tabular-nums">
-                <span>{formatRupiah(item.spent)} terpakai</span>
-                <span>Pagu: {formatRupiah(item.monthlyLimit)}</span>
+              <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground tabular-nums gap-2">
+                <span className="truncate">{formatRupiah(item.spent)} terpakai</span>
+                <span className="shrink-0">Pagu: {formatRupiah(item.monthlyLimit)}</span>
               </div>
             </Card>
           ))}

@@ -164,35 +164,35 @@ export const CashflowBar: React.FC<CashflowBarProps> = ({ income, expense }) => 
   const isPositive = net >= 0;
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center justify-between mb-2">
+    <Card className="p-3.5 sm:p-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2.5">
         <span className="text-xs font-semibold text-muted-foreground">
           Arus Kas Periode Ini (Cashflow)
         </span>
         <Badge
           variant={isPositive ? "success" : "destructive"}
-          className="tabular-nums font-bold"
+          className="tabular-nums font-bold self-start sm:self-auto text-xs py-0.5 px-2"
         >
           {isPositive ? 'Surplus ' : 'Defisit '}
           {formatRupiah(net)}
         </Badge>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 pt-1">
-        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-          <p className="text-[11px] font-medium text-emerald-800 dark:text-emerald-300">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-1">
+        <div className="p-2.5 sm:p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 min-w-0">
+          <p className="text-[11px] font-medium text-emerald-800 dark:text-emerald-300 truncate">
             Total Pemasukan
           </p>
-          <p className="text-sm font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
+          <p className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 tabular-nums truncate">
             +{formatRupiah(income)}
           </p>
         </div>
 
-        <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20">
-          <p className="text-[11px] font-medium text-rose-800 dark:text-rose-300">
+        <div className="p-2.5 sm:p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 min-w-0">
+          <p className="text-[11px] font-medium text-rose-800 dark:text-rose-300 truncate">
             Total Pengeluaran
           </p>
-          <p className="text-sm font-bold text-rose-700 dark:text-rose-400 tabular-nums">
+          <p className="text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-400 tabular-nums truncate">
             -{formatRupiah(expense)}
           </p>
         </div>

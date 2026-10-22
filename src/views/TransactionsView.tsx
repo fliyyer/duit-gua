@@ -248,11 +248,11 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                     return (
                       <div
                         key={tx.id}
-                        className="py-2.5 flex items-center justify-between group hover:bg-muted/40 rounded-lg px-1 transition-colors"
+                        className="py-2.5 flex items-center justify-between group hover:bg-muted/40 rounded-lg px-2 transition-colors gap-2"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
                           <div
-                            className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                            className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                             style={{
                               backgroundColor: isTransfer
                                 ? 'rgba(14, 165, 233, 0.15)'
@@ -275,19 +275,19 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                               className="w-4 h-4"
                             />
                           </div>
-                          <div>
-                            <p className="text-xs font-bold text-foreground truncate max-w-[150px]">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-foreground truncate">
                               {isTransfer
                                 ? `Transfer: ${wallet?.name} -> ${toWallet?.name}`
                                 : category?.name || 'Transaksi'}
                             </p>
-                            <p className="text-[11px] text-muted-foreground truncate max-w-[150px]">
+                            <p className="text-[11px] text-muted-foreground truncate">
                               {tx.note || wallet?.name || 'Tanpa catatan'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
                           <div className="text-right">
                             <p
                               className={`text-xs font-bold tabular-nums ${
@@ -301,12 +301,12 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                               {isIncome ? '+' : isTransfer ? '' : '-'}
                               {formatRupiah(tx.amount)}
                             </p>
-                            <p className="text-[10px] text-muted-foreground font-medium">
+                            <p className="text-[10px] text-muted-foreground font-medium truncate max-w-[90px] sm:max-w-none">
                               {wallet?.name || 'Dompet'}
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                          <div className="flex items-center gap-0.5 opacity-90 group-hover:opacity-100 transition-opacity shrink-0">
                             <Button
                               variant="ghost"
                               size="icon"

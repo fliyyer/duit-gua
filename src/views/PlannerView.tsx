@@ -112,124 +112,124 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 w-full sm:w-auto">
           <Button
             onClick={() => onOpenAddPlan()}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-sm"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-sm px-2.5 sm:px-4"
           >
-            <Icon name="plus" className="w-4 h-4" />
-            <span>Tambah Pos Anggaran</span>
+            <Icon name="plus" className="w-4 h-4 shrink-0" />
+            <span className="truncate">Tambah Pos</span>
           </Button>
 
           <Button
             variant="outline"
             onClick={onNavigateToTrackers}
-            className="text-xs font-semibold rounded-lg gap-1.5"
+            className="text-xs font-semibold rounded-lg gap-1.5 px-2.5 sm:px-4"
           >
-            <Icon name="coffee" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Buka Tracker Harian</span>
+            <Icon name="coffee" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="truncate">Tracker Harian</span>
           </Button>
         </div>
       </div>
 
       {/* Top 6 Summary Cards (Sesuai Template Excel OTWSATUMILYAR) */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3">
         {/* 1. Pendapatan */}
-        <Card className="p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-muted-foreground">Pendapatan</span>
-            <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-xs font-medium text-muted-foreground truncate">Pendapatan</span>
+            <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
               <Icon name="trending-up" className="w-3.5 h-3.5" />
             </div>
           </div>
-          <p className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
+          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
             {formatRupiah(totalIncome)}
           </p>
-          <span className="text-[10px] text-muted-foreground mt-1">Bulan {formatMonthIndo(currentMonth)}</span>
+          <span className="text-[10px] text-muted-foreground mt-1 truncate">Bulan {formatMonthIndo(currentMonth)}</span>
         </Card>
 
         {/* 2. Uang yang Ditabung */}
-        <Card className="p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-muted-foreground">Ditabung</span>
-            <div className="w-6 h-6 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-xs font-medium text-muted-foreground truncate">Ditabung</span>
+            <div className="w-6 h-6 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
               <Icon name="target" className="w-3.5 h-3.5" />
             </div>
           </div>
-          <p className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
+          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
             {formatRupiah(totalSavingActual)}
           </p>
-          <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1">
-            <span>Rencana:</span>
-            <span className="font-semibold text-foreground">{formatRupiah(totalSavingPlan)}</span>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-muted-foreground mt-1 gap-0.5">
+            <span className="shrink-0">Rencana:</span>
+            <span className="font-semibold text-foreground tabular-nums truncate">{formatRupiah(totalSavingPlan)}</span>
           </div>
         </Card>
 
         {/* 3. Total Pengeluaran */}
-        <Card className="p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-muted-foreground">Total Pengeluaran</span>
-            <div className="w-6 h-6 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-xs font-medium text-muted-foreground truncate">Total Pengeluaran</span>
+            <div className="w-6 h-6 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
               <Icon name="trending-down" className="w-3.5 h-3.5" />
             </div>
           </div>
-          <p className="text-base sm:text-lg font-extrabold text-rose-600 dark:text-rose-400 tabular-nums">
+          <p className="text-sm sm:text-base md:text-lg font-extrabold text-rose-600 dark:text-rose-400 tabular-nums truncate">
             {formatRupiah(totalExpenseActual)}
           </p>
-          <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1">
-            <span>Rencana:</span>
-            <span className="font-semibold text-foreground">{formatRupiah(totalExpensePlan)}</span>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-muted-foreground mt-1 gap-0.5">
+            <span className="shrink-0">Rencana:</span>
+            <span className="font-semibold text-foreground tabular-nums truncate">{formatRupiah(totalExpensePlan)}</span>
           </div>
         </Card>
 
         {/* 4. Sisa Uang Bulan Ini */}
-        <Card className={`p-4 rounded-xl border flex flex-col justify-between shadow-sm ${
+        <Card className={`p-3 sm:p-4 rounded-xl border flex flex-col justify-between shadow-sm min-w-0 ${
           sisaUangActual >= 0
             ? 'bg-emerald-500/5 border-emerald-500/20'
             : 'bg-rose-500/5 border-rose-500/20'
         }`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-muted-foreground">Sisa Uang</span>
-            <Badge variant={sisaUangActual >= 0 ? 'success' : 'destructive'} className="text-[10px] py-0 px-1.5">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2 gap-1">
+            <span className="text-xs font-medium text-muted-foreground truncate">Sisa Uang</span>
+            <Badge variant={sisaUangActual >= 0 ? 'success' : 'destructive'} className="text-[10px] py-0 px-1.5 shrink-0">
               {sisaUangActual >= 0 ? 'Surplus' : 'Defisit'}
             </Badge>
           </div>
-          <p className={`text-base sm:text-lg font-extrabold tabular-nums ${
+          <p className={`text-sm sm:text-base md:text-lg font-extrabold tabular-nums truncate ${
             sisaUangActual >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
           }`}>
             {formatRupiah(sisaUangActual)}
           </p>
-          <span className="text-[10px] text-muted-foreground mt-1">Setelah tabungan & belanja</span>
+          <span className="text-[10px] text-muted-foreground mt-1 truncate">Setelah tabungan & belanja</span>
         </Card>
 
         {/* 5. Pengeluaran Sehari-Hari */}
-        <Card className="p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-muted-foreground">Sehari-Hari</span>
-            <div className="w-6 h-6 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-xs font-medium text-muted-foreground truncate">Sehari-Hari</span>
+            <div className="w-6 h-6 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
               <Icon name="shopping-bag" className="w-3.5 h-3.5" />
             </div>
           </div>
-          <p className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
+          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
             {formatRupiah(totalDailyExpenseActual)}
           </p>
-          <span className="text-[10px] text-muted-foreground mt-1">
+          <span className="text-[10px] text-muted-foreground mt-1 truncate">
             {monthDailyExpenses.length} transaksi bulan ini
           </span>
         </Card>
 
         {/* 6. Biaya Jajan & Nongkrong */}
-        <Card className="p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-muted-foreground">Jajan & Nongkrong</span>
-            <div className="w-6 h-6 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-xs font-medium text-muted-foreground truncate">Jajan & Kopi</span>
+            <div className="w-6 h-6 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
               <Icon name="coffee" className="w-3.5 h-3.5" />
             </div>
           </div>
-          <p className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
+          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
             {formatRupiah(totalJajanActual)}
           </p>
-          <span className="text-[10px] text-muted-foreground mt-1">
+          <span className="text-[10px] text-muted-foreground mt-1 truncate">
             {monthJajanItems.length} kali jajan bulan ini
           </span>
         </Card>
@@ -266,28 +266,28 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               incomeItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
                       {item.incomeType || 'Utama'}
                     </Badge>
-                    <span className="text-xs font-semibold text-foreground">{item.title}</span>
+                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <span className="text-xs font-bold text-foreground tabular-nums">
                       {formatRupiah(item.actualAmount || item.plannedAmount)}
                     </span>
                     <button
                       onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Edit"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                       title="Hapus"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />
@@ -338,12 +338,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               savingItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
                     <Badge
                       variant="outline"
-                      className={`text-[10px] font-semibold py-0.5 px-2 ${
+                      className={`text-[10px] font-semibold py-0.5 px-2 shrink-0 ${
                         item.priority === 'High'
                           ? 'border-rose-500/40 text-rose-600 dark:text-rose-400'
                           : 'border-amber-500/40 text-amber-600 dark:text-amber-400'
@@ -351,28 +351,28 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     >
                       {item.priority}
                     </Badge>
-                    <span className="text-xs font-semibold text-foreground">{item.title}</span>
+                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
                       <span className="text-xs font-bold text-foreground tabular-nums block">
                         {formatRupiah(item.actualAmount)}
                       </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums">
+                      <span className="text-[10px] text-muted-foreground tabular-nums block">
                         Target: {formatRupiah(item.plannedAmount)}
                       </span>
                     </div>
                     <button
                       onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Edit"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                       title="Hapus"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />
@@ -423,34 +423,34 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               fixedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
                       {item.priority}
                     </Badge>
-                    <span className="text-xs font-semibold text-foreground">{item.title}</span>
+                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
                       <span className="text-xs font-bold text-foreground tabular-nums block">
                         {formatRupiah(item.actualAmount)}
                       </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums">
+                      <span className="text-[10px] text-muted-foreground tabular-nums block">
                         Target: {formatRupiah(item.plannedAmount)}
                       </span>
                     </div>
                     <button
                       onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Edit"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                       title="Hapus"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />
@@ -505,34 +505,34 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               return (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
                       {item.priority}
                     </Badge>
-                    <div>
-                      <span className="text-xs font-semibold text-foreground block">{item.title}</span>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-xs font-semibold text-foreground block truncate">{item.title}</span>
                       {(isJajan || isSehari) && (
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block truncate">
                           Sinkron otomatis dari tracker
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
                       <span className="text-xs font-bold text-foreground tabular-nums block">
                         {formatRupiah(displayActual)}
                       </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums">
+                      <span className="text-[10px] text-muted-foreground tabular-nums block">
                         Target: {formatRupiah(item.plannedAmount)}
                       </span>
                     </div>
                     <button
                       onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Edit"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
@@ -540,7 +540,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     {!item.isAutoCalculated && (
                       <button
                         onClick={() => onDeletePlan(item.id)}
-                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                         title="Hapus"
                       >
                         <Icon name="trash" className="w-3.5 h-3.5" />
@@ -592,34 +592,34 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               subDebtItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
                       {item.priority}
                     </Badge>
-                    <span className="text-xs font-semibold text-foreground">{item.title}</span>
+                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
                       <span className="text-xs font-bold text-foreground tabular-nums block">
                         {formatRupiah(item.actualAmount)}
                       </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums">
+                      <span className="text-[10px] text-muted-foreground tabular-nums block">
                         Target: {formatRupiah(item.plannedAmount)}
                       </span>
                     </div>
                     <button
                       onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Edit"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                       title="Hapus"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />

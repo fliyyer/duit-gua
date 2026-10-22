@@ -20,29 +20,29 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   return (
     <header className="lg:hidden sticky top-0 z-30 w-full bg-background/95 backdrop-blur-md border-b transition-colors">
-      <div className="w-full px-4 h-16 flex items-center justify-between">
+      <div className="w-full px-3.5 sm:px-4 h-16 flex items-center justify-between gap-2">
         {/* App Title & Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shadow-sm">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-1">
+          <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shadow-sm shrink-0">
             <Icon name="wallet" className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <h1 className="text-base font-bold text-foreground leading-tight">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <h1 className="text-base font-bold text-foreground leading-tight shrink-0">
                 Duit Gua
               </h1>
-              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
+              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md truncate max-w-[100px] sm:max-w-none">
                 {formatMonthIndo(selectedMonth)}
               </span>
             </div>
-            <p className="text-[11px] font-medium text-muted-foreground tabular-nums">
+            <p className="text-[11px] font-medium text-muted-foreground tabular-nums truncate">
               Saldo: <span className="font-semibold text-emerald-600 dark:text-emerald-400">{formatRupiah(totalBalance)}</span>
             </p>
           </div>
         </div>
 
         {/* Action Buttons: Dark Mode & Settings */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 shrink-0">
           <Button
             variant="ghost"
             size="icon"

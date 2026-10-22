@@ -166,7 +166,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 onChange={handleAmountChange}
                 placeholder="0"
                 autoFocus
-                className={`w-full text-center text-3xl font-extrabold bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 ${
+                className={`w-full text-center text-2xl sm:text-3xl font-extrabold bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 ${
                   type === 'expense' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
                 }`}
               />

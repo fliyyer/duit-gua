@@ -50,7 +50,7 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
           </span>
         </div>
 
-        <p className="text-3xl font-extrabold tabular-nums tracking-tight mb-4 text-foreground">
+        <p className="text-2xl sm:text-3xl font-extrabold tabular-nums tracking-tight mb-4 text-foreground break-words">
           {formatRupiah(totalBalance)}
         </p>
 
@@ -88,26 +88,26 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
 
             return (
             <Card key={wallet.id} className="p-4 flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0"
                     style={{ backgroundColor: wallet.color || '#059669' }}
                   >
                     <Icon name="wallet" className="w-5 h-5" />
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-foreground">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-bold text-foreground truncate">
                       {wallet.name}
                     </h3>
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground truncate">
                       {getWalletTypeLabel(wallet.type)}
                       {wallet.accountNumber ? ` • ${wallet.accountNumber}` : ''}
                     </p>
                   </div>
                 </div>
 
-                <div className="text-right">
+                <div className="text-right shrink-0">
                   <p className="text-sm font-bold text-foreground tabular-nums">
                     {formatRupiah(wallet.balance)}
                   </p>

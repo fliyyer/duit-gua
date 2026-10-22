@@ -121,7 +121,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({
               }}
               placeholder="0"
               autoFocus
-              className="w-full text-center text-3xl font-extrabold text-foreground bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40"
+              className="w-full text-center text-2xl sm:text-3xl font-extrabold text-foreground bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40"
             />
             <span className="text-xs text-muted-foreground mt-1">Rupiah (IDR)</span>
           </div>

@@ -92,71 +92,71 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 w-full sm:w-auto">
           <Button
             onClick={onOpenAddDailyExpense}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-sm"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-sm px-2.5 sm:px-4"
           >
-            <Icon name="plus" className="w-4 h-4" />
-            <span>+ Belanja Harian</span>
+            <Icon name="plus" className="w-4 h-4 shrink-0" />
+            <span className="truncate">Belanja Harian</span>
           </Button>
 
           <Button
             onClick={onOpenAddJajan}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs rounded-lg gap-1.5 shadow-sm"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs rounded-lg gap-1.5 shadow-sm px-2.5 sm:px-4"
           >
-            <Icon name="coffee" className="w-4 h-4" />
-            <span>+ Jajan / Nongkrong</span>
+            <Icon name="coffee" className="w-4 h-4 shrink-0" />
+            <span className="truncate">Jajan / Kopi</span>
           </Button>
         </div>
       </div>
 
       {/* Top Combined Summary Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="p-4 rounded-xl border bg-card shadow-sm">
-          <span className="text-[11px] font-medium text-muted-foreground block mb-1">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card shadow-sm min-w-0">
+          <span className="text-[11px] font-medium text-muted-foreground block mb-1 truncate">
             Pengeluaran Sehari-Hari
           </span>
-          <p className="text-base sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 tabular-nums">
+          <p className="text-sm sm:text-lg md:text-xl font-extrabold text-amber-600 dark:text-amber-400 tabular-nums truncate">
             {formatRupiah(totalDailyExpense)}
           </p>
-          <span className="text-[10px] text-muted-foreground mt-0.5 block">
+          <span className="text-[10px] text-muted-foreground mt-0.5 block truncate">
             Bulan {formatMonthIndo(currentMonth)}
           </span>
         </Card>
 
-        <Card className="p-4 rounded-xl border bg-card shadow-sm">
-          <span className="text-[11px] font-medium text-muted-foreground block mb-1">
-            Jumlah Transaksi Sehari-Hari
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card shadow-sm min-w-0">
+          <span className="text-[11px] font-medium text-muted-foreground block mb-1 truncate">
+            Transaksi Sehari-Hari
           </span>
-          <p className="text-base sm:text-xl font-extrabold text-foreground tabular-nums">
+          <p className="text-sm sm:text-lg md:text-xl font-extrabold text-foreground tabular-nums truncate">
             {totalDailyCount} Transaksi
           </p>
-          <span className="text-[10px] text-muted-foreground mt-0.5 block">
+          <span className="text-[10px] text-muted-foreground mt-0.5 block truncate">
             Frekuensi belanja harian
           </span>
         </Card>
 
-        <Card className="p-4 rounded-xl border bg-card shadow-sm">
-          <span className="text-[11px] font-medium text-muted-foreground block mb-1">
-            Total Biaya Jajan & Nongkrong
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card shadow-sm min-w-0">
+          <span className="text-[11px] font-medium text-muted-foreground block mb-1 truncate">
+            Biaya Jajan & Nongkrong
           </span>
-          <p className="text-base sm:text-xl font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">
+          <p className="text-sm sm:text-lg md:text-xl font-extrabold text-purple-600 dark:text-purple-400 tabular-nums truncate">
             {formatRupiah(totalJajanAmount)}
           </p>
-          <span className="text-[10px] text-muted-foreground mt-0.5 block">
+          <span className="text-[10px] text-muted-foreground mt-0.5 block truncate">
             Kopi, makan luar, hiburan
           </span>
         </Card>
 
-        <Card className="p-4 rounded-xl border bg-card shadow-sm">
-          <span className="text-[11px] font-medium text-muted-foreground block mb-1">
-            Frekuensi Jajan & Nongkrong
+        <Card className="p-3 sm:p-4 rounded-xl border bg-card shadow-sm min-w-0">
+          <span className="text-[11px] font-medium text-muted-foreground block mb-1 truncate">
+            Frekuensi Jajan
           </span>
-          <p className="text-base sm:text-xl font-extrabold text-foreground tabular-nums">
+          <p className="text-sm sm:text-lg md:text-xl font-extrabold text-foreground tabular-nums truncate">
             {totalJajanCount} Kali Jajan
           </p>
-          <span className="text-[10px] text-muted-foreground mt-0.5 block">
+          <span className="text-[10px] text-muted-foreground mt-0.5 block truncate">
             Total sesi nongkrong
           </span>
         </Card>
@@ -221,40 +221,40 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
               dailyExpenses.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-foreground">
+                  <div className="space-y-0.5 min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-xs font-bold text-foreground truncate">
                         {item.title}
                       </span>
-                      <Badge variant="outline" className="text-[10px] py-0 px-1.5 font-medium">
+                      <Badge variant="outline" className="text-[10px] py-0 px-1.5 font-medium shrink-0">
                         {item.quantity}x
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                      <span>{formatDateIndo(item.date)}</span>
-                      <span>•</span>
-                      <span>@ {formatRupiah(item.price)}</span>
-                      <span>•</span>
-                      <span className="font-medium text-foreground/80">{getWalletName(item.walletId)}</span>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+                      <span className="shrink-0">{formatDateIndo(item.date)}</span>
+                      <span className="shrink-0">•</span>
+                      <span className="shrink-0">@ {formatRupiah(item.price)}</span>
+                      <span className="shrink-0">•</span>
+                      <span className="font-medium text-foreground/80 truncate max-w-[120px] sm:max-w-none">{getWalletName(item.walletId)}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <span className="text-xs font-extrabold text-foreground tabular-nums">
                       {formatRupiah(item.total)}
                     </span>
                     <button
                       onClick={() => onEditDailyExpense(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Ubah"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => onDeleteDailyExpense(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                       title="Hapus"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />
@@ -274,7 +274,7 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
         >
           <div className="flex items-center justify-between border-b pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
                 <Icon name="coffee" className="w-4 h-4" />
               </div>
               <div>
@@ -290,7 +290,7 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
             <Button
               size="sm"
               onClick={onOpenAddJajan}
-              className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg gap-1"
+              className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg gap-1 shrink-0"
             >
               <Icon name="plus" className="w-3.5 h-3.5" />
               <span>Tambah</span>
@@ -307,39 +307,39 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
               jajanItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
                 >
-                  <div className="space-y-0.5">
-                    <span className="text-xs font-bold text-foreground block">
+                  <div className="space-y-0.5 min-w-0 flex-1">
+                    <span className="text-xs font-bold text-foreground block truncate">
                       {item.title}
                     </span>
-                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                      <span>{formatDateIndo(item.date)}</span>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+                      <span className="shrink-0">{formatDateIndo(item.date)}</span>
                       {item.note && (
                         <>
-                          <span>•</span>
-                          <span className="italic text-foreground/70">{item.note}</span>
+                          <span className="shrink-0">•</span>
+                          <span className="italic text-foreground/70 truncate max-w-[120px] sm:max-w-none">{item.note}</span>
                         </>
                       )}
-                      <span>•</span>
-                      <span className="font-medium text-foreground/80">{getWalletName(item.walletId)}</span>
+                      <span className="shrink-0">•</span>
+                      <span className="font-medium text-foreground/80 truncate max-w-[120px] sm:max-w-none">{getWalletName(item.walletId)}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <span className="text-xs font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">
                       {formatRupiah(item.amount)}
                     </span>
                     <button
                       onClick={() => onEditJajan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
                       title="Ubah"
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => onDeleteJajan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
                       title="Hapus"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />
