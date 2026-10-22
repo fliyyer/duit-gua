@@ -2,9 +2,10 @@ import React from 'react';
 import { AppState, TabType, Transaction } from '../types';
 import { formatRupiah, getCurrentMonthString, formatMonthIndo } from '../utils/currency';
 import { Icon } from '../components/Icon';
-import { CategoryExpenseChart, CashflowBar } from '../components/Charts';
+import { CategoryExpenseChart } from '../components/Charts';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
 
 interface DashboardViewProps {
@@ -37,6 +38,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const totalExpense = monthTransactions
     .filter((t) => t.type === 'expense')
     .reduce((sum, t) => sum + t.amount, 0);
+
+  const netCashflow = totalIncome - totalExpense;
 
   const totalBalance = state.wallets.reduce((sum, w) => sum + w.balance, 0);
 
@@ -71,53 +74,129 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     <div className="flex flex-col gap-6 pb-20">
       {/* Top Banner on Desktop & Mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Kartu Saldo Utama (Main Hero Card) */}
-        <Card className="lg:col-span-2 p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm flex flex-col justify-between">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-muted-foreground">
-                  Total Saldo Semua Dompet
+        {/* Kartu Saldo Utama & Arus Kas Terintegrasi (Combined Hero Banner) */}
+        <Card className="lg:col-span-2 p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm flex flex-col justify-between gap-4">
+          {/* Header Row: Title, Month Badge, and Wallets Link */}
+          <div className="flex items-center justify-between border-b pb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-muted-foreground">
+                Ringkasan Saldo & Arus Kas
+              </span>
+              <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                {formatMonthIndo(currentMonth)}
+              </span>
+            </div>
+            <button
+              onClick={() => onSelectTab('wallets')}
+              className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2.5 py-1 rounded-md transition-colors"
+            >
+              <span>{state.wallets.length} Akun</span>
+              <Icon name="chevron-right" className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* 2-Column Responsive Body: Left = Saldo & Quick Actions, Right = Cashflow Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 items-stretch">
+            {/* Left Side: Saldo Utama & Action Buttons */}
+            <div className="flex flex-col justify-between gap-3">
+              <div>
+                <span className="text-[11px] font-medium text-muted-foreground block mb-0.5">
+                  Total Saldo Seluruh Dompet
                 </span>
-                <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                  {formatMonthIndo(currentMonth)}
-                </span>
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tabular-nums tracking-tight text-foreground break-words">
+                  {formatRupiah(totalBalance)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Akumulasi kas tunai, rekening bank & dompet digital aktif
+                </p>
               </div>
-              <button
-                onClick={() => onSelectTab('wallets')}
-                className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2.5 py-1 rounded-md transition-colors"
-              >
-                <span>{state.wallets.length} Akun</span>
-                <Icon name="chevron-right" className="w-3.5 h-3.5" />
-              </button>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <Button
+                  onClick={onOpenAddTransaction}
+                  className="h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold gap-1.5 shadow-sm px-2 sm:px-3"
+                >
+                  <Icon name="plus" className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Catat Transaksi</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={onOpenTransfer}
+                  className="h-9 rounded-lg text-xs font-semibold gap-1.5 hover:bg-accent px-2 sm:px-3"
+                >
+                  <Icon name="arrow-left-right" className="w-4 h-4 text-primary shrink-0" />
+                  <span className="truncate">Pindah Saldo</span>
+                </Button>
+              </div>
             </div>
 
-            <div>
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tabular-nums tracking-tight text-foreground break-words">
-                {formatRupiah(totalBalance)}
+            {/* Right Side: Integrated Cashflow (Arus Kas Periode Ini) */}
+            <div className="p-3.5 rounded-xl border bg-muted/30 dark:bg-muted/15 flex flex-col justify-between gap-2.5">
+              <div className="flex items-center justify-between gap-1.5">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                    <Icon name="trending-up" className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs font-bold text-foreground truncate">
+                    Arus Kas (Cashflow)
+                  </span>
+                </div>
+                <Badge
+                  variant={netCashflow >= 0 ? "success" : "destructive"}
+                  className="tabular-nums font-bold text-[11px] py-0.5 px-2 shrink-0"
+                >
+                  {netCashflow >= 0 ? 'Surplus ' : 'Defisit '}
+                  {formatRupiah(netCashflow)}
+                </Badge>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Saldo akumulasi seluruh rekening & uang tunai aktif
-              </p>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-2.5 pt-3 border-t">
-              <Button
-                onClick={onOpenAddTransaction}
-                className="h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold gap-1.5 shadow-sm"
-              >
-                <Icon name="plus" className="w-4 h-4" />
-                <span>Catat Transaksi</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={onOpenTransfer}
-                className="h-9 rounded-lg text-xs font-semibold gap-1.5 hover:bg-accent"
-              >
-                <Icon name="arrow-left-right" className="w-4 h-4 text-primary" />
-                <span>Pindah Saldo</span>
-              </Button>
+              {/* Pemasukan vs Pengeluaran mini cards */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 min-w-0">
+                  <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300 mb-0.5">
+                    <Icon name="trending-up" className="w-3 h-3 shrink-0" />
+                    <span className="truncate">Pemasukan</span>
+                  </div>
+                  <p className="text-xs sm:text-sm font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums truncate">
+                    +{formatRupiah(totalIncome)}
+                  </p>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 min-w-0">
+                  <div className="flex items-center gap-1 text-[10px] font-semibold text-rose-800 dark:text-rose-300 mb-0.5">
+                    <Icon name="trending-down" className="w-3 h-3 shrink-0" />
+                    <span className="truncate">Pengeluaran</span>
+                  </div>
+                  <p className="text-xs sm:text-sm font-extrabold text-rose-700 dark:text-rose-400 tabular-nums truncate">
+                    -{formatRupiah(totalExpense)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Progress bar visual ratio */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground font-medium">
+                  <span>Rasio Pengeluaran</span>
+                  <span className="tabular-nums font-semibold text-foreground">
+                    {totalIncome > 0 ? Math.min(100, Math.round((totalExpense / totalIncome) * 100)) : (totalExpense > 0 ? 100 : 0)}%
+                  </span>
+                </div>
+                <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      totalExpense > totalIncome
+                        ? 'bg-rose-500'
+                        : (totalIncome > 0 && totalExpense / totalIncome > 0.8)
+                        ? 'bg-amber-500'
+                        : 'bg-emerald-500'
+                    }`}
+                    style={{
+                      width: `${totalIncome > 0 ? Math.min(100, Math.round((totalExpense / totalIncome) * 100)) : (totalExpense > 0 ? 100 : 0)}%`,
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </Card>
@@ -192,9 +271,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom Kiri / Utama (2 Kolom di Desktop) */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Ringkasan Arus Kas */}
-          <CashflowBar income={totalIncome} expense={totalExpense} />
-
           {/* Grafik Proporsi Pengeluaran */}
           <CategoryExpenseChart
             transactions={monthTransactions}
