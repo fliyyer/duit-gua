@@ -3,16 +3,6 @@ import { AppState } from '../types';
 import { Icon } from '../components/Icon';
 import { exportDataAsJSON, importDataFromJSON, clearAllData } from '../utils/storage';
 import {
-  getDefaultTransactions,
-  getDefaultBudgets,
-  getDefaultPlans,
-  getDefaultDailyExpenses,
-  getDefaultJajanItems,
-  DEFAULT_WALLETS,
-  DEFAULT_CATEGORIES,
-} from '../data/defaultData';
-import { getCurrentMonthString } from '../utils/currency';
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -21,6 +11,9 @@ import {
 import { Button } from '../components/ui/button';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 
+import { useAuth } from '../context/AuthContext';
+import { usePwaInstall } from '../hooks/usePwaInstall';
+
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -28,6 +21,8 @@ interface SettingsModalProps {
   onUpdateState: (newState: AppState) => void;
   onToggleTheme: () => void;
   onShowToast: (message: string, type?: 'success' | 'error' | 'info') => void;
+  syncStatus?: 'idle' | 'syncing' | 'synced' | 'error';
+  onManualSync?: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -37,8 +32,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onUpdateState,
   onToggleTheme,
   onShowToast,
+  syncStatus = 'idle',
+  onManualSync,
 }) => {
+  const { user, logout } = useAuth();
+  const { isInstalled, installApp } = usePwaInstall();
+  const [showIosTip, setShowIosTip] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleInstallApp = async () => {
+    const res = await installApp();
+    if (res === 'ios') {
+      setShowIosTip((prev) => !prev);
+    } else if (res === 'accepted') {
+      onShowToast('Aplikasi berhasil dipasang di layar utama!', 'success');
+    }
+  };
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     title: string;
@@ -86,34 +95,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     e.target.value = '';
   };
 
-  const handleResetToDemo = () => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Muat Data Sampel Demo',
-      description: 'Muat kembali data sampel demo? Seluruh transaksi dan anggaran saat ini akan diganti dengan data sampel bawaan.',
-      confirmText: 'Ya, Muat Sampel',
-      cancelText: 'Batal',
-      variant: 'default',
-      onConfirm: () => {
-        const currentMonth = getCurrentMonthString();
-        const demoState: AppState = {
-          wallets: DEFAULT_WALLETS,
-          categories: DEFAULT_CATEGORIES,
-          transactions: getDefaultTransactions(),
-          budgets: getDefaultBudgets(),
-          plans: getDefaultPlans(currentMonth),
-          dailyExpenses: getDefaultDailyExpenses(currentMonth),
-          jajanItems: getDefaultJajanItems(currentMonth),
-          selectedMonth: currentMonth,
-          theme: state.theme,
-        };
-        onUpdateState(demoState);
-        onShowToast('Data sampel demo berhasil dimuat.', 'info');
-        onClose();
-      },
-    });
-  };
-
   const handleClearAll = () => {
     setConfirmDialog({
       isOpen: true,
@@ -144,6 +125,110 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </DialogHeader>
 
         <div className="flex flex-col gap-4 sm:gap-5 pt-1">
+          {/* Akun Pengguna */}
+          {user && (
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-bold text-foreground">
+                Akun Terhubung
+              </span>
+              <div className="p-3.5 rounded-xl bg-card border-2 border-border shadow-brutal-xs space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-border flex items-center justify-center text-xs font-extrabold uppercase shrink-0">
+                      {user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-extrabold text-foreground truncate">
+                        {user.displayName || 'Pengguna'}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground truncate">
+                        {user.isGuest ? 'Mode Tamu (Lokal)' : user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      onClose();
+                      logout();
+                      onShowToast('Berhasil keluar dari akun.', 'info');
+                    }}
+                    className="text-xs font-bold text-destructive hover:bg-destructive/10 shrink-0"
+                  >
+                    Keluar
+                  </Button>
+                </div>
+
+                {!user.isGuest && onManualSync && (
+                  <div className="pt-2 border-t border-border/60 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                      <span className={`w-2 h-2 rounded-full ${
+                        syncStatus === 'syncing' ? 'bg-amber-500 animate-ping' : syncStatus === 'synced' ? 'bg-emerald-500' : 'bg-muted-foreground'
+                      }`} />
+                      <span>{syncStatus === 'syncing' ? 'Menyimpan...' : syncStatus === 'synced' ? 'Cloud Terkoneksi' : 'Firebase Ready'}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={onManualSync}
+                      disabled={syncStatus === 'syncing'}
+                      className="px-2.5 py-1 text-[11px] font-bold rounded-lg border-2 border-border bg-card hover:bg-accent flex items-center gap-1.5 shadow-brutal-xs disabled:opacity-50"
+                    >
+                      <Icon name="refresh" className={`w-3 h-3 ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
+                      <span>Cadangkan Sekarang</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Aplikasi Layar Utama (PWA) */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-bold text-foreground">
+              Aplikasi Layar Utama (PWA)
+            </span>
+            <div className="p-3.5 rounded-xl bg-card border-2 border-border shadow-brutal-xs flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <img
+                  src="/pwa-192x192.png"
+                  alt="Duit Gua"
+                  className="w-8 h-8 rounded-lg border-2 border-border shrink-0 object-cover"
+                />
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold text-foreground truncate">
+                    {isInstalled ? 'Aplikasi Terpasang' : 'Pasang di Layar HP'}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground truncate">
+                    {isInstalled ? 'Berjalan sebagai aplikasi mandiri' : 'Akses cepat tanpa browser'}
+                  </p>
+                </div>
+              </div>
+              {!isInstalled ? (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleInstallApp}
+                  className="text-xs font-extrabold shadow-brutal-xs shrink-0"
+                >
+                  <Icon name="download" className="w-3.5 h-3.5 mr-1" />
+                  <span>Pasang</span>
+                </Button>
+              ) : (
+                <span className="px-2.5 py-1 text-[11px] font-extrabold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-2 border-emerald-500/30 rounded-lg shrink-0">
+                  Terpasang ✓
+                </span>
+              )}
+            </div>
+            {showIosTip && (
+              <div className="p-3 bg-muted border-2 border-border rounded-xl text-xs space-y-1.5 text-foreground animate-in fade-in">
+                <p className="font-extrabold text-xs">Cara instal di iPhone (Safari):</p>
+                <p className="text-[11px] text-muted-foreground">1. Ketuk tombol <strong>Bagikan / Share</strong> (ikon kotak dengan panah atas di bilah bawah Safari).</p>
+                <p className="text-[11px] text-muted-foreground">2. Pilih <strong>Tambahkan ke Layar Utama</strong> (<em>Add to Home Screen</em>).</p>
+              </div>
+            )}
+          </div>
+
           {/* Tampilan Tema */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-bold text-foreground">
@@ -229,16 +314,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </span>
             <div className="flex flex-col gap-2">
               <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleResetToDemo}
-                className="w-full gap-1.5 font-bold shadow-brutal-xs border-2 border-border"
-              >
-                <Icon name="refresh" className="w-4 h-4" />
-                <span>Muat Ulang Data Sampel Demo</span>
-              </Button>
-
-              <Button
                 variant="destructive"
                 size="sm"
                 onClick={handleClearAll}
@@ -252,7 +327,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Info App */}
           <div className="pt-1 text-center text-[11px] text-muted-foreground">
-            <p className="font-semibold text-foreground">Duit Gua • v0.1.0 (shadcn/ui)</p>
+            <p className="font-semibold text-foreground">Duit Gua • v1.0.0</p>
             <p>Aplikasi Pengelola Keuangan Pribadi Mobile First</p>
           </div>
         </div>

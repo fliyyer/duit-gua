@@ -1,58 +1,65 @@
-# Duit Gua: Aplikasi Pengelola Keuangan Pribadi (Mobile First)
+<p align="center">
+  <img src="public/pwa-192x192.png" width="96" height="96" alt="Logo Duit Gua" style="border-radius: 20px;" />
+</p>
 
-Aplikasi pencatatan dan pengelolaan keuangan pribadi modern dengan antarmuka mobile-first, responsif, dan offline-first (seluruh data tersimpan aman di browser perangkat).
+<h1 align="center">Duit Gua (v1.0.0)</h1>
 
-## Fitur Utama
+<p align="center">
+  <strong>Aplikasi Pengelola Keuangan Pribadi Mobile-First</strong><br />
+  Pencatatan keuangan harian cerdas, anti bokek, bertema <em>Soft Neo-Brutalism</em>, dan dapat diinstal langsung di HP (PWA).
+</p>
 
-1. **Ringkasan Saldo & Arus Kas (Dashboard)**
-   - Total kekayaan bersih dari semua akun/dompet.
-   - Perhitungan otomatis pemasukan, pengeluaran, dan surplus/defisit bulan berjalan.
-   - Grafik proporsi pengeluaran per kategori (SVG Donut Chart) dengan persentase real-time.
-   - Riwayat transaksi terkini dengan akses cepat ubah dan hapus.
+<p align="center">
+  <img src="docs/preview-mobile.png" width="340" alt="Pratinjau Duit Gua Mobile" style="border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);" />
+</p>
 
-2. **Pencatatan Transaksi Cepat (+)**
-   - Tombol mengambang (Floating Action Button) di navigasi bawah untuk catat pengeluaran dan pemasukan seketika.
-   - Input nominal Rupiah otomatis dengan tombol pintas nominal (+10k, +50k, +100k, +500k).
-   - Pemilihan kategori dengan ikon semantik dan warna penanda.
-   - Pemilihan dompet/rekening sumber pembayaran.
-   - Catatan transaksi opsional dan tanggal fleksibel.
+---
 
-3. **Pindah Saldo Antar Dompet (Transfer)**
-   - Pindahkan saldo antar akun (misal: Tarik tunai dari BCA ke Dompet Tunai, atau Top Up GoPay dari Rekening Bank).
-   - Validasi saldo mencukupi dan pencatatan riwayat transfer otomatis.
+## Fitur Utama V1
 
-4. **Daftar & Penyaringan Transaksi**
-   - Pencarian berdasarkan catatan, nama kategori, atau nama dompet.
-   - Filter tipe: Semua, Pengeluaran, Pemasukan, Transfer.
-   - Filter per dompet dan periode bulan.
-   - Pengelompokan daftar transaksi berdasarkan tanggal (Hari ini, Kemarin, dst).
+- **Tampilan Mobile-First & Soft Neo-Brutalism**: Desain modern dengan garis tegas, bayangan taktil, dan navigasi bawah yang nyaman untuk pengoperasian satu tangan di HP. Mendukung Mode Terang & Gelap.
+- **PWA (Bisa Diinstal di HP)**: Dapat dipasang langsung di layar utama smartphone (Android & iPhone) tanpa perlu download dari Play Store/App Store. Berjalan mulus secara *standalone*.
+- **Login Fleksibel**: Mendukung **Masuk dengan Google**, Email & Password, atau langsung coba lewat **Mode Tamu (Offline)**.
+- **Sinkronisasi Cloud & Offline-First**: Data tersimpan otomatis di HP secara offline dan tersinkron ke cloud Firebase saat online sehingga aman diakses multi-perangkat.
+- **Multi-Dompet & Transfer**: Kelola berbagai jenis rekening (Tunai, Bank, E-Wallet) dan catat transfer antar dompet dengan validasi saldo otomatis.
+- **Catat Transaksi Cepat**: Input pengeluaran & pemasukan dengan tombol hitung nominal cepat (+10k, +50k, +100k) dan filter kategori.
+- **Pelacak Jajan & Nongkrong**: Form praktis khusus untuk mencatat jajan santai, ngopi, dan makan harian agar pengeluaran kecil tidak boncos.
+- **Perencanaan Bulanan & Batas Anggaran**: Atur alokasi pos tabungan dan batas maksimal pengeluaran per kategori dengan indikator warna status anggaran.
+- **Cadangkan Data**: Ekspor & impor data transaksi kapan saja dalam format JSON.
 
-5. **Perencanaan & Batas Anggaran (Budgeting)**
-   - Pasang batas maksimal pengeluaran bulanan per kategori.
-   - Indikator progres visual dengan peringatan warna (Hijau: Aman, Kuning: Mendekati limit, Merah: Overbudget).
+---
 
-6. **Manajemen Dompet & Akun Keuangan**
-   - Tambah berbagai jenis akun: Uang Tunai, Rekening Bank, E-Wallet, dan Investasi.
-   - Penyesuaian saldo awal dan warna aksen kartu.
+## Cara Instal di HP (PWA)
 
-7. **Cadangkan & Pulihkan Data (Backup & Restore)**
-   - Ekspor data transaksi ke file format JSON.
-   - Impor kembali file cadangan JSON kapan saja.
-   - Pilihan reset ke data demo atau bersihkan data untuk mulai dari awal.
+1. **Android (Chrome)**: Buka website aplikasi di browser Chrome HP, ketuk tombol **"Instal Aplikasi"** pada banner yang muncul di layar (atau buka menu titik tiga > pilih *Tambahkan ke Layar Utama / Instal aplikasi*).
+2. **iPhone / iPad (Safari)**: Buka website di browser Safari, ketuk tombol **Bagikan (Share [↑])** di bagian bawah, lalu pilih **Tambahkan ke Layar Utama** (*Add to Home Screen*).
 
-8. **Aksesibilitas & Tema**
-   - Dukungan penuh Mode Gelap (Dark Mode) dan Mode Terang (Light Mode).
-   - Navigasi keyboard (Tab, Enter, Escape).
-   - Desain ramah sentuhan (touch-friendly) dengan area sentuh minimal 44px.
+---
 
-## Cara Menjalankan Aplikasi
+## Konfigurasi Singkat (.env)
+
+Buat file `.env` di folder utama aplikasi dengan data dari Firebase Console Anda:
+
+```env
+VITE_FIREBASE_API_KEY=AIzaSy...
+VITE_FIREBASE_AUTH_DOMAIN=project-id.firebaseapp.com
+VITE_FIREBASE_DATABASE_URL=https://project-id-default-rtdb.firebaseio.com
+VITE_FIREBASE_PROJECT_ID=project-id
+VITE_FIREBASE_STORAGE_BUCKET=project-id.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
+VITE_FIREBASE_APP_ID=1:000000000000:web:abcdef123456
+```
+
+---
+
+## Perintah Cepat
 
 ```bash
-# Jalankan development server
+# Menjalankan aplikasi secara lokal
 npm run dev
 
-# Atau jalankan build produksi
+# Kompilasi untuk naik ke produksi
 npm run build
-npm run preview
 ```
-Aplikasi dapat diakses melalui browser di `http://localhost:3000` atau `http://localhost:3001`.
+
+Hasil build produksi otomatis siap saji di folder `dist/` untuk di-upload ke Vercel, Netlify, atau Firebase Hosting.

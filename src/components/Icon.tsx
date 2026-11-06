@@ -38,7 +38,17 @@ export type IconName =
   | 'settings'
   | 'refresh'
   | 'info'
-  | 'bell';
+  | 'bell'
+  | 'mail'
+  | 'lock'
+  | 'user'
+  | 'eye'
+  | 'eye-off'
+  | 'log-out'
+  | 'log-in'
+  | 'google'
+  | 'sparkles'
+  | 'shield-check';
 
 interface IconProps {
   name: IconName | string;
@@ -358,6 +368,93 @@ export const Icon: React.FC<IconProps> = ({ name, className = 'w-5 h-5', size = 
         <svg {...props}>
           <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
           <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+        </svg>
+      );
+    case 'mail':
+      return (
+        <svg {...props}>
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      );
+    case 'lock':
+      return (
+        <svg {...props}>
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+      );
+    case 'user':
+      return (
+        <svg {...props}>
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      );
+    case 'eye':
+      return (
+        <svg {...props}>
+          <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      );
+    case 'eye-off':
+      return (
+        <svg {...props}>
+          <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+          <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+          <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+          <path d="m2 2 20 20" />
+        </svg>
+      );
+    case 'log-out':
+      return (
+        <svg {...props}>
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" x2="9" y1="12" y2="12" />
+        </svg>
+      );
+    case 'log-in':
+      return (
+        <svg {...props}>
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+          <polyline points="10 17 15 12 10 7" />
+          <line x1="15" x2="3" y1="12" y2="12" />
+        </svg>
+      );
+    case 'sparkles':
+      return (
+        <svg {...props}>
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+        </svg>
+      );
+    case 'shield-check':
+      return (
+        <svg {...props}>
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      );
+    case 'google':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" className={className}>
+          <path
+            fill="#EA4335"
+            d="M12 5c1.54 0 2.93.56 4.02 1.48l3.02-3.02C17.21 1.8 14.77 1 12 1 7.42 1 3.51 3.61 1.63 7.37l3.7 2.87C6.22 7.39 8.87 5 12 5z"
+          />
+          <path
+            fill="#4285F4"
+            d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.7 2.87c2.16-2 3.72-4.94 3.72-8.69z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.33 14.76c-.24-.72-.38-1.49-.38-2.28 0-.79.14-1.56.38-2.28L1.63 7.37C.59 9.45 0 11.66 0 14s.59 4.55 1.63 6.63l3.7-2.87z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c3.24 0 5.95-1.08 7.93-2.91l-3.7-2.87c-1.07.73-2.44 1.16-4.23 1.16-3.13 0-5.78-2.39-6.67-5.24L1.63 16C3.51 19.79 7.42 23 12 23z"
+          />
         </svg>
       );
     default:

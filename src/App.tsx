@@ -10,7 +10,7 @@ import {
   Transaction,
   Wallet,
 } from './types';
-import { getInitialState, saveState } from './utils/storage';
+import { getInitialState, saveState, clearAllData } from './utils/storage';
 import { Navbar } from './components/Navbar';
 import { BottomNav } from './components/BottomNav';
 import { DesktopSidebar } from './components/DesktopSidebar';
@@ -31,11 +31,18 @@ import { BudgetsView } from './views/BudgetsView';
 import { WalletsView } from './views/WalletsView';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { getCurrentMonthString } from './utils/currency';
+import { useAuth } from './context/AuthContext';
+import { AuthView } from './views/AuthView';
+import { Icon } from './components/Icon';
+import { fetchUserFinancialState, saveUserFinancialState } from './services/firebaseSync';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 
 export const App: React.FC = () => {
+  const { user, loading, logout } = useAuth();
   const [state, setState] = useState<AppState>(() => getInitialState());
   const [currentTab, setCurrentTab] = useState<TabType>('dashboard');
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
 
   // Modals state
   const [isTxModalOpen, setIsTxModalOpen] = useState(false);
@@ -81,6 +88,70 @@ export const App: React.FC = () => {
   useEffect(() => {
     saveState(state);
   }, [state]);
+
+  // Initial cloud hydration when user logs in
+  useEffect(() => {
+    if (user && !user.isGuest) {
+      let isCancelled = false;
+      setSyncStatus('syncing');
+      fetchUserFinancialState(user.uid)
+        .then((cloudData) => {
+          if (isCancelled) return;
+          if (cloudData) {
+            // Auto clean legacy sample data (like tx-1 or dummy plans)
+            const hasLegacySample =
+              (Array.isArray(cloudData.transactions) &&
+                cloudData.transactions.some((t: any) => t.id === 'tx-1' || t.id === 'tx-2')) ||
+              (Array.isArray(cloudData.wallets) &&
+                cloudData.wallets.some((w: any) => w.id === 'w-bca' && w.balance === 5200000));
+
+            if (hasLegacySample) {
+              const cleanState = clearAllData();
+              setState(cleanState);
+              saveUserFinancialState(user.uid, cleanState);
+              setSyncStatus('synced');
+            } else {
+              setState(cloudData);
+              setSyncStatus('synced');
+            }
+          } else {
+            // New user on cloud: seed with clean empty state
+            const cleanState = clearAllData();
+            setState(cleanState);
+            saveUserFinancialState(user.uid, cleanState).then(() => {
+              if (!isCancelled) setSyncStatus('synced');
+            });
+          }
+        })
+        .catch(() => {
+          if (!isCancelled) setSyncStatus('idle');
+        });
+      return () => {
+        isCancelled = true;
+      };
+    } else {
+      setSyncStatus('idle');
+    }
+  }, [user?.uid]);
+
+  // Debounced Auto-sync to Firebase Cloud
+  useEffect(() => {
+    if (!user || user.isGuest) return;
+    const timer = setTimeout(async () => {
+      setSyncStatus('syncing');
+      try {
+        const success = await saveUserFinancialState(user.uid, state);
+        if (success) {
+          setSyncStatus('synced');
+        } else {
+          setSyncStatus('idle');
+        }
+      } catch {
+        setSyncStatus('error');
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [state, user?.uid]);
 
   // Sync theme to HTML class
   useEffect(() => {
@@ -661,12 +732,66 @@ export const App: React.FC = () => {
     });
   };
 
+  const handleLogout = () => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Keluar dari Akun?',
+      description: 'Anda akan keluar dari sesi ini. Data Anda tetap tersimpan dan dapat diakses kembali.',
+      confirmText: 'Ya, Keluar',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: async () => {
+        await logout();
+        showToast('Berhasil keluar dari akun.', 'info');
+      },
+    });
+  };
+
+  const handleManualCloudSync = async () => {
+    if (!user || user.isGuest) {
+      showToast('Mode Tamu hanya tersimpan di browser lokal.', 'info');
+      return;
+    }
+    setSyncStatus('syncing');
+    try {
+      const ok = await saveUserFinancialState(user.uid, state);
+      if (ok) {
+        setSyncStatus('synced');
+        showToast('Data berhasil dicadangkan ke Firebase Cloud!', 'success');
+      } else {
+        setSyncStatus('idle');
+        showToast('Sinkronisasi cloud selesai.', 'info');
+      }
+    } catch (err: any) {
+      setSyncStatus('error');
+      showToast('Gagal mencadangkan ke cloud: ' + (err.message || 'Error'), 'error');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#fdfbf7] dark:bg-background flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-2xl bg-primary text-primary-foreground border-2 border-border shadow-brutal-sm flex items-center justify-center animate-bounce mb-3">
+          <Icon name="wallet" className="w-6 h-6" />
+        </div>
+        <p className="text-xs font-bold text-muted-foreground animate-pulse">Memuat Duit Gua...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthView />;
+  }
+
   const totalBalance = state.wallets.reduce((sum, w) => sum + w.balance, 0);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row w-full transition-colors">
       {/* Toast Notification Container */}
       <ToastContainer toasts={toasts} onDismiss={handleDismissToast} />
+
+      {/* PWA Install Prompt Banner for Mobile */}
+      <PwaInstallPrompt />
 
       {/* Desktop Sidebar (Only visible on lg: screens) */}
       <DesktopSidebar
@@ -677,6 +802,9 @@ export const App: React.FC = () => {
         theme={state.theme}
         onToggleTheme={handleToggleTheme}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        user={user}
+        onLogout={handleLogout}
+        syncStatus={syncStatus}
         onOpenAddTransaction={() => {
           setEditingTx(null);
           setIsTxModalOpen(true);
@@ -700,6 +828,9 @@ export const App: React.FC = () => {
           theme={state.theme}
           onToggleTheme={handleToggleTheme}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          user={user}
+          onLogout={handleLogout}
+          syncStatus={syncStatus}
         />
 
         {/* Content Container (Full width responsive) */}
@@ -915,6 +1046,8 @@ export const App: React.FC = () => {
         onUpdateState={setState}
         onToggleTheme={handleToggleTheme}
         onShowToast={showToast}
+        syncStatus={syncStatus}
+        onManualSync={handleManualCloudSync}
       />
 
       {/* Global Confirm Dialog */}

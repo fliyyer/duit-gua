@@ -31,17 +31,6 @@ interface JajanModalProps {
   defaultMonth: string;
 }
 
-const QUICK_JAJAN_NAMES = [
-  'Kopi Kenangan',
-  'Gorengan Sore',
-  'Ayam Geprek',
-  'Richeese Factory',
-  'Billiard',
-  'Nongkrong Cafe',
-  'Sushi Box',
-  'Top Up Games',
-];
-
 export const JajanModal: React.FC<JajanModalProps> = ({
   isOpen,
   onClose,
@@ -171,23 +160,9 @@ export const JajanModal: React.FC<JajanModalProps> = ({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Contoh: Sushi Tei, Kopi Kenangan, Richeese"
+              placeholder="Contoh: Kopi, Makanan, Jajan Sore"
               autoFocus
             />
-
-            {/* Quick chips */}
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {QUICK_JAJAN_NAMES.slice(0, 4).map((name) => (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => setTitle(name)}
-                  className="px-2 py-1 text-[11px] font-bold rounded-lg border-2 border-border/40 hover:border-border bg-card shadow-brutal-xs hover:bg-accent text-foreground transition-all active:translate-x-[1px] active:translate-y-[1px]"
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Nominal Uang yang Dihabiskan */}

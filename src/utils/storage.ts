@@ -2,15 +2,10 @@ import { AppState } from '../types';
 import {
   DEFAULT_CATEGORIES,
   DEFAULT_WALLETS,
-  getDefaultTransactions,
-  getDefaultBudgets,
-  getDefaultPlans,
-  getDefaultDailyExpenses,
-  getDefaultJajanItems,
 } from '../data/defaultData';
 import { getCurrentMonthString } from './currency';
 
-const STORAGE_KEY = 'duit_gua_data_v2';
+const STORAGE_KEY = 'duit_gua_data_v3';
 
 export function getInitialState(): AppState {
   const currentMonth = getCurrentMonthString();
@@ -19,27 +14,31 @@ export function getInitialState(): AppState {
     return {
       wallets: DEFAULT_WALLETS,
       categories: DEFAULT_CATEGORIES,
-      transactions: getDefaultTransactions(),
-      budgets: getDefaultBudgets(),
-      plans: getDefaultPlans(currentMonth),
-      dailyExpenses: getDefaultDailyExpenses(currentMonth),
-      jajanItems: getDefaultJajanItems(currentMonth),
+      transactions: [],
+      budgets: [],
+      plans: [],
+      dailyExpenses: [],
+      jajanItems: [],
       selectedMonth: currentMonth,
       theme: 'light',
     };
   }
 
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('duit_gua_data_v1');
+    const raw =
+      localStorage.getItem(STORAGE_KEY) ||
+      localStorage.getItem('duit_gua_data_v2') ||
+      localStorage.getItem('duit_gua_data_v1');
+
     if (!raw) {
       const initial: AppState = {
         wallets: DEFAULT_WALLETS,
         categories: DEFAULT_CATEGORIES,
-        transactions: getDefaultTransactions(),
-        budgets: getDefaultBudgets(),
-        plans: getDefaultPlans(currentMonth),
-        dailyExpenses: getDefaultDailyExpenses(currentMonth),
-        jajanItems: getDefaultJajanItems(currentMonth),
+        transactions: [],
+        budgets: [],
+        plans: [],
+        dailyExpenses: [],
+        jajanItems: [],
         selectedMonth: currentMonth,
         theme: 'light',
       };
@@ -48,14 +47,25 @@ export function getInitialState(): AppState {
     }
 
     const parsed = JSON.parse(raw);
+
+    // Auto-clean any legacy sample/dummy data from previous versions
+    const hasLegacySampleData =
+      (Array.isArray(parsed.transactions) && parsed.transactions.some((t: any) => t.id === 'tx-1' || t.id === 'tx-2')) ||
+      (Array.isArray(parsed.wallets) && parsed.wallets.some((w: any) => w.id === 'w-bca' && w.balance === 5200000)) ||
+      (Array.isArray(parsed.plans) && parsed.plans.some((p: any) => p.id === 'plan-inc-1'));
+
+    if (hasLegacySampleData) {
+      return clearAllData();
+    }
+
     return {
       wallets: Array.isArray(parsed.wallets) && parsed.wallets.length > 0 ? parsed.wallets : DEFAULT_WALLETS,
-      categories: Array.isArray(parsed.categories) ? parsed.categories : DEFAULT_CATEGORIES,
-      transactions: Array.isArray(parsed.transactions) ? parsed.transactions : getDefaultTransactions(),
-      budgets: Array.isArray(parsed.budgets) ? parsed.budgets : getDefaultBudgets(),
-      plans: Array.isArray(parsed.plans) && parsed.plans.length > 0 ? parsed.plans : getDefaultPlans(currentMonth),
-      dailyExpenses: Array.isArray(parsed.dailyExpenses) && parsed.dailyExpenses.length > 0 ? parsed.dailyExpenses : getDefaultDailyExpenses(currentMonth),
-      jajanItems: Array.isArray(parsed.jajanItems) && parsed.jajanItems.length > 0 ? parsed.jajanItems : getDefaultJajanItems(currentMonth),
+      categories: Array.isArray(parsed.categories) && parsed.categories.length > 0 ? parsed.categories : DEFAULT_CATEGORIES,
+      transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
+      budgets: Array.isArray(parsed.budgets) ? parsed.budgets : [],
+      plans: Array.isArray(parsed.plans) ? parsed.plans : [],
+      dailyExpenses: Array.isArray(parsed.dailyExpenses) ? parsed.dailyExpenses : [],
+      jajanItems: Array.isArray(parsed.jajanItems) ? parsed.jajanItems : [],
       selectedMonth: parsed.selectedMonth || currentMonth,
       theme: parsed.theme === 'dark' ? 'dark' : 'light',
     };
@@ -64,11 +74,11 @@ export function getInitialState(): AppState {
     return {
       wallets: DEFAULT_WALLETS,
       categories: DEFAULT_CATEGORIES,
-      transactions: getDefaultTransactions(),
-      budgets: getDefaultBudgets(),
-      plans: getDefaultPlans(currentMonth),
-      dailyExpenses: getDefaultDailyExpenses(currentMonth),
-      jajanItems: getDefaultJajanItems(currentMonth),
+      transactions: [],
+      budgets: [],
+      plans: [],
+      dailyExpenses: [],
+      jajanItems: [],
       selectedMonth: currentMonth,
       theme: 'light',
     };
@@ -109,7 +119,7 @@ export function importDataFromJSON(jsonText: string): AppState | null {
       categories: Array.isArray(parsed.categories) ? parsed.categories : DEFAULT_CATEGORIES,
       transactions: parsed.transactions,
       budgets: Array.isArray(parsed.budgets) ? parsed.budgets : [],
-      plans: Array.isArray(parsed.plans) ? parsed.plans : getDefaultPlans(currentMonth),
+      plans: Array.isArray(parsed.plans) ? parsed.plans : [],
       dailyExpenses: Array.isArray(parsed.dailyExpenses) ? parsed.dailyExpenses : [],
       jajanItems: Array.isArray(parsed.jajanItems) ? parsed.jajanItems : [],
       selectedMonth: parsed.selectedMonth || currentMonth,
@@ -127,10 +137,7 @@ export function importDataFromJSON(jsonText: string): AppState | null {
 export function clearAllData(): AppState {
   const currentMonth = getCurrentMonthString();
   const blankState: AppState = {
-    wallets: [
-      { id: 'w-cash', name: 'Dompet Tunai', type: 'cash', balance: 0, color: '#059669' },
-      { id: 'w-bca', name: 'Rekening Bank', type: 'bank', balance: 0, color: '#1d4ed8' },
-    ],
+    wallets: DEFAULT_WALLETS,
     categories: DEFAULT_CATEGORIES,
     transactions: [],
     budgets: [],

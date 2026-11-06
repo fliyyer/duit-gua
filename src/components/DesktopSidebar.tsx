@@ -4,6 +4,8 @@ import { Icon } from './Icon';
 import { formatRupiah, formatMonthIndo } from '../utils/currency';
 import { Button } from './ui/button';
 
+import { AuthUser } from '../context/AuthContext';
+
 interface DesktopSidebarProps {
   currentTab: TabType;
   onSelectTab: (tab: TabType) => void;
@@ -15,6 +17,9 @@ interface DesktopSidebarProps {
   onOpenAddTransaction: () => void;
   onOpenAddDailyExpense: () => void;
   onOpenAddJajan: () => void;
+  user?: AuthUser | null;
+  onLogout?: () => void;
+  syncStatus?: 'idle' | 'syncing' | 'synced' | 'error';
 }
 
 export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
@@ -28,6 +33,9 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   onOpenAddTransaction,
   onOpenAddDailyExpense,
   onOpenAddJajan,
+  user,
+  onLogout,
+  syncStatus = 'idle',
 }) => {
   const navItems: { id: TabType; label: string; icon: string; badge?: string }[] = [
     { id: 'dashboard', label: 'Ringkasan', icon: 'pie-chart' },
@@ -153,6 +161,45 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
           <Icon name="settings" className="w-4 h-4" />
           <span>Pengaturan & Backup Data</span>
         </button>
+
+        {user && (
+          <div className="pt-2 border-t-2 border-border/60 flex items-center justify-between gap-2 px-1">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-border flex items-center justify-center text-xs font-extrabold uppercase shrink-0">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="Avatar" className="w-full h-full rounded-lg object-cover" />
+                ) : (
+                  user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-extrabold text-foreground truncate leading-tight">
+                  {user.displayName || 'Pengguna'}
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                    syncStatus === 'syncing' ? 'bg-amber-500 animate-ping' : syncStatus === 'synced' ? 'bg-emerald-500' : 'bg-muted-foreground/50'
+                  }`} />
+                  <p className="text-[10px] text-muted-foreground truncate leading-tight">
+                    {syncStatus === 'syncing' ? 'Menyinkronkan...' : user.isGuest ? 'Mode Tamu (Lokal)' : 'Firebase Cloud'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="w-7 h-7 rounded-lg border-2 border-border/80 bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive flex items-center justify-center shrink-0 active:translate-x-[1px] active:translate-y-[1px] transition-all"
+                title="Keluar Akun"
+                aria-label="Keluar Akun"
+              >
+                <Icon name="log-out" className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </aside>
   );
