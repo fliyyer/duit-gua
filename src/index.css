@@ -4,35 +4,36 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 40 25% 97.5%; /* Warm paper cream canvas */
+    --foreground: 222.2 84% 5%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222.2 84% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222.2 84% 5%;
 
-    --primary: 158 64% 32%; /* Emerald 700 */
-    --primary-foreground: 210 40% 98%;
+    --primary: 156 72% 32%; /* Rich emerald money green */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 40 18% 92%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 40 18% 93%;
+    --muted-foreground: 215.4 16.3% 40%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 40 25% 91%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 78% 54%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 158 64% 32%;
+    --border: 220 22% 18%; /* Crisp slate ink border */
+    --input: 220 22% 18%;
+    --ring: 156 72% 32%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
+    --shadow-brutal-color: rgba(15, 23, 42, 0.9);
     --sat: env(safe-area-inset-top, 0px);
     --sar: env(safe-area-inset-right, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
@@ -40,33 +41,34 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 224 35% 8%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 7%;
+    --card: 224 30% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 7%;
+    --popover: 224 30% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 158 64% 45%; /* Emerald 500 in dark mode */
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary: 156 72% 44%;
+    --primary-foreground: 222.2 84% 5%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 220 25% 18%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 25% 16%;
+    --muted-foreground: 215 20.2% 68%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 220 25% 18%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72% 52%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 158 64% 45%;
+    --border: 217 22% 36%; /* Luminous slate border in dark mode */
+    --input: 217 22% 36%;
+    --ring: 156 72% 44%;
+    --shadow-brutal-color: rgba(0, 0, 0, 0.85);
   }
 
   * {

@@ -41,7 +41,7 @@ export const InfoReminder: React.FC<InfoReminderProps> = ({
         side={side}
         align={align}
         sideOffset={6}
-        className="w-64 sm:w-72 p-2.5 text-xs rounded-xl border bg-popover text-popover-foreground shadow-lg z-50 pointer-events-auto"
+        className="w-64 sm:w-72 p-2.5 text-xs rounded-xl border-2 border-border bg-popover text-popover-foreground shadow-brutal z-50 pointer-events-auto"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >

@@ -133,14 +133,14 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 pt-0.5">
           {/* Type Toggle: Pengeluaran vs Pemasukan */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-muted rounded-lg">
+          <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/60 rounded-xl border-2 border-border shadow-brutal-xs">
             <button
               type="button"
               onClick={() => handleTypeChange('expense')}
-              className={`py-1.5 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all border-2 ${
                 type === 'expense'
-                  ? 'bg-rose-600 text-white shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-rose-600 text-white border-border shadow-brutal-xs'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
               <Icon name="trending-down" className="w-3.5 h-3.5" />
@@ -149,10 +149,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <button
               type="button"
               onClick={() => handleTypeChange('income')}
-              className={`py-1.5 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all border-2 ${
                 type === 'income'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-emerald-600 text-white border-border shadow-brutal-xs'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
               <Icon name="trending-up" className="w-3.5 h-3.5" />
@@ -161,9 +161,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           </div>
 
           {/* Compact Amount Input Box */}
-          <div className="bg-muted/40 p-3 rounded-xl border flex flex-col items-center gap-1.5">
+          <div className="bg-card p-3 rounded-xl border-2 border-border shadow-brutal-xs flex flex-col items-center gap-1.5">
             <div className="w-full flex items-center justify-center gap-1.5">
-              <span className="text-sm font-bold text-muted-foreground">Rp</span>
+              <span className="text-sm font-extrabold text-muted-foreground">Rp</span>
               <input
                 id="amount-input"
                 type="text"
@@ -172,20 +172,20 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 onChange={handleAmountChange}
                 placeholder="0"
                 autoFocus
-                className={`w-full max-w-[240px] text-center text-2xl sm:text-3xl font-extrabold bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 ${
+                className={`w-full max-w-[240px] text-center text-2xl sm:text-3xl font-extrabold bg-transparent border-none outline-none tabular-nums font-heading placeholder:text-muted-foreground/40 ${
                   type === 'expense' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
                 }`}
               />
             </div>
 
             {/* Quick addition chips */}
-            <div className="flex flex-wrap justify-center gap-1 pt-1.5 border-t border-border/50 w-full">
+            <div className="flex flex-wrap justify-center gap-1.5 pt-1.5 border-t-2 border-border w-full">
               {[10000, 25000, 50000, 100000, 500000].map((val) => (
                 <button
                   key={val}
                   type="button"
                   onClick={() => handleQuickAdd(val)}
-                  className="px-2 py-0.5 text-[11px] font-medium rounded-md bg-background border hover:bg-accent text-foreground transition-all active:scale-95"
+                  className="px-2 py-0.5 text-[11px] font-bold rounded-md bg-card border-2 border-border hover:bg-accent text-foreground shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
                 >
                   +{val >= 1000 ? `${val / 1000}k` : val}
                 </button>
@@ -194,7 +194,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           </div>
 
           {error && (
-            <div className="p-2.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive flex items-center gap-2">
+            <div className="p-2.5 rounded-lg bg-destructive/10 border-2 border-destructive text-xs font-bold text-destructive flex items-center gap-2">
               <Icon name="x" className="w-3.5 h-3.5 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -207,7 +207,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 Kategori
               </label>
               {categoryId && (
-                <span className="text-[11px] font-medium text-muted-foreground truncate max-w-[160px]">
+                <span className="text-[11px] font-bold text-muted-foreground truncate max-w-[160px]">
                   {filteredCategories.find((c) => c.id === categoryId)?.name}
                 </span>
               )}
@@ -220,10 +220,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     key={cat.id}
                     type="button"
                     onClick={() => setCategoryId(cat.id)}
-                    className={`px-2.5 py-1 rounded-lg border flex items-center gap-1.5 text-xs transition-all ${
+                    className={`px-2.5 py-1 rounded-lg border-2 flex items-center gap-1.5 text-xs font-bold transition-all active:translate-x-[1px] active:translate-y-[1px] ${
                       isSelected
-                        ? 'bg-foreground text-background border-foreground font-bold shadow-sm'
-                        : 'bg-card border-border text-foreground hover:bg-accent'
+                        ? 'bg-foreground text-background border-border shadow-brutal-xs'
+                        : 'bg-card border-border/60 text-foreground hover:bg-accent hover:border-border'
                     }`}
                   >
                     <div

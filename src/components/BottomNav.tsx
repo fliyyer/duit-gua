@@ -28,16 +28,16 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           onClick={() => setIsQuickMenuOpen(false)}
         >
           <div
-            className="w-full max-w-sm mx-auto bg-card rounded-xl border p-4 shadow-2xl space-y-2 mb-20 animate-in slide-in-from-bottom-5"
+            className="w-full max-w-sm mx-auto bg-card rounded-2xl border-2 border-border p-4 shadow-brutal-lg space-y-2 mb-20 animate-in slide-in-from-bottom-5"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b pb-2 mb-2">
+            <div className="flex items-center justify-between border-b-2 border-border pb-2 mb-2">
               <span className="text-xs font-bold text-foreground">Catat Cepat</span>
               <button
                 onClick={() => setIsQuickMenuOpen(false)}
-                className="p-1 rounded-md text-muted-foreground hover:text-foreground"
+                className="w-6 h-6 rounded-md border-2 border-border bg-card hover:bg-accent text-muted-foreground hover:text-foreground flex items-center justify-center shadow-brutal-xs"
               >
-                <Icon name="x" className="w-4 h-4" />
+                <Icon name="x" className="w-3.5 h-3.5" />
               </button>
             </div>
 
@@ -46,9 +46,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 setIsQuickMenuOpen(false);
                 onOpenAddTransaction();
               }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent text-left transition-colors"
+              className="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-border bg-card hover:bg-accent text-left shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
             >
-              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary border-2 border-border flex items-center justify-center shrink-0">
                 <Icon name="plus" className="w-4 h-4" />
               </div>
               <div>
@@ -62,9 +62,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 setIsQuickMenuOpen(false);
                 onOpenAddDailyExpense();
               }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent text-left transition-colors"
+              className="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-border bg-card hover:bg-accent text-left shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
             >
-              <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border-2 border-border flex items-center justify-center shrink-0">
                 <Icon name="shopping-bag" className="w-4 h-4" />
               </div>
               <div>
@@ -78,9 +78,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 setIsQuickMenuOpen(false);
                 onOpenAddJajan();
               }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent text-left transition-colors"
+              className="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-border bg-card hover:bg-accent text-left shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
             >
-              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border-2 border-border flex items-center justify-center shrink-0">
                 <Icon name="coffee" className="w-4 h-4" />
               </div>
               <div>
@@ -94,7 +94,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
       {/* Mobile Bottom Navigation */}
       <nav
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-md border-t pb-[env(safe-area-inset-bottom,8px)] transition-colors shadow-lg"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-md border-t-2 border-border pb-[env(safe-area-inset-bottom,8px)] transition-colors"
         aria-label="Navigasi Menu Utama Mobile"
       >
         <div className="max-w-lg mx-auto px-2 h-16 flex items-center justify-between relative">
@@ -103,7 +103,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             onClick={() => onSelectTab('dashboard')}
             className={`flex-1 flex flex-col items-center justify-center py-1 min-h-[48px] rounded-lg transition-all ${
               currentTab === 'dashboard'
-                ? 'text-primary font-semibold'
+                ? 'text-primary font-bold'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
             aria-current={currentTab === 'dashboard' ? 'page' : undefined}
@@ -117,7 +117,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             onClick={() => onSelectTab('planner')}
             className={`flex-1 flex flex-col items-center justify-center py-1 min-h-[48px] rounded-lg transition-all ${
               currentTab === 'planner'
-                ? 'text-primary font-semibold'
+                ? 'text-primary font-bold'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
             aria-current={currentTab === 'planner' ? 'page' : undefined}
@@ -130,7 +130,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           <div className="flex-1 flex justify-center -mt-5">
             <button
               onClick={() => setIsQuickMenuOpen(true)}
-              className="w-12 h-12 rounded-xl bg-primary hover:bg-primary/90 active:scale-95 text-primary-foreground flex items-center justify-center shadow-md transition-all border-2 border-background focus:ring-2 focus:ring-ring/30"
+              className="w-12 h-12 rounded-xl bg-primary hover:brightness-105 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none text-primary-foreground flex items-center justify-center shadow-brutal transition-all border-2 border-border focus:outline-none"
               aria-label="Buka Menu Tambah Cepat"
               title="Catat Cepat (+)"
             >

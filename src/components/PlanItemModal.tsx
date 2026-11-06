@@ -123,10 +123,10 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
                   key={g.id}
                   type="button"
                   onClick={() => setGroup(g.id as PlanGroupType)}
-                  className={`p-1.5 sm:p-2 rounded-lg border text-xs font-semibold transition-all ${
+                  className={`p-1.5 sm:p-2 rounded-lg border-2 text-xs font-bold transition-all active:translate-x-[1px] active:translate-y-[1px] ${
                     group === g.id
-                      ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                      : 'bg-card text-foreground hover:bg-accent'
+                      ? 'bg-primary text-primary-foreground border-border shadow-brutal-xs'
+                      : 'bg-card text-foreground border-border/40 hover:border-border hover:bg-accent'
                   } ${g.id === 'subscription_debt' ? 'col-span-2' : ''}`}
                 >
                   {g.label}
@@ -172,10 +172,10 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
                     key={t}
                     type="button"
                     onClick={() => setIncomeType(t)}
-                    className={`py-1.5 sm:py-2 px-1 rounded-lg border text-xs font-semibold text-center transition-all ${
+                    className={`py-1.5 sm:py-2 px-1 rounded-lg border-2 text-xs font-bold text-center transition-all active:translate-x-[1px] active:translate-y-[1px] ${
                       incomeType === t
-                        ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                        : 'bg-card text-foreground hover:bg-accent'
+                        ? 'bg-primary text-primary-foreground border-border shadow-brutal-xs'
+                        : 'bg-card text-foreground border-border/40 hover:border-border hover:bg-accent'
                     }`}
                   >
                     {t}
@@ -197,14 +197,14 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
                     key={p}
                     type="button"
                     onClick={() => setPriority(p)}
-                    className={`py-1.5 sm:py-2 rounded-lg border text-xs font-semibold transition-all ${
+                    className={`py-1.5 sm:py-2 rounded-lg border-2 text-xs font-bold transition-all active:translate-x-[1px] active:translate-y-[1px] ${
                       priority === p
                         ? p === 'High'
-                          ? 'bg-rose-600 text-white border-rose-600'
+                          ? 'bg-rose-600 text-white border-border shadow-brutal-xs'
                           : p === 'Medium'
-                          ? 'bg-amber-600 text-white border-amber-600'
-                          : 'bg-emerald-600 text-white border-emerald-600'
-                        : 'bg-card text-foreground hover:bg-accent'
+                          ? 'bg-amber-600 text-white border-border shadow-brutal-xs'
+                          : 'bg-emerald-600 text-white border-border shadow-brutal-xs'
+                        : 'bg-card text-foreground border-border/40 hover:border-border hover:bg-accent'
                     }`}
                   >
                     {p}

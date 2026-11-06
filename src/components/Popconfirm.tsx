@@ -52,7 +52,7 @@ export const Popconfirm: React.FC<PopconfirmProps> = ({
       <PopoverContent
         align={align}
         side={side}
-        className="w-64 p-3 rounded-xl shadow-elevated bg-popover border space-y-2.5 z-50"
+        className="w-64 p-3 rounded-xl shadow-brutal bg-popover border-2 border-border space-y-2.5 z-50"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-2.5">

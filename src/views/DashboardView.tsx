@@ -75,20 +75,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Top Banner on Desktop & Mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Kartu Saldo Utama & Arus Kas Terintegrasi (Combined Hero Banner) */}
-        <Card className="lg:col-span-2 p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm flex flex-col justify-between gap-4">
+        <Card className="lg:col-span-2 p-5 sm:p-6 bg-gradient-to-br from-card via-card to-emerald-500/5 flex flex-col justify-between gap-4">
           {/* Header Row: Title, Month Badge, and Wallets Link */}
-          <div className="flex items-center justify-between border-b pb-2.5 gap-2">
+          <div className="flex items-center justify-between border-b-2 border-border pb-2.5 gap-2">
             <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <span className="text-xs font-semibold text-muted-foreground truncate">
+              <span className="text-xs font-bold text-muted-foreground truncate">
                 Total Saldo Bersih
               </span>
-              <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border-2 border-emerald-500/30 shadow-brutal-xs shrink-0">
                 {formatMonthIndo(currentMonth)}
               </span>
             </div>
             <button
               onClick={() => onSelectTab('wallets')}
-              className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2 py-1 rounded-md transition-colors shrink-0"
+              className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2 py-1 rounded-md transition-colors shrink-0"
               title="Lihat rincian semua dompet"
             >
               <span>{state.wallets.length} Dompet</span>
@@ -113,7 +113,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <Button
                   onClick={onOpenAddTransaction}
-                  className="h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold gap-1.5 shadow-sm px-2 sm:px-3"
+                  className="h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold gap-1.5 px-2 sm:px-3"
                 >
                   <Icon name="plus" className="w-4 h-4 shrink-0" />
                   <span className="truncate">Catat Transaksi</span>
@@ -121,7 +121,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <Button
                   variant="outline"
                   onClick={onOpenTransfer}
-                  className="h-9 rounded-lg text-xs font-semibold gap-1.5 hover:bg-accent px-2 sm:px-3"
+                  className="h-9 rounded-lg text-xs font-bold gap-1.5 hover:bg-accent px-2 sm:px-3"
                 >
                   <Icon name="arrow-left-right" className="w-4 h-4 text-primary shrink-0" />
                   <span className="truncate">Pindah Saldo</span>
@@ -130,10 +130,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             {/* Right Side: Integrated Cashflow (Arus Kas Periode Ini) */}
-            <div className="p-3.5 rounded-xl border bg-muted/30 dark:bg-muted/15 flex flex-col justify-between gap-2.5">
+            <div className="p-3.5 rounded-xl border-2 border-border shadow-brutal-xs bg-muted/30 dark:bg-muted/15 flex flex-col justify-between gap-2.5">
               <div className="flex items-center justify-between gap-1.5">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-2 border-border shadow-brutal-xs flex items-center justify-center shrink-0">
                     <Icon name="trending-up" className="w-3.5 h-3.5" />
                   </div>
                   <span className="text-xs font-bold text-foreground truncate">
@@ -142,7 +142,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </div>
                 <Badge
                   variant={netCashflow >= 0 ? "success" : "destructive"}
-                  className="tabular-nums font-bold text-[11px] py-0.5 px-2 shrink-0"
+                  className="tabular-nums font-bold text-[11px] py-0.5 px-2 shrink-0 border-2"
                 >
                   {netCashflow >= 0 ? 'Surplus ' : 'Defisit '}
                   {formatRupiah(netCashflow)}
@@ -151,22 +151,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               {/* Pemasukan vs Pengeluaran mini cards */}
               <div className="grid grid-cols-2 gap-2">
-                <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 min-w-0">
-                  <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300 mb-0.5">
+                <div className="p-2.5 rounded-lg bg-emerald-500/10 border-2 border-emerald-500/30 shadow-brutal-xs min-w-0">
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 mb-0.5">
                     <Icon name="trending-up" className="w-3 h-3 shrink-0" />
                     <span className="truncate">Pemasukan</span>
                   </div>
-                  <p className="text-xs sm:text-sm font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums truncate">
+                  <p className="text-xs sm:text-sm font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums truncate font-heading">
                     +{formatRupiah(totalIncome)}
                   </p>
                 </div>
 
-                <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 min-w-0">
-                  <div className="flex items-center gap-1 text-[10px] font-semibold text-rose-800 dark:text-rose-300 mb-0.5">
+                <div className="p-2.5 rounded-lg bg-rose-500/10 border-2 border-rose-500/30 shadow-brutal-xs min-w-0">
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-rose-800 dark:text-rose-300 mb-0.5">
                     <Icon name="trending-down" className="w-3 h-3 shrink-0" />
                     <span className="truncate">Pengeluaran</span>
                   </div>
-                  <p className="text-xs sm:text-sm font-extrabold text-rose-700 dark:text-rose-400 tabular-nums truncate">
+                  <p className="text-xs sm:text-sm font-extrabold text-rose-700 dark:text-rose-400 tabular-nums truncate font-heading">
                     -{formatRupiah(totalExpense)}
                   </p>
                 </div>
@@ -176,11 +176,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-[10px] text-muted-foreground font-medium">
                   <span>Rasio Pengeluaran</span>
-                  <span className="tabular-nums font-semibold text-foreground">
+                  <span className="tabular-nums font-bold text-foreground">
                     {totalIncome > 0 ? Math.min(100, Math.round((totalExpense / totalIncome) * 100)) : (totalExpense > 0 ? 100 : 0)}%
                   </span>
                 </div>
-                <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
+                <div className="w-full bg-muted/60 h-2 rounded-full overflow-hidden border border-border">
                   <div
                     className={`h-full rounded-full transition-all duration-300 ${
                       totalExpense > totalIncome
@@ -200,15 +200,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </Card>
 
         {/* Quick Shortcut Card to OTWSATUMILYAR Trackers */}
-        <Card className="p-5 rounded-xl border bg-card flex flex-col justify-between shadow-sm space-y-3">
-          <div className="flex items-center justify-between border-b pb-2">
+        <Card className="p-5 flex flex-col justify-between space-y-3">
+          <div className="flex items-center justify-between border-b-2 border-border pb-2">
             <div>
               <h3 className="text-xs font-bold text-foreground">Tracker Harian Bulan Ini</h3>
               <p className="text-[11px] text-muted-foreground">{formatMonthIndo(currentMonth)}</p>
             </div>
             <button
               onClick={() => onSelectTab('trackers')}
-              className="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5"
+              className="text-xs font-bold text-primary hover:underline flex items-center gap-0.5"
             >
               <span>Buka</span>
               <Icon name="chevron-right" className="w-3 h-3" />
@@ -218,10 +218,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="space-y-2">
             <div
               onClick={() => onSelectTab('trackers')}
-              className="p-3 rounded-lg border bg-amber-500/5 hover:bg-amber-500/10 cursor-pointer transition-colors flex items-center justify-between"
+              className="p-3 rounded-lg border-2 border-border shadow-brutal-xs bg-amber-500/5 hover:bg-amber-500/10 cursor-pointer transition-all active:translate-x-[1px] active:translate-y-[1px] flex items-center justify-between"
             >
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border-2 border-border shadow-brutal-xs flex items-center justify-center">
                   <Icon name="shopping-bag" className="w-3.5 h-3.5" />
                 </div>
                 <div>
@@ -229,17 +229,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <span className="text-[10px] text-muted-foreground">{monthDailyExpenses.length} transaksi</span>
                 </div>
               </div>
-              <span className="text-xs font-extrabold text-amber-600 dark:text-amber-400 tabular-nums">
+              <span className="text-xs font-extrabold text-amber-600 dark:text-amber-400 tabular-nums font-heading">
                 {formatRupiah(totalDailyExpense)}
               </span>
             </div>
 
             <div
               onClick={() => onSelectTab('trackers')}
-              className="p-3 rounded-lg border bg-purple-500/5 hover:bg-purple-500/10 cursor-pointer transition-colors flex items-center justify-between"
+              className="p-3 rounded-lg border-2 border-border shadow-brutal-xs bg-purple-500/5 hover:bg-purple-500/10 cursor-pointer transition-all active:translate-x-[1px] active:translate-y-[1px] flex items-center justify-between"
             >
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-md bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-md bg-purple-500/15 text-purple-600 dark:text-purple-400 border-2 border-border shadow-brutal-xs flex items-center justify-center">
                   <Icon name="coffee" className="w-3.5 h-3.5" />
                 </div>
                 <div>
@@ -247,7 +247,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <span className="text-[10px] text-muted-foreground">{monthJajanItems.length} sesi</span>
                 </div>
               </div>
-              <span className="text-xs font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">
+              <span className="text-xs font-extrabold text-purple-600 dark:text-purple-400 tabular-nums font-heading">
                 {formatRupiah(totalJajan)}
               </span>
             </div>
@@ -257,7 +257,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             variant="outline"
             size="sm"
             onClick={() => onSelectTab('planner')}
-            className="w-full text-xs font-semibold rounded-lg gap-1.5"
+            className="w-full text-xs font-bold rounded-lg gap-1.5"
           >
             <Icon name="layers" className="w-3.5 h-3.5 text-primary" />
             <span>Lihat Rencana 4 Pilar</span>

@@ -79,7 +79,7 @@ export function DatePicker({
           variant="outline"
           disabled={disabled}
           className={cn(
-            "w-full justify-start text-left font-normal h-10 px-3 border-input hover:bg-accent/40 rounded-lg",
+            "w-full justify-start text-left font-bold h-10 px-3 border-2 border-input hover:bg-accent/40 rounded-lg shadow-brutal-xs",
             !selectedDate && "text-muted-foreground",
             className
           )}
@@ -94,21 +94,21 @@ export function DatePicker({
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 rounded-xl shadow-elevated" align={align}>
-        <div className="flex items-center justify-between border-b px-3 py-2 bg-muted/30">
-          <span className="text-xs font-semibold text-muted-foreground">Pintas:</span>
+      <PopoverContent className="w-auto p-0 rounded-xl shadow-brutal border-2 border-border" align={align}>
+        <div className="flex items-center justify-between border-b-2 border-border px-3 py-2 bg-muted/30">
+          <span className="text-xs font-bold text-muted-foreground">Pintas:</span>
           <div className="flex gap-1.5">
             <button
               type="button"
               onClick={() => handleQuickSelect(0)}
-              className="text-xs px-2 py-1 rounded-md bg-background border hover:bg-accent hover:text-accent-foreground font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-lg bg-card border-2 border-border/50 hover:border-border shadow-brutal-xs hover:bg-accent text-foreground font-bold transition-all active:translate-x-[1px] active:translate-y-[1px]"
             >
               Hari ini
             </button>
             <button
               type="button"
               onClick={() => handleQuickSelect(1)}
-              className="text-xs px-2 py-1 rounded-md bg-background border hover:bg-accent hover:text-accent-foreground font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-lg bg-card border-2 border-border/50 hover:border-border shadow-brutal-xs hover:bg-accent text-foreground font-bold transition-all active:translate-x-[1px] active:translate-y-[1px]"
             >
               Kemarin
             </button>

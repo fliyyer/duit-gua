@@ -104,7 +104,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({
       <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary border-2 border-border shadow-brutal-xs flex items-center justify-center">
               <Icon name="arrow-left-right" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>Pindah Saldo / Transfer</DialogTitle>
@@ -113,7 +113,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {/* Nominal Transfer */}
-          <div className="bg-muted/40 p-3 sm:p-4 rounded-xl border flex flex-col items-center">
+          <div className="bg-muted/40 p-3 sm:p-4 rounded-xl border-2 border-border shadow-brutal-xs flex flex-col items-center">
             <label htmlFor="transfer-amount" className="text-xs font-medium text-muted-foreground mb-1">
               Nominal yang Ditransfer
             </label>
@@ -129,13 +129,13 @@ export const TransferModal: React.FC<TransferModalProps> = ({
               }}
               placeholder="0"
               autoFocus
-              className="w-full text-center text-2xl sm:text-3xl font-extrabold text-foreground bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40"
+              className="w-full text-center text-2xl sm:text-3xl font-extrabold text-foreground bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 font-heading"
             />
             <span className="text-xs text-muted-foreground mt-1">Rupiah (IDR)</span>
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive flex items-center gap-2">
+            <div className="p-3 rounded-lg bg-destructive/10 border-2 border-destructive/30 text-xs font-bold text-destructive flex items-center gap-2">
               <Icon name="x" className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>

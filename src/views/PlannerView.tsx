@@ -92,7 +92,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
   return (
     <div className="space-y-4 sm:space-y-6 pb-12">
       {/* Month Navigation & Action Bar (Sleek 1-Row Responsive) */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 p-3 sm:p-3.5 rounded-xl bg-card border shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 p-3 sm:p-3.5 rounded-xl bg-card border-2 border-border shadow-brutal">
         <div className="flex items-center justify-between sm:justify-start gap-2">
           <div className="flex items-center gap-1.5">
             <Button
@@ -106,7 +106,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <Icon name="chevron-left" className="w-4 h-4" />
             </Button>
 
-            <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-muted/50 border">
+            <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-card border-2 border-border shadow-brutal-xs">
               <Icon name="calendar" className="w-3.5 h-3.5 text-primary shrink-0" />
               <span className="text-xs sm:text-sm font-bold text-foreground">
                 {formatMonthIndo(currentMonth)}
@@ -130,7 +130,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             variant="outline"
             size="sm"
             onClick={onNavigateToTrackers}
-            className="sm:hidden h-8 text-xs font-semibold rounded-lg gap-1 px-2.5"
+            className="sm:hidden h-8 text-xs font-bold rounded-lg gap-1 px-2.5"
             title="Buka Tracker Harian"
           >
             <Icon name="coffee" className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -142,7 +142,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
         <div className="flex items-center gap-2">
           <Button
             onClick={() => onOpenAddPlan()}
-            className="flex-1 sm:flex-none h-8 sm:h-9 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-xs px-3 sm:px-4"
+            className="flex-1 sm:flex-none h-8 sm:h-9 text-xs rounded-lg gap-1.5 px-3 sm:px-4"
           >
             <Icon name="plus" className="w-3.5 h-3.5 shrink-0" />
             <span>Tambah Rencana</span>
@@ -151,7 +151,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
           <Button
             variant="outline"
             onClick={onNavigateToTrackers}
-            className="hidden sm:inline-flex h-9 text-xs font-semibold rounded-lg gap-1.5 px-3 sm:px-4"
+            className="hidden sm:inline-flex h-9 text-xs font-bold rounded-lg gap-1.5 px-3 sm:px-4"
           >
             <Icon name="coffee" className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>Tracker Harian</span>
@@ -160,12 +160,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
       </div>
 
       {/* Ringkasan Finansial Rencana (Unified Financial Health Hero Card) */}
-      <Card className="p-4 sm:p-5 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm space-y-4">
+      <Card className="p-4 sm:p-5 rounded-xl bg-card space-y-4">
         {/* Top Headline: Surplus / Defisit & Net Free Cash */}
         <div className="flex items-center justify-between gap-2">
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-semibold text-muted-foreground">
+              <span className="text-xs font-bold text-muted-foreground">
                 Ringkasan Rencana
               </span>
               <Badge
@@ -189,7 +189,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
 
         {/* Visual Allocation Breakdown Bar */}
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] font-medium text-muted-foreground">
+          <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground">
             <div className="flex items-center gap-1">
               <span>Alokasi Anggaran</span>
               <InfoReminder
@@ -197,13 +197,13 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 content="Pembagian pendapatan bulanan ke dalam tabungan, kebutuhan pengeluaran, dan sisa dana bebas."
               />
             </div>
-            <span className="tabular-nums font-semibold text-foreground">
+            <span className="tabular-nums font-bold text-foreground">
               Total {formatRupiah(totalIncome)}
             </span>
           </div>
 
           {/* Segmented Bar */}
-          <div className="w-full h-2 rounded-full bg-muted overflow-hidden flex">
+          <div className="w-full h-2.5 rounded-full bg-muted/60 border-2 border-border overflow-hidden flex">
             {totalIncome > 0 ? (
               <>
                 <div
@@ -242,53 +242,53 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
         </div>
 
         {/* 3 Metric Columns: Pendapatan, Tabungan, Pengeluaran */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-2 border-t">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-2 border-t-2 border-border">
           {/* Pendapatan */}
-          <div className="p-2 sm:p-2.5 rounded-lg bg-emerald-500/5 border border-emerald-500/15 min-w-0">
-            <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300 mb-0.5">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-emerald-500/10 border-2 border-border shadow-brutal-xs min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 mb-0.5">
               <Icon name="trending-up" className="w-3 h-3 shrink-0" />
               <span className="truncate">Pendapatan</span>
             </div>
-            <p className="text-xs sm:text-base font-extrabold text-foreground tabular-nums truncate">
+            <p className="text-xs sm:text-base font-extrabold text-foreground tabular-nums truncate font-heading">
               {formatRupiah(totalIncome)}
             </p>
-            <span className="text-[10px] text-muted-foreground truncate block">
+            <span className="text-[10px] text-muted-foreground truncate block font-medium">
               {incomeItems.length} sumber
             </span>
           </div>
 
           {/* Ditabung */}
-          <div className="p-2 sm:p-2.5 rounded-lg bg-blue-500/5 border border-blue-500/15 min-w-0">
-            <div className="flex items-center gap-1 text-[11px] font-semibold text-blue-800 dark:text-blue-300 mb-0.5">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-blue-500/10 border-2 border-border shadow-brutal-xs min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-blue-800 dark:text-blue-300 mb-0.5">
               <Icon name="target" className="w-3 h-3 shrink-0" />
               <span className="truncate">Ditabung</span>
             </div>
-            <p className="text-xs sm:text-base font-extrabold text-foreground tabular-nums truncate">
+            <p className="text-xs sm:text-base font-extrabold text-foreground tabular-nums truncate font-heading">
               {formatRupiah(totalSavingActual)}
             </p>
-            <span className="text-[10px] text-muted-foreground truncate block">
+            <span className="text-[10px] text-muted-foreground truncate block font-medium">
               Target {formatRupiah(totalSavingPlan)}
             </span>
           </div>
 
           {/* Pengeluaran */}
-          <div className="p-2 sm:p-2.5 rounded-lg bg-rose-500/5 border border-rose-500/15 min-w-0">
-            <div className="flex items-center gap-1 text-[11px] font-semibold text-rose-800 dark:text-rose-300 mb-0.5">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-rose-500/10 border-2 border-border shadow-brutal-xs min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-rose-800 dark:text-rose-300 mb-0.5">
               <Icon name="trending-down" className="w-3 h-3 shrink-0" />
               <span className="truncate">Pengeluaran</span>
             </div>
-            <p className="text-xs sm:text-base font-extrabold text-rose-600 dark:text-rose-400 tabular-nums truncate">
+            <p className="text-xs sm:text-base font-extrabold text-rose-600 dark:text-rose-400 tabular-nums truncate font-heading">
               {formatRupiah(totalExpenseActual)}
             </p>
-            <span className="text-[10px] text-muted-foreground truncate block">
+            <span className="text-[10px] text-muted-foreground truncate block font-medium">
               Target {formatRupiah(totalExpensePlan)}
             </span>
           </div>
         </div>
 
         {/* Quick Tracker Integration Footer */}
-        <div className="pt-2 border-t flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-1 text-muted-foreground font-medium text-[11px]">
+        <div className="pt-2 border-t-2 border-border flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-1 text-muted-foreground font-bold text-[11px]">
             <span>Tracker:</span>
             <InfoReminder
               title="Sinkronisasi Tracker Harian"
@@ -299,19 +299,19 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             <button
               type="button"
               onClick={onNavigateToTrackers}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border bg-amber-500/10 hover:bg-amber-500/15 text-amber-800 dark:text-amber-300 text-[11px] font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-2 border-border bg-card text-foreground hover:bg-accent text-[11px] font-bold shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
               title="Buka Tracker Pengeluaran Sehari-Hari"
             >
-              <Icon name="shopping-bag" className="w-3 h-3" />
+              <Icon name="shopping-bag" className="w-3 h-3 text-amber-600 dark:text-amber-400" />
               <span>Sehari-Hari: {formatRupiah(totalDailyExpenseActual)}</span>
             </button>
             <button
               type="button"
               onClick={onNavigateToTrackers}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border bg-purple-500/10 hover:bg-purple-500/15 text-purple-800 dark:text-purple-300 text-[11px] font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-2 border-border bg-card text-foreground hover:bg-accent text-[11px] font-bold shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
               title="Buka Tracker Jajan & Nongkrong"
             >
-              <Icon name="coffee" className="w-3 h-3" />
+              <Icon name="coffee" className="w-3 h-3 text-purple-600 dark:text-purple-400" />
               <span>Jajan: {formatRupiah(totalJajanActual)}</span>
             </button>
           </div>

@@ -92,7 +92,7 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-sm border-2 border-border shadow-brutal-xs shrink-0"
                     style={{ backgroundColor: wallet.color || '#059669' }}
                   >
                     <Icon name="wallet" className="w-5 h-5" />
@@ -109,7 +109,7 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
                 </div>
 
                 <div className="text-right shrink-0">
-                  <p className="text-sm font-bold text-foreground tabular-nums">
+                  <p className="text-sm font-extrabold text-foreground tabular-nums font-heading">
                     {formatRupiah(wallet.balance)}
                   </p>
                   <p className="text-[10px] text-muted-foreground font-medium">
@@ -119,7 +119,7 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
               </div>
 
               {/* Wallet Row Footer Actions */}
-              <div className="pt-2 border-t flex items-center justify-between text-xs">
+              <div className="pt-2 border-t-2 border-border flex items-center justify-between text-xs">
                 <span className="text-[11px] text-muted-foreground">
                   Aksen: <span className="font-mono text-[10px]">{wallet.color}</span>
                 </span>

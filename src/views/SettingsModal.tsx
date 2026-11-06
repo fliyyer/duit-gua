@@ -136,7 +136,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary border-2 border-border shadow-brutal-xs flex items-center justify-center">
               <Icon name="settings" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>Pengaturan & Cadangan Data</DialogTitle>
@@ -149,7 +149,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <span className="text-xs font-bold text-foreground">
               Tampilan Aplikasi
             </span>
-            <div className="flex items-center justify-between p-3.5 rounded-xl bg-muted/40 border">
+            <div className="flex items-center justify-between p-3.5 rounded-xl bg-muted/40 border-2 border-border shadow-brutal-xs">
               <div className="flex items-center gap-2.5">
                 <Icon name={state.theme === 'dark' ? 'moon' : 'sun'} className="w-5 h-5 text-primary" />
                 <div>
@@ -165,7 +165,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={onToggleTheme}
-                className="text-xs font-semibold"
+                className="text-xs font-bold shadow-brutal-xs"
               >
                 Ganti Tema
               </Button>
@@ -184,9 +184,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="grid grid-cols-2 gap-2 pt-1">
               <button
                 onClick={handleExport}
-                className="p-3.5 rounded-xl bg-muted/40 border hover:border-primary text-left flex flex-col gap-1.5 transition-all active:scale-[0.98]"
+                className="p-3.5 rounded-xl bg-card border-2 border-border shadow-brutal-xs hover:border-primary text-left flex flex-col gap-1.5 transition-all active:translate-x-[1px] active:translate-y-[1px]"
               >
-                <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary border-2 border-border shadow-brutal-xs flex items-center justify-center">
                   <Icon name="download" className="w-4 h-4" />
                 </div>
                 <span className="text-xs font-bold text-foreground">
@@ -199,9 +199,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3.5 rounded-xl bg-muted/40 border hover:border-primary text-left flex flex-col gap-1.5 transition-all active:scale-[0.98]"
+                className="p-3.5 rounded-xl bg-card border-2 border-border shadow-brutal-xs hover:border-primary text-left flex flex-col gap-1.5 transition-all active:translate-x-[1px] active:translate-y-[1px]"
               >
-                <div className="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 border-2 border-border shadow-brutal-xs flex items-center justify-center">
                   <Icon name="upload" className="w-4 h-4" />
                 </div>
                 <span className="text-xs font-bold text-foreground">
@@ -223,7 +223,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Reset & Manajemen Data */}
-          <div className="flex flex-col gap-2 pt-2 border-t">
+          <div className="flex flex-col gap-2 pt-2 border-t-2 border-border">
             <span className="text-xs font-bold text-foreground">
               Pengelolaan Data
             </span>
@@ -232,7 +232,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 variant="secondary"
                 size="sm"
                 onClick={handleResetToDemo}
-                className="w-full gap-1.5"
+                className="w-full gap-1.5 font-bold shadow-brutal-xs border-2 border-border"
               >
                 <Icon name="refresh" className="w-4 h-4" />
                 <span>Muat Ulang Data Sampel Demo</span>
@@ -242,7 +242,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 variant="destructive"
                 size="sm"
                 onClick={handleClearAll}
-                className="w-full gap-1.5 bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20"
+                className="w-full gap-1.5 bg-destructive/10 text-destructive hover:bg-destructive/20 border-2 border-destructive/30 shadow-brutal-xs font-bold"
               >
                 <Icon name="trash" className="w-4 h-4" />
                 <span>Kosongkan Semua Transaksi</span>

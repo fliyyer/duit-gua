@@ -85,7 +85,7 @@ export const BudgetModal: React.FC<BudgetModalProps> = ({
       <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary border-2 border-border shadow-brutal-xs flex items-center justify-center">
               <Icon name="target" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>
@@ -96,7 +96,7 @@ export const BudgetModal: React.FC<BudgetModalProps> = ({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {error && (
-            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border-2 border-destructive/30 text-xs font-bold text-destructive">
               {error}
             </div>
           )}
@@ -125,7 +125,7 @@ export const BudgetModal: React.FC<BudgetModalProps> = ({
           </div>
 
           {/* Batas Anggaran Bulanan */}
-          <div className="bg-muted/40 p-3 sm:p-4 rounded-xl border flex flex-col items-center">
+          <div className="bg-muted/40 p-3 sm:p-4 rounded-xl border-2 border-border shadow-brutal-xs flex flex-col items-center">
             <label htmlFor="budget-limit" className="text-xs font-medium text-muted-foreground mb-1">
               Batas Maksimal Bulanan
             </label>
@@ -141,12 +141,12 @@ export const BudgetModal: React.FC<BudgetModalProps> = ({
               }}
               placeholder="0"
               autoFocus
-              className="w-full text-center text-2xl sm:text-3xl font-extrabold text-foreground bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40"
+              className="w-full text-center text-2xl sm:text-3xl font-extrabold text-foreground bg-transparent border-none outline-none tabular-nums placeholder:text-muted-foreground/40 font-heading"
             />
             <span className="text-xs text-muted-foreground mt-1">Rupiah per bulan</span>
 
             {/* Quick additions */}
-            <div className="flex flex-wrap justify-center gap-1.5 mt-3 pt-3 border-t w-full">
+            <div className="flex flex-wrap justify-center gap-1.5 mt-3 pt-3 border-t-2 border-border/40 w-full">
               {[200000, 500000, 1000000, 2000000].map((val) => (
                 <button
                   key={val}
@@ -155,7 +155,7 @@ export const BudgetModal: React.FC<BudgetModalProps> = ({
                     const cur = parseNumberInput(rawLimit);
                     setRawLimit((cur + val).toString());
                   }}
-                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-background border hover:bg-accent text-foreground transition-all active:scale-95"
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg bg-card border-2 border-border shadow-brutal-xs hover:bg-accent text-foreground transition-all active:translate-x-[1px] active:translate-y-[1px]"
                 >
                   +{val >= 1000000 ? `${val / 1000000} Jt` : `${val / 1000}k`}
                 </button>

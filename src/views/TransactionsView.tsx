@@ -144,10 +144,10 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
             <button
               key={type.id}
               onClick={() => setSelectedType(type.id)}
-              className={`px-2.5 py-1.5 rounded-md font-medium whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap border-2 transition-all ${
                 selectedType === type.id
-                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground border-border shadow-brutal-xs'
+                  : 'bg-card border-border/50 text-muted-foreground hover:text-foreground hover:border-border'
               }`}
             >
               {type.label}
@@ -156,7 +156,7 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
         </div>
 
         {/* Dompet & Bulan Selector */}
-        <div className="grid grid-cols-2 gap-2 pt-2 border-t">
+        <div className="grid grid-cols-2 gap-2 pt-2 border-t-2 border-border">
           <Select value={selectedWalletId} onValueChange={setSelectedWalletId}>
             <SelectTrigger className="h-9 text-xs bg-muted/60 border-input/40">
               <SelectValue placeholder="Semua Dompet" />

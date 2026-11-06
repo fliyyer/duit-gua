@@ -114,7 +114,7 @@ export const JajanModal: React.FC<JajanModalProps> = ({
       <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary border-2 border-border shadow-brutal-xs flex items-center justify-center">
               <Icon name="coffee" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>
@@ -125,7 +125,7 @@ export const JajanModal: React.FC<JajanModalProps> = ({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {error && (
-            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border-2 border-destructive/30 text-xs font-bold text-destructive">
               {error}
             </div>
           )}
@@ -182,7 +182,7 @@ export const JajanModal: React.FC<JajanModalProps> = ({
                   key={name}
                   type="button"
                   onClick={() => setTitle(name)}
-                  className="px-2 py-1 text-[11px] font-medium rounded-md border bg-muted/30 hover:bg-accent text-foreground transition-all"
+                  className="px-2 py-1 text-[11px] font-bold rounded-lg border-2 border-border/40 hover:border-border bg-card shadow-brutal-xs hover:bg-accent text-foreground transition-all active:translate-x-[1px] active:translate-y-[1px]"
                 >
                   {name}
                 </button>
@@ -209,7 +209,7 @@ export const JajanModal: React.FC<JajanModalProps> = ({
                   setRawAmount(num === 0 ? '' : num.toString());
                 }}
                 placeholder="0"
-                className="pl-11 font-semibold tabular-nums text-base"
+                className="pl-11 font-semibold tabular-nums text-base font-heading"
               />
             </div>
 
@@ -220,7 +220,7 @@ export const JajanModal: React.FC<JajanModalProps> = ({
                   key={val}
                   type="button"
                   onClick={() => setRawAmount(val.toString())}
-                  className="flex-1 py-1 text-xs font-medium rounded-md border bg-background hover:bg-accent text-foreground transition-all"
+                  className="flex-1 py-1 text-xs font-bold rounded-lg border-2 border-border shadow-brutal-xs bg-card hover:bg-accent text-foreground transition-all active:translate-x-[1px] active:translate-y-[1px]"
                 >
                   {val >= 1000000 ? `${val / 1000000} Jt` : `${val / 1000}k`}
                 </button>

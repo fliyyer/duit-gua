@@ -4,21 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-bold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+        default: "bg-primary text-primary-foreground border-border shadow-brutal-sm hover:brightness-105",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
+          "bg-destructive text-destructive-foreground border-border shadow-brutal-sm hover:brightness-105",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border-border bg-card hover:bg-accent hover:text-accent-foreground text-foreground shadow-brutal-sm",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        emerald: "bg-emerald-600 text-white hover:bg-emerald-500 shadow-sm",
-        rose: "bg-rose-600 text-white hover:bg-rose-500 shadow-sm",
+          "bg-secondary text-secondary-foreground border-border hover:bg-secondary/80 shadow-brutal-sm",
+        ghost: "border-transparent hover:bg-accent hover:text-accent-foreground shadow-none active:translate-x-0 active:translate-y-0",
+        link: "text-primary underline-offset-4 hover:underline border-transparent shadow-none active:translate-x-0 active:translate-y-0",
+        emerald: "bg-emerald-600 text-white border-border shadow-brutal-sm hover:bg-emerald-500",
+        rose: "bg-rose-600 text-white border-border shadow-brutal-sm hover:bg-rose-500",
       },
       size: {
         default: "h-10 px-4 py-2",

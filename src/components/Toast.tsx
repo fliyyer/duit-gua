@@ -20,12 +20,12 @@ export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-lg shadow-elevated border text-sm font-medium transition-all duration-200 animate-in fade-in slide-in-from-top-3 ${
+          className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl shadow-brutal border-2 text-sm font-bold transition-all duration-200 animate-in fade-in slide-in-from-top-3 ${
             toast.type === 'success'
-              ? 'bg-emerald-900 text-white border-emerald-700'
+              ? 'bg-emerald-800 text-white border-border'
               : toast.type === 'error'
-              ? 'bg-rose-900 text-white border-rose-700'
-              : 'bg-slate-900 text-white border-slate-700'
+              ? 'bg-rose-800 text-white border-border'
+              : 'bg-card text-foreground border-border'
           }`}
           role="alert"
           aria-live="assertive"

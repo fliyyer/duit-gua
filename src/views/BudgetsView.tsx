@@ -57,37 +57,37 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
   return (
     <div className="flex flex-col gap-4 pb-28">
       {/* Header Info Banner */}
-      <Card className="p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold text-muted-foreground">
+      <Card className="p-5 sm:p-6 bg-gradient-to-br from-card via-card to-emerald-500/5">
+        <div className="flex items-center justify-between mb-3 border-b-2 border-border pb-2.5">
+          <span className="text-xs font-bold text-muted-foreground">
             Batas Anggaran Bulan Ini
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-md bg-muted font-medium text-foreground">
+          <span className="text-xs px-2.5 py-0.5 rounded-md bg-muted border-2 border-border shadow-brutal-xs font-bold text-foreground">
             {state.budgets.length} Kategori Aktif
           </span>
         </div>
 
         <div className="flex items-baseline justify-between mb-2">
           <div>
-            <p className="text-2xl font-extrabold tabular-nums text-foreground">
+            <p className="text-2xl font-extrabold tabular-nums text-foreground font-heading">
               {formatRupiah(totalBudgetSpent)}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground mt-0.5">
               dari batas anggaran {formatRupiah(totalBudgetLimit)}
             </p>
           </div>
           <Badge
             variant={isOverallOver ? "destructive" : "success"}
-            className="tabular-nums font-bold"
+            className="tabular-nums font-bold border-2"
           >
             {overallPercent.toFixed(0)}% terpakai
           </Badge>
         </div>
 
         {/* Overall Progress Bar */}
-        <div className="w-full bg-muted h-2 rounded-md overflow-hidden mb-4">
+        <div className="w-full bg-muted/60 h-2.5 rounded-full overflow-hidden border-2 border-border mb-4">
           <div
-            className={`h-full rounded-md transition-all duration-300 ${
+            className={`h-full rounded-full transition-all duration-300 ${
               isOverallOver ? 'bg-rose-500' : overallPercent > 80 ? 'bg-amber-400' : 'bg-primary'
             }`}
             style={{ width: `${overallPercent}%` }}
@@ -96,7 +96,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
         <Button
           onClick={onOpenAddBudget}
-          className="w-full h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs gap-1.5 shadow-sm"
+          className="w-full h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs gap-1.5 shadow-brutal-sm"
         >
           <Icon name="plus" className="w-4 h-4" />
           <span>Pasang Batas Anggaran Baru</span>
@@ -136,7 +136,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                    className="w-8 h-8 rounded-lg border-2 border-border shadow-brutal-xs flex items-center justify-center shrink-0"
                     style={{
                       backgroundColor: `${item.categoryColor}20`,
                       color: item.categoryColor,
@@ -150,11 +150,11 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                     </h4>
                     <p className="text-[11px] text-muted-foreground truncate">
                       {item.isOver ? (
-                        <span className="text-rose-600 dark:text-rose-400 font-semibold">
+                        <span className="text-rose-600 dark:text-rose-400 font-bold">
                           Kelebihan {formatRupiah(Math.abs(item.remaining))}
                         </span>
                       ) : (
-                        <span>Sisa {formatRupiah(item.remaining)}</span>
+                        <span className="font-semibold">Sisa {formatRupiah(item.remaining)}</span>
                       )}
                     </p>
                   </div>
@@ -163,7 +163,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                 <div className="flex items-center gap-1.5 shrink-0">
                   <Badge
                     variant={item.isOver ? "destructive" : item.percent > 80 ? "warning" : "success"}
-                    className="tabular-nums font-bold"
+                    className="tabular-nums font-bold border-2"
                   >
                     {item.percent}%
                   </Badge>
@@ -172,7 +172,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                     variant="ghost"
                     size="icon"
                     onClick={() => onEditBudget(item)}
-                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground"
+                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground border border-border/40 shadow-brutal-xs"
                     title="Ubah Anggaran"
                   >
                     <Icon name="edit" className="w-3.5 h-3.5" />
@@ -187,7 +187,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-border/40 shadow-brutal-xs"
                       title="Hapus Anggaran"
                     >
                       <Icon name="trash" className="w-3.5 h-3.5" />

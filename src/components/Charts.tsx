@@ -130,7 +130,7 @@ export const CategoryExpenseChart: React.FC<CategoryExpenseChartProps> = ({
                   </div>
                 </div>
                 {/* Visual bar */}
-                <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
+                <div className="w-full bg-muted/60 h-2 rounded-full border border-border overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
@@ -143,7 +143,7 @@ export const CategoryExpenseChart: React.FC<CategoryExpenseChartProps> = ({
             ))}
 
             {sortedCategories.length > 5 && (
-              <p className="text-[11px] text-muted-foreground text-center pt-1">
+              <p className="text-[11px] text-muted-foreground text-center pt-1 font-semibold">
                 + {sortedCategories.length - 5} kategori lainnya
               </p>
             )}
@@ -166,7 +166,7 @@ export const CashflowBar: React.FC<CashflowBarProps> = ({ income, expense }) => 
   return (
     <Card className="p-3.5 sm:p-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2.5">
-        <span className="text-xs font-semibold text-muted-foreground">
+        <span className="text-xs font-bold text-muted-foreground">
           Arus Kas Periode Ini (Cashflow)
         </span>
         <Badge
@@ -179,20 +179,20 @@ export const CashflowBar: React.FC<CashflowBarProps> = ({ income, expense }) => 
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-1">
-        <div className="p-2.5 sm:p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 min-w-0">
-          <p className="text-[11px] font-medium text-emerald-800 dark:text-emerald-300 truncate">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-emerald-500/10 border-2 border-border shadow-brutal-xs min-w-0">
+          <p className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 truncate">
             Total Pemasukan
           </p>
-          <p className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 tabular-nums truncate">
+          <p className="text-xs sm:text-sm font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums truncate font-heading">
             +{formatRupiah(income)}
           </p>
         </div>
 
-        <div className="p-2.5 sm:p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 min-w-0">
-          <p className="text-[11px] font-medium text-rose-800 dark:text-rose-300 truncate">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-rose-500/10 border-2 border-border shadow-brutal-xs min-w-0">
+          <p className="text-[11px] font-bold text-rose-800 dark:text-rose-300 truncate">
             Total Pengeluaran
           </p>
-          <p className="text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-400 tabular-nums truncate">
+          <p className="text-xs sm:text-sm font-extrabold text-rose-700 dark:text-rose-400 tabular-nums truncate font-heading">
             -{formatRupiah(expense)}
           </p>
         </div>

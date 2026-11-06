@@ -89,7 +89,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
       <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary border-2 border-border shadow-brutal-xs flex items-center justify-center">
               <Icon name="wallet" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>
@@ -100,7 +100,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {error && (
-            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border-2 border-destructive/30 text-xs font-bold text-destructive">
               {error}
             </div>
           )}
@@ -136,10 +136,10 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => setType(item.id as WalletType)}
-                  className={`p-2 sm:p-2.5 rounded-lg border text-xs font-semibold transition-all ${
+                  className={`p-2 sm:p-2.5 rounded-lg border-2 text-xs font-bold transition-all active:translate-x-[1px] active:translate-y-[1px] ${
                     type === item.id
-                      ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                      : 'bg-card text-foreground hover:bg-accent'
+                      ? 'bg-primary text-primary-foreground border-border shadow-brutal-xs'
+                      : 'bg-card text-foreground border-border/40 hover:border-border hover:bg-accent'
                   }`}
                 >
                   {item.label}
@@ -197,8 +197,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                   key={c}
                   type="button"
                   onClick={() => setColor(c)}
-                  className={`w-7 h-7 rounded-md transition-transform ${
-                    color === c ? 'scale-110 ring-2 ring-offset-2 ring-primary' : 'opacity-80 hover:opacity-100'
+                  className={`w-7 h-7 rounded-md border-2 border-border transition-all active:translate-x-[1px] active:translate-y-[1px] ${
+                    color === c ? 'scale-110 shadow-brutal ring-2 ring-offset-2 ring-primary' : 'opacity-80 hover:opacity-100 shadow-brutal-xs'
                   }`}
                   style={{ backgroundColor: c }}
                   aria-label={`Pilih warna ${c}`}

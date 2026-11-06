@@ -39,16 +39,16 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   ];
 
   return (
-    <aside className="hidden lg:flex w-64 xl:w-72 flex-col border-r bg-card/70 backdrop-blur-md p-5 shrink-0 min-h-screen sticky top-0 h-screen overflow-y-auto justify-between shadow-sm">
+    <aside className="hidden lg:flex w-64 xl:w-72 flex-col border-r-2 border-border bg-card p-5 shrink-0 min-h-screen sticky top-0 h-screen overflow-y-auto justify-between shadow-none">
       {/* Top Branding & Balance Widget */}
       <div className="space-y-6">
         {/* App Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center border-2 border-border shadow-brutal-sm">
             <Icon name="wallet" className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-base font-extrabold text-foreground tracking-tight">
+            <h1 className="text-base font-extrabold text-foreground tracking-tight font-heading">
               Duit Gua
             </h1>
             <p className="text-[11px] font-medium text-muted-foreground">
@@ -58,14 +58,14 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
         </div>
 
         {/* Total Net Worth Card */}
-        <div className="p-3.5 rounded-xl bg-muted/40 border space-y-1">
+        <div className="p-3.5 rounded-xl bg-card border-2 border-border shadow-brutal-sm space-y-1">
           <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[11px] font-medium">Total Saldo Aktif</span>
-            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+            <span className="text-[11px] font-bold">Total Saldo Aktif</span>
+            <span className="text-[10px] font-bold text-foreground border border-border bg-emerald-500/20 px-2 py-0.5 rounded-md">
               {formatMonthIndo(selectedMonth)}
             </span>
           </div>
-          <p className="text-lg font-extrabold text-foreground tabular-nums">
+          <p className="text-lg font-extrabold text-foreground tabular-nums font-heading">
             {formatRupiah(totalBalance)}
           </p>
         </div>
@@ -74,7 +74,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
         <div className="space-y-1.5">
           <Button
             onClick={onOpenAddTransaction}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs rounded-lg gap-2 shadow-sm h-10"
+            className="w-full font-bold text-xs rounded-lg gap-2 h-10"
           >
             <Icon name="plus" className="w-4 h-4" />
             <span>Catat Transaksi (+)</span>
@@ -83,14 +83,14 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
           <div className="grid grid-cols-2 gap-1.5 pt-1">
             <button
               onClick={onOpenAddDailyExpense}
-              className="py-1.5 px-2 rounded-lg border text-[11px] font-medium bg-background hover:bg-accent text-foreground transition-all text-center flex items-center justify-center gap-1"
+              className="py-1.5 px-2 rounded-lg border-2 border-border text-[11px] font-bold bg-card hover:bg-accent text-foreground shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-center flex items-center justify-center gap-1"
             >
               <Icon name="shopping-bag" className="w-3 h-3 text-amber-600 dark:text-amber-400" />
               <span>+ Sehari-Hari</span>
             </button>
             <button
               onClick={onOpenAddJajan}
-              className="py-1.5 px-2 rounded-lg border text-[11px] font-medium bg-background hover:bg-accent text-foreground transition-all text-center flex items-center justify-center gap-1"
+              className="py-1.5 px-2 rounded-lg border-2 border-border text-[11px] font-bold bg-card hover:bg-accent text-foreground shadow-brutal-xs active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-center flex items-center justify-center gap-1"
             >
               <Icon name="coffee" className="w-3 h-3 text-purple-600 dark:text-purple-400" />
               <span>+ Jajan</span>
@@ -100,7 +100,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 
         {/* Navigation Menu */}
         <nav className="space-y-1 pt-2" aria-label="Menu Desktop">
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-3 pb-1 block">
+          <span className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider px-3 pb-1 block">
             Menu Utama
           </span>
           {navItems.map((item) => {
@@ -109,10 +109,10 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
               <button
                 key={item.id}
                 onClick={() => onSelectTab(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${
                   isActive
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                    ? 'bg-primary text-primary-foreground border-2 border-border shadow-brutal-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent border-2 border-transparent hover:border-border/60'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -121,7 +121,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-accent text-accent-foreground">
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-border bg-accent text-accent-foreground">
                     {item.badge}
                   </span>
                 )}
@@ -132,23 +132,23 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
       </div>
 
       {/* Bottom Controls: Theme & Settings */}
-      <div className="pt-4 border-t space-y-2">
+      <div className="pt-4 border-t-2 border-border space-y-2">
         <button
           onClick={onToggleTheme}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-lg border-2 border-transparent hover:border-border hover:bg-accent text-xs font-bold text-muted-foreground hover:text-foreground transition-all"
         >
           <div className="flex items-center gap-2.5">
             <Icon name={theme === 'dark' ? 'sun' : 'moon'} className="w-4 h-4 text-primary" />
             <span>Mode {theme === 'dark' ? 'Terang' : 'Gelap'}</span>
           </div>
-          <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded">
+          <span className="text-[10px] font-bold border border-border bg-card px-1.5 py-0.5 rounded">
             {theme === 'dark' ? 'Dark' : 'Light'}
           </span>
         </button>
 
         <button
           onClick={onOpenSettings}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg border-2 border-transparent hover:border-border hover:bg-accent text-xs font-bold text-muted-foreground hover:text-foreground transition-all"
         >
           <Icon name="settings" className="w-4 h-4" />
           <span>Pengaturan & Backup Data</span>
