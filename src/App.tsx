@@ -29,6 +29,7 @@ import { DailyTrackersView } from './views/DailyTrackersView';
 import { TransactionsView } from './views/TransactionsView';
 import { BudgetsView } from './views/BudgetsView';
 import { WalletsView } from './views/WalletsView';
+import { ConfirmDialog } from './components/ConfirmDialog';
 import { getCurrentMonthString } from './utils/currency';
 
 export const App: React.FC = () => {
@@ -59,6 +60,22 @@ export const App: React.FC = () => {
   const [editingJajan, setEditingJajan] = useState<JajanItem | null>(null);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Global confirm dialog modal state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    confirmText?: string;
+    cancelText?: string;
+    variant?: 'destructive' | 'default' | 'warning';
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    description: '',
+    onConfirm: () => {},
+  });
 
   // Sync to localStorage
   useEffect(() => {
@@ -194,37 +211,45 @@ export const App: React.FC = () => {
     const tx = state.transactions.find((t) => t.id === id);
     if (!tx) return;
 
-    if (window.confirm('Yakin ingin menghapus catatan transaksi ini? Saldo dompet akan disesuaikan.')) {
-      setState((prev) => {
-        let updatedWallets = [...prev.wallets];
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Hapus Transaksi',
+      description: 'Yakin ingin menghapus catatan transaksi ini? Saldo dompet akan disesuaikan secara otomatis.',
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        setState((prev) => {
+          let updatedWallets = [...prev.wallets];
 
-        if (tx.type === 'expense') {
-          updatedWallets = updatedWallets.map((w) =>
-            w.id === tx.walletId ? { ...w, balance: w.balance + tx.amount } : w
-          );
-        } else if (tx.type === 'income') {
-          updatedWallets = updatedWallets.map((w) =>
-            w.id === tx.walletId ? { ...w, balance: w.balance - tx.amount } : w
-          );
-        } else if (tx.type === 'transfer' && tx.toWalletId) {
-          // Revert transfer
-          updatedWallets = updatedWallets.map((w) => {
-            if (w.id === tx.walletId) return { ...w, balance: w.balance + tx.amount };
-            if (w.id === tx.toWalletId) return { ...w, balance: w.balance - tx.amount };
-            return w;
-          });
-        }
+          if (tx.type === 'expense') {
+            updatedWallets = updatedWallets.map((w) =>
+              w.id === tx.walletId ? { ...w, balance: w.balance + tx.amount } : w
+            );
+          } else if (tx.type === 'income') {
+            updatedWallets = updatedWallets.map((w) =>
+              w.id === tx.walletId ? { ...w, balance: w.balance - tx.amount } : w
+            );
+          } else if (tx.type === 'transfer' && tx.toWalletId) {
+            // Revert transfer
+            updatedWallets = updatedWallets.map((w) => {
+              if (w.id === tx.walletId) return { ...w, balance: w.balance + tx.amount };
+              if (w.id === tx.toWalletId) return { ...w, balance: w.balance - tx.amount };
+              return w;
+            });
+          }
 
-        return {
-          ...prev,
-          wallets: updatedWallets,
-          transactions: prev.transactions.filter((t) => t.id !== id),
-          dailyExpenses: prev.dailyExpenses.filter((d) => d.transactionId !== id),
-          jajanItems: prev.jajanItems.filter((j) => j.transactionId !== id),
-        };
-      });
-      showToast('Transaksi berhasil dihapus.', 'info');
-    }
+          return {
+            ...prev,
+            wallets: updatedWallets,
+            transactions: prev.transactions.filter((t) => t.id !== id),
+            dailyExpenses: prev.dailyExpenses.filter((d) => d.transactionId !== id),
+            jajanItems: prev.jajanItems.filter((j) => j.transactionId !== id),
+          };
+        });
+        showToast('Transaksi berhasil dihapus.', 'info');
+      },
+    });
   };
 
   // Transfer between wallets
@@ -298,13 +323,24 @@ export const App: React.FC = () => {
       return;
     }
 
-    if (window.confirm('Hapus dompet ini? Transaksi lama yang terkait akan tetap tersimpan di riwayat.')) {
-      setState((prev) => ({
-        ...prev,
-        wallets: prev.wallets.filter((w) => w.id !== id),
-      }));
-      showToast('Dompet berhasil dihapus.', 'info');
-    }
+    const wallet = state.wallets.find((w) => w.id === id);
+    const walletName = wallet ? `"${wallet.name}"` : 'ini';
+
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Hapus Dompet',
+      description: `Hapus dompet ${walletName}? Transaksi lama yang terkait akan tetap tersimpan di riwayat.`,
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        setState((prev) => ({
+          ...prev,
+          wallets: prev.wallets.filter((w) => w.id !== id),
+        }));
+        showToast('Dompet berhasil dihapus.', 'info');
+      },
+    });
   };
 
   // Budget CRUD
@@ -345,13 +381,21 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteBudget = (id: string) => {
-    if (window.confirm('Hapus target anggaran pos ini?')) {
-      setState((prev) => ({
-        ...prev,
-        budgets: prev.budgets.filter((b) => b.id !== id),
-      }));
-      showToast('Anggaran pos berhasil dihapus.', 'info');
-    }
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Hapus Batas Anggaran',
+      description: 'Hapus target anggaran pos ini? Batas pengeluaran untuk pos ini akan direset.',
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        setState((prev) => ({
+          ...prev,
+          budgets: prev.budgets.filter((b) => b.id !== id),
+        }));
+        showToast('Anggaran pos berhasil dihapus.', 'info');
+      },
+    });
   };
 
   // Financial Plans (4 Pilar) CRUD
@@ -377,13 +421,24 @@ export const App: React.FC = () => {
   };
 
   const handleDeletePlan = (id: string) => {
-    if (window.confirm('Hapus pos anggaran ini?')) {
-      setState((prev) => ({
-        ...prev,
-        plans: prev.plans.filter((p) => p.id !== id),
-      }));
-      showToast('Pos anggaran berhasil dihapus.', 'info');
-    }
+    const plan = state.plans.find((p) => p.id === id);
+    const planTitle = plan ? `"${plan.title}"` : 'ini';
+
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Hapus Pos Rencana',
+      description: `Hapus pos rencana anggaran ${planTitle}?`,
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        setState((prev) => ({
+          ...prev,
+          plans: prev.plans.filter((p) => p.id !== id),
+        }));
+        showToast('Pos anggaran berhasil dihapus.', 'info');
+      },
+    });
   };
 
   // Daily Expense CRUD with automatic wallet deduction & transaction sync
@@ -473,21 +528,29 @@ export const App: React.FC = () => {
     const item = state.dailyExpenses.find((d) => d.id === id);
     if (!item) return;
 
-    if (window.confirm(`Hapus catatan "${item.title}"? Saldo dompet akan dikembalikan.`)) {
-      setState((prev) => {
-        const updatedWallets = prev.wallets.map((w) =>
-          w.id === item.walletId ? { ...w, balance: w.balance + item.total } : w
-        );
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Hapus Catatan Pengeluaran',
+      description: `Hapus catatan "${item.title}"? Saldo dompet akan dikembalikan secara otomatis.`,
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        setState((prev) => {
+          const updatedWallets = prev.wallets.map((w) =>
+            w.id === item.walletId ? { ...w, balance: w.balance + item.total } : w
+          );
 
-        return {
-          ...prev,
-          wallets: updatedWallets,
-          dailyExpenses: prev.dailyExpenses.filter((d) => d.id !== id),
-          transactions: prev.transactions.filter((t) => t.id !== item.transactionId),
-        };
-      });
-      showToast('Catatan berhasil dihapus & saldo dipulihkan.', 'info');
-    }
+          return {
+            ...prev,
+            wallets: updatedWallets,
+            dailyExpenses: prev.dailyExpenses.filter((d) => d.id !== id),
+            transactions: prev.transactions.filter((t) => t.id !== item.transactionId),
+          };
+        });
+        showToast('Catatan berhasil dihapus & saldo dipulihkan.', 'info');
+      },
+    });
   };
 
   // Jajan & Nongkrong CRUD with automatic wallet deduction & transaction sync
@@ -573,21 +636,29 @@ export const App: React.FC = () => {
     const item = state.jajanItems.find((j) => j.id === id);
     if (!item) return;
 
-    if (window.confirm(`Hapus catatan jajan "${item.title}"? Saldo dompet akan dikembalikan.`)) {
-      setState((prev) => {
-        const updatedWallets = prev.wallets.map((w) =>
-          w.id === item.walletId ? { ...w, balance: w.balance + item.amount } : w
-        );
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Hapus Catatan Jajan',
+      description: `Hapus catatan jajan "${item.title}"? Saldo dompet akan dikembalikan secara otomatis.`,
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        setState((prev) => {
+          const updatedWallets = prev.wallets.map((w) =>
+            w.id === item.walletId ? { ...w, balance: w.balance + item.amount } : w
+          );
 
-        return {
-          ...prev,
-          wallets: updatedWallets,
-          jajanItems: prev.jajanItems.filter((j) => j.id !== id),
-          transactions: prev.transactions.filter((t) => t.id !== item.transactionId),
-        };
-      });
-      showToast('Catatan jajan dihapus & saldo dipulihkan.', 'info');
-    }
+          return {
+            ...prev,
+            wallets: updatedWallets,
+            jajanItems: prev.jajanItems.filter((j) => j.id !== id),
+            transactions: prev.transactions.filter((t) => t.id !== item.transactionId),
+          };
+        });
+        showToast('Catatan jajan dihapus & saldo dipulihkan.', 'info');
+      },
+    });
   };
 
   const totalBalance = state.wallets.reduce((sum, w) => sum + w.balance, 0);
@@ -844,6 +915,18 @@ export const App: React.FC = () => {
         onUpdateState={setState}
         onToggleTheme={handleToggleTheme}
         onShowToast={showToast}
+      />
+
+      {/* Global Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        description={confirmDialog.description}
+        confirmText={confirmDialog.confirmText}
+        cancelText={confirmDialog.cancelText}
+        variant={confirmDialog.variant}
       />
     </div>
   );

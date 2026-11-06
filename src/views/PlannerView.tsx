@@ -10,6 +10,7 @@ import {
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { Popconfirm } from '../components/Popconfirm';
 
 interface PlannerViewProps {
   state: AppState;
@@ -285,13 +286,21 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
-                    <button
-                      onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      title="Hapus"
+                    <Popconfirm
+                      title="Hapus Pos Pendapatan?"
+                      description={`Hapus pos "${item.title}"?`}
+                      confirmText="Hapus"
+                      cancelText="Batal"
+                      onConfirm={() => onDeletePlan(item.id)}
                     >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                    </button>
+                      <button
+                        type="button"
+                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                        title="Hapus"
+                      >
+                        <Icon name="trash" className="w-3.5 h-3.5" />
+                      </button>
+                    </Popconfirm>
                   </div>
                 </div>
               ))
@@ -370,13 +379,21 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
-                    <button
-                      onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      title="Hapus"
+                    <Popconfirm
+                      title="Hapus Pos Pengeluaran Tetap?"
+                      description={`Hapus pos "${item.title}"?`}
+                      confirmText="Hapus"
+                      cancelText="Batal"
+                      onConfirm={() => onDeletePlan(item.id)}
                     >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                    </button>
+                      <button
+                        type="button"
+                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                        title="Hapus"
+                      >
+                        <Icon name="trash" className="w-3.5 h-3.5" />
+                      </button>
+                    </Popconfirm>
                   </div>
                 </div>
               ))
@@ -448,13 +465,21 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
-                    <button
-                      onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      title="Hapus"
+                    <Popconfirm
+                      title="Hapus Pos Tabungan?"
+                      description={`Hapus pos "${item.title}"?`}
+                      confirmText="Hapus"
+                      cancelText="Batal"
+                      onConfirm={() => onDeletePlan(item.id)}
                     >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                    </button>
+                      <button
+                        type="button"
+                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                        title="Hapus"
+                      >
+                        <Icon name="trash" className="w-3.5 h-3.5" />
+                      </button>
+                    </Popconfirm>
                   </div>
                 </div>
               ))
@@ -538,13 +563,21 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     {!item.isAutoCalculated && (
-                      <button
-                        onClick={() => onDeletePlan(item.id)}
-                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                        title="Hapus"
+                      <Popconfirm
+                        title="Hapus Pos Pengeluaran Variabel?"
+                        description={`Hapus pos "${item.title}"?`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeletePlan(item.id)}
                       >
-                        <Icon name="trash" className="w-3.5 h-3.5" />
-                      </button>
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
                     )}
                   </div>
                 </div>
@@ -617,13 +650,21 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     >
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
-                    <button
-                      onClick={() => onDeletePlan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      title="Hapus"
+                    <Popconfirm
+                      title="Hapus Pos Pembayaran Hutang?"
+                      description={`Hapus pos "${item.title}"?`}
+                      confirmText="Hapus"
+                      cancelText="Batal"
+                      onConfirm={() => onDeletePlan(item.id)}
                     >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                    </button>
+                      <button
+                        type="button"
+                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                        title="Hapus"
+                      >
+                        <Icon name="trash" className="w-3.5 h-3.5" />
+                      </button>
+                    </Popconfirm>
                   </div>
                 </div>
               ))

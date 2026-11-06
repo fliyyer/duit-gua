@@ -12,6 +12,7 @@ import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Popconfirm } from '../components/Popconfirm';
 
 interface DailyTrackersViewProps {
   state: AppState;
@@ -241,25 +242,33 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-extrabold text-foreground tabular-nums">
-                      {formatRupiah(item.total)}
-                    </span>
-                    <button
-                      onClick={() => onEditDailyExpense(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
-                      title="Ubah"
-                    >
-                      <Icon name="edit" className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => onDeleteDailyExpense(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      title="Hapus"
-                    >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs font-extrabold text-foreground tabular-nums">
+                        {formatRupiah(item.total)}
+                      </span>
+                      <button
+                        onClick={() => onEditDailyExpense(item)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                        title="Ubah"
+                      >
+                        <Icon name="edit" className="w-3.5 h-3.5" />
+                      </button>
+                      <Popconfirm
+                        title="Hapus Catatan?"
+                        description={`Hapus catatan "${item.title}"? Saldo dompet akan dipulihkan.`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeleteDailyExpense(item.id)}
+                      >
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
+                    </div>
                 </div>
               ))
             )}
@@ -326,25 +335,33 @@ export const DailyTrackersView: React.FC<DailyTrackersViewProps> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">
-                      {formatRupiah(item.amount)}
-                    </span>
-                    <button
-                      onClick={() => onEditJajan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
-                      title="Ubah"
-                    >
-                      <Icon name="edit" className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => onDeleteJajan(item.id)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      title="Hapus"
-                    >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">
+                        {formatRupiah(item.amount)}
+                      </span>
+                      <button
+                        onClick={() => onEditJajan(item)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                        title="Ubah"
+                      >
+                        <Icon name="edit" className="w-3.5 h-3.5" />
+                      </button>
+                      <Popconfirm
+                        title="Hapus Catatan Jajan?"
+                        description={`Hapus catatan jajan "${item.title}"? Saldo dompet akan dipulihkan.`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeleteJajan(item.id)}
+                      >
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
+                    </div>
                 </div>
               ))
             )}

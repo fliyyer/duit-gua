@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select';
+import { Popconfirm } from '../components/Popconfirm';
 
 interface TransactionsViewProps {
   state: AppState;
@@ -325,15 +326,22 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                             >
                               <Icon name="edit" className="w-3.5 h-3.5" />
                             </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => onDeleteTransaction(tx.id)}
-                              className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                              title="Hapus transaksi"
+                            <Popconfirm
+                              title="Hapus Transaksi?"
+                              description={`Hapus catatan ${formatRupiah(tx.amount)}? Saldo dompet akan disesuaikan.`}
+                              confirmText="Hapus"
+                              cancelText="Batal"
+                              onConfirm={() => onDeleteTransaction(tx.id)}
                             >
-                              <Icon name="trash" className="w-3.5 h-3.5" />
-                            </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                title="Hapus transaksi"
+                              >
+                                <Icon name="trash" className="w-3.5 h-3.5" />
+                              </Button>
+                            </Popconfirm>
                           </div>
                         </div>
                       </div>

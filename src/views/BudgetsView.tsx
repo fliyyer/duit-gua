@@ -6,6 +6,7 @@ import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
+import { Popconfirm } from '../components/Popconfirm';
 
 interface BudgetsViewProps {
   state: AppState;
@@ -176,15 +177,22 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                   >
                     <Icon name="edit" className="w-3.5 h-3.5" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onDeleteBudget(item.id)}
-                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    title="Hapus Anggaran"
+                  <Popconfirm
+                    title="Hapus Batas Anggaran?"
+                    description={`Hapus batas anggaran untuk pos "${item.categoryName}"?`}
+                    confirmText="Hapus"
+                    cancelText="Batal"
+                    onConfirm={() => onDeleteBudget(item.id)}
                   >
-                    <Icon name="trash" className="w-3.5 h-3.5" />
-                  </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      title="Hapus Anggaran"
+                    >
+                      <Icon name="trash" className="w-3.5 h-3.5" />
+                    </Button>
+                  </Popconfirm>
                 </div>
               </div>
 

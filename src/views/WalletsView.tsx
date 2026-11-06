@@ -4,6 +4,7 @@ import { formatRupiah } from '../utils/currency';
 import { Icon } from '../components/Icon';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
+import { Popconfirm } from '../components/Popconfirm';
 
 interface WalletsViewProps {
   state: AppState;
@@ -133,15 +134,22 @@ export const WalletsView: React.FC<WalletsViewProps> = ({
                     <span>Ubah</span>
                   </Button>
                   {state.wallets.length > 1 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onDeleteWallet(wallet.id)}
-                      className="h-8 px-2.5 rounded-lg text-xs gap-1 font-medium text-destructive hover:bg-destructive/10"
+                    <Popconfirm
+                      title="Hapus Dompet?"
+                      description={`Hapus dompet "${wallet.name}"? Transaksi lama akan tetap tersimpan.`}
+                      confirmText="Hapus"
+                      cancelText="Batal"
+                      onConfirm={() => onDeleteWallet(wallet.id)}
                     >
-                      <Icon name="trash" className="w-3.5 h-3.5" />
-                      <span>Hapus</span>
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 px-2.5 rounded-lg text-xs gap-1 font-medium text-destructive hover:bg-destructive/10"
+                      >
+                        <Icon name="trash" className="w-3.5 h-3.5" />
+                        <span>Hapus</span>
+                      </Button>
+                    </Popconfirm>
                   )}
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { AppState } from '../types';
 import { Icon } from '../components/Icon';
 import { exportDataAsJSON, importDataFromJSON, clearAllData } from '../utils/storage';
@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from '../components/ui/dialog';
 import { Button } from '../components/ui/button';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -38,6 +39,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onShowToast,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    confirmText?: string;
+    cancelText?: string;
+    variant?: 'destructive' | 'default' | 'warning';
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    description: '',
+    onConfirm: () => {},
+  });
 
   const handleExport = () => {
     try {
@@ -72,32 +87,48 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const handleResetToDemo = () => {
-    if (window.confirm('Muat kembali data sampel demo? Transaksi saat ini akan diganti.')) {
-      const currentMonth = getCurrentMonthString();
-      const demoState: AppState = {
-        wallets: DEFAULT_WALLETS,
-        categories: DEFAULT_CATEGORIES,
-        transactions: getDefaultTransactions(),
-        budgets: getDefaultBudgets(),
-        plans: getDefaultPlans(currentMonth),
-        dailyExpenses: getDefaultDailyExpenses(currentMonth),
-        jajanItems: getDefaultJajanItems(currentMonth),
-        selectedMonth: currentMonth,
-        theme: state.theme,
-      };
-      onUpdateState(demoState);
-      onShowToast('Data sampel demo berhasil dimuat.', 'info');
-      onClose();
-    }
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Muat Data Sampel Demo',
+      description: 'Muat kembali data sampel demo? Seluruh transaksi dan anggaran saat ini akan diganti dengan data sampel bawaan.',
+      confirmText: 'Ya, Muat Sampel',
+      cancelText: 'Batal',
+      variant: 'default',
+      onConfirm: () => {
+        const currentMonth = getCurrentMonthString();
+        const demoState: AppState = {
+          wallets: DEFAULT_WALLETS,
+          categories: DEFAULT_CATEGORIES,
+          transactions: getDefaultTransactions(),
+          budgets: getDefaultBudgets(),
+          plans: getDefaultPlans(currentMonth),
+          dailyExpenses: getDefaultDailyExpenses(currentMonth),
+          jajanItems: getDefaultJajanItems(currentMonth),
+          selectedMonth: currentMonth,
+          theme: state.theme,
+        };
+        onUpdateState(demoState);
+        onShowToast('Data sampel demo berhasil dimuat.', 'info');
+        onClose();
+      },
+    });
   };
 
   const handleClearAll = () => {
-    if (window.confirm('Yakin ingin mengosongkan semua transaksi dan data dompet? Tindakan ini tidak dapat dibatalkan.')) {
-      const cleared = clearAllData();
-      onUpdateState({ ...cleared, theme: state.theme });
-      onShowToast('Semua data berhasil dibersihkan.', 'info');
-      onClose();
-    }
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Kosongkan Semua Data',
+      description: 'Yakin ingin mengosongkan semua transaksi dan data dompet? Tindakan ini permanen dan tidak dapat dibatalkan.',
+      confirmText: 'Ya, Kosongkan',
+      cancelText: 'Batal',
+      variant: 'destructive',
+      onConfirm: () => {
+        const cleared = clearAllData();
+        onUpdateState({ ...cleared, theme: state.theme });
+        onShowToast('Semua data berhasil dibersihkan.', 'info');
+        onClose();
+      },
+    });
   };
 
   return (
@@ -226,6 +257,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         </div>
       </DialogContent>
+
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        description={confirmDialog.description}
+        confirmText={confirmDialog.confirmText}
+        cancelText={confirmDialog.cancelText}
+        variant={confirmDialog.variant}
+      />
     </Dialog>
   );
 };
