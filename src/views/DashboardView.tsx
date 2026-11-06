@@ -77,20 +77,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Kartu Saldo Utama & Arus Kas Terintegrasi (Combined Hero Banner) */}
         <Card className="lg:col-span-2 p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm flex flex-col justify-between gap-4">
           {/* Header Row: Title, Month Badge, and Wallets Link */}
-          <div className="flex items-center justify-between border-b pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-muted-foreground">
-                Ringkasan Saldo & Arus Kas
+          <div className="flex items-center justify-between border-b pb-2.5 gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <span className="text-xs font-semibold text-muted-foreground truncate">
+                Total Saldo Bersih
               </span>
-              <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+              <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
                 {formatMonthIndo(currentMonth)}
               </span>
             </div>
             <button
               onClick={() => onSelectTab('wallets')}
-              className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2.5 py-1 rounded-md transition-colors"
+              className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 hover:bg-accent px-2 py-1 rounded-md transition-colors shrink-0"
+              title="Lihat rincian semua dompet"
             >
-              <span>{state.wallets.length} Akun</span>
+              <span>{state.wallets.length} Dompet</span>
               <Icon name="chevron-right" className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -100,14 +101,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {/* Left Side: Saldo Utama & Action Buttons */}
             <div className="flex flex-col justify-between gap-3">
               <div>
-                <span className="text-[11px] font-medium text-muted-foreground block mb-0.5">
-                  Total Saldo Seluruh Dompet
-                </span>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tabular-nums tracking-tight text-foreground break-words">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tabular-nums tracking-tight text-foreground break-words font-heading">
                   {formatRupiah(totalBalance)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Akumulasi kas tunai, rekening bank & dompet digital aktif
+                  Akumulasi kas tunai, rekening & e-wallet
                 </p>
               </div>
 
@@ -470,40 +468,69 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <div>
-                <CardTitle>Dompet & Akun</CardTitle>
-                <CardDescription>Rekening & saldo aktif</CardDescription>
+                <CardTitle>Rincian Dompet & Rekening</CardTitle>
+                <CardDescription>{state.wallets.length} sumber dana aktif</CardDescription>
               </div>
               <button
                 onClick={() => onSelectTab('wallets')}
-                className="text-xs font-semibold text-primary hover:underline"
+                className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
               >
-                Semua
+                <span>Kelola</span>
+                <Icon name="chevron-right" className="w-3 h-3" />
               </button>
             </CardHeader>
 
             <CardContent className="space-y-2">
-              {state.wallets.map((w) => (
-                <div
-                  key={w.id}
-                  className="flex items-center justify-between p-2.5 rounded-lg border bg-muted/20"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="w-3 h-3 rounded-md"
-                      style={{ backgroundColor: w.color }}
-                    />
-                    <div>
-                      <p className="text-xs font-bold text-foreground">{w.name}</p>
-                      {w.accountNumber && (
-                        <p className="text-[10px] text-muted-foreground">{w.accountNumber}</p>
-                      )}
+              {state.wallets.map((w) => {
+                const getWalletTypeBadge = (type: string) => {
+                  switch (type) {
+                    case 'cash':
+                      return 'Tunai';
+                    case 'bank':
+                      return 'Bank';
+                    case 'ewallet':
+                      return 'E-Wallet';
+                    case 'investment':
+                      return 'Investasi';
+                    default:
+                      return 'Dompet';
+                  }
+                };
+
+                return (
+                  <div
+                    key={w.id}
+                    onClick={() => onSelectTab('wallets')}
+                    className="flex items-center justify-between p-2.5 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer group"
+                    title={`Klik untuk mengelola dompet ${w.name}`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+                      <div
+                        className="w-3 h-3 rounded-full shrink-0"
+                        style={{ backgroundColor: w.color }}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <p className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                            {w.name}
+                          </p>
+                          <span className="text-[9px] font-semibold text-muted-foreground bg-muted px-1.5 py-0.2 rounded shrink-0">
+                            {getWalletTypeBadge(w.type)}
+                          </span>
+                        </div>
+                        {w.accountNumber && (
+                          <p className="text-[10px] text-muted-foreground font-mono truncate">
+                            {w.accountNumber}
+                          </p>
+                        )}
+                      </div>
                     </div>
+                    <span className="text-xs font-bold text-foreground tabular-nums shrink-0">
+                      {formatRupiah(w.balance)}
+                    </span>
                   </div>
-                  <span className="text-xs font-bold text-foreground tabular-nums">
-                    {formatRupiah(w.balance)}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
         </div>
