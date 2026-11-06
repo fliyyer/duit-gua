@@ -377,14 +377,14 @@ export const App: React.FC = () => {
       }
     });
 
-    showToast('Batas anggaran pos berhasil disimpan.', 'success');
+    showToast('Batas anggaran kategori berhasil disimpan.', 'success');
   };
 
   const handleDeleteBudget = (id: string) => {
     setConfirmDialog({
       isOpen: true,
       title: 'Hapus Batas Anggaran',
-      description: 'Hapus target anggaran pos ini? Batas pengeluaran untuk pos ini akan direset.',
+      description: 'Hapus batas anggaran kategori ini? Batas pengeluaran untuk kategori ini akan direset.',
       confirmText: 'Ya, Hapus',
       cancelText: 'Batal',
       variant: 'destructive',
@@ -393,7 +393,7 @@ export const App: React.FC = () => {
           ...prev,
           budgets: prev.budgets.filter((b) => b.id !== id),
         }));
-        showToast('Anggaran pos berhasil dihapus.', 'info');
+        showToast('Batas anggaran berhasil dihapus.', 'info');
       },
     });
   };
@@ -417,7 +417,7 @@ export const App: React.FC = () => {
         };
       }
     });
-    showToast('Pos anggaran berhasil disimpan.', 'success');
+    showToast('Rencana berhasil disimpan.', 'success');
   };
 
   const handleDeletePlan = (id: string) => {
@@ -426,8 +426,8 @@ export const App: React.FC = () => {
 
     setConfirmDialog({
       isOpen: true,
-      title: 'Hapus Pos Rencana',
-      description: `Hapus pos rencana anggaran ${planTitle}?`,
+      title: 'Hapus Rencana',
+      description: `Hapus rencana ${planTitle}?`,
       confirmText: 'Ya, Hapus',
       cancelText: 'Batal',
       variant: 'destructive',
@@ -436,7 +436,7 @@ export const App: React.FC = () => {
           ...prev,
           plans: prev.plans.filter((p) => p.id !== id),
         }));
-        showToast('Pos anggaran berhasil dihapus.', 'info');
+        showToast('Rencana berhasil dihapus.', 'info');
       },
     });
   };

@@ -86,11 +86,11 @@ export const WalletModal: React.FC<WalletModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Icon name="wallet" className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Icon name="wallet" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>
               {editWallet ? 'Ubah Informasi Dompet' : 'Tambah Dompet / Akun Baru'}
@@ -98,16 +98,16 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {error && (
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
               {error}
             </div>
           )}
 
           {/* Nama Dompet */}
           <div>
-            <label htmlFor="wallet-name" className="block text-xs font-bold text-foreground mb-1.5">
+            <label htmlFor="wallet-name" className="block text-xs font-bold text-foreground mb-1">
               Nama Dompet / Rekening
             </label>
             <Input
@@ -122,10 +122,10 @@ export const WalletModal: React.FC<WalletModalProps> = ({
 
           {/* Tipe Dompet */}
           <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
+            <label className="block text-xs font-bold text-foreground mb-1">
               Jenis Akun
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
               {[
                 { id: 'bank', label: 'Rekening Bank' },
                 { id: 'ewallet', label: 'E-Wallet' },
@@ -136,7 +136,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => setType(item.id as WalletType)}
-                  className={`p-2.5 rounded-lg border text-xs font-semibold transition-all ${
+                  className={`p-2 sm:p-2.5 rounded-lg border text-xs font-semibold transition-all ${
                     type === item.id
                       ? 'bg-primary text-primary-foreground border-primary shadow-sm'
                       : 'bg-card text-foreground hover:bg-accent'

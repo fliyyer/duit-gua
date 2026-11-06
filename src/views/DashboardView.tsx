@@ -55,7 +55,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     const percent = Math.min(100, (spent / b.monthlyLimit) * 100);
     return {
       ...b,
-      categoryName: category ? category.name : 'Pos Pengeluaran',
+      categoryName: category ? category.name : 'Kategori Pengeluaran',
       categoryColor: category ? category.color : '#059669',
       spent,
       percent,
@@ -420,7 +420,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle>Pantauan Anggaran</CardTitle>
-                  <CardDescription>Batas pengeluaran per pos</CardDescription>
+                  <CardDescription>Batas pengeluaran per kategori</CardDescription>
                 </div>
                 <button
                   onClick={() => onSelectTab('budgets')}

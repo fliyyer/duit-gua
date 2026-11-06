@@ -61,7 +61,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader className="border-none pb-0">
           <div className="flex items-start gap-3">
             {getIcon()}

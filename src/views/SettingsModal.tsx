@@ -133,17 +133,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Icon name="settings" className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Icon name="settings" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>Pengaturan & Cadangan Data</DialogTitle>
           </div>
         </DialogHeader>
 
-        <div className="flex flex-col gap-5 pt-1">
+        <div className="flex flex-col gap-4 sm:gap-5 pt-1">
           {/* Tampilan Tema */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-bold text-foreground">

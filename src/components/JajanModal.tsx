@@ -111,11 +111,11 @@ export const JajanModal: React.FC<JajanModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Icon name="coffee" className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Icon name="coffee" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>
               {editItem ? 'Ubah Jajan & Nongkrong' : 'Catat Jajan & Nongkrong'}
@@ -123,9 +123,9 @@ export const JajanModal: React.FC<JajanModalProps> = ({
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {error && (
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
               {error}
             </div>
           )}

@@ -101,7 +101,7 @@ export const CategoryExpenseChart: React.FC<CategoryExpenseChartProps> = ({
                 Pengeluaran
               </span>
               <span className="text-sm font-bold text-foreground tabular-nums">
-                {sortedCategories.length} Pos
+                {sortedCategories.length} Kategori
               </span>
             </div>
           </div>

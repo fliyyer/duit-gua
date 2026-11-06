@@ -124,7 +124,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-4 sm:p-5 sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader className="pb-1">
           <DialogTitle className="text-base font-bold">
             {editTransaction ? 'Ubah Catatan Transaksi' : 'Catat Transaksi Baru'}

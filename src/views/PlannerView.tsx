@@ -11,6 +11,7 @@ import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Popconfirm } from '../components/Popconfirm';
+import { InfoReminder } from '../components/InfoReminder';
 
 interface PlannerViewProps {
   state: AppState;
@@ -78,163 +79,244 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
   // Sisa Uang = Pendapatan - Pengeluaran - Tabungan
   const sisaUangActual = totalIncome - totalExpenseActual - totalSavingActual;
 
-  return (
-    <div className="space-y-6 pb-12">
-      {/* Month Navigation & Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl bg-card border shadow-sm">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => onSelectMonth(getPrevMonth(currentMonth))}
-            className="h-9 w-9 rounded-lg"
-            title="Bulan Sebelumnya"
-            aria-label="Bulan Sebelumnya"
-          >
-            <Icon name="chevron-left" className="w-4 h-4" />
-          </Button>
+  // Percentage calculations
+  const savingPercent = totalIncome > 0 ? Math.round((totalSavingActual / totalIncome) * 100) : 0;
+  const expensePercent = totalIncome > 0 ? Math.round((totalExpenseActual / totalIncome) * 100) : 0;
+  const sisaPercent = totalIncome > 0 ? Math.max(0, 100 - savingPercent - expensePercent) : 0;
 
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 border">
-            <Icon name="calendar" className="w-4 h-4 text-primary" />
-            <span className="text-sm font-bold text-foreground">
-              {formatMonthIndo(currentMonth)}
-            </span>
+  const totalAllocated = savingPercent + expensePercent;
+  const savingBarWidth = totalAllocated > 100 ? (savingPercent / totalAllocated) * 100 : savingPercent;
+  const expenseBarWidth = totalAllocated > 100 ? (expensePercent / totalAllocated) * 100 : expensePercent;
+  const sisaBarWidth = totalAllocated > 100 ? 0 : sisaPercent;
+
+  return (
+    <div className="space-y-4 sm:space-y-6 pb-12">
+      {/* Month Navigation & Action Bar (Sleek 1-Row Responsive) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 p-3 sm:p-3.5 rounded-xl bg-card border shadow-xs">
+        <div className="flex items-center justify-between sm:justify-start gap-2">
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onSelectMonth(getPrevMonth(currentMonth))}
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg"
+              title="Bulan Sebelumnya"
+              aria-label="Bulan Sebelumnya"
+            >
+              <Icon name="chevron-left" className="w-4 h-4" />
+            </Button>
+
+            <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-muted/50 border">
+              <Icon name="calendar" className="w-3.5 h-3.5 text-primary shrink-0" />
+              <span className="text-xs sm:text-sm font-bold text-foreground">
+                {formatMonthIndo(currentMonth)}
+              </span>
+            </div>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onSelectMonth(getNextMonth(currentMonth))}
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg"
+              title="Bulan Berikutnya"
+              aria-label="Bulan Berikutnya"
+            >
+              <Icon name="chevron-right" className="w-4 h-4" />
+            </Button>
           </div>
 
+          {/* Mobile-only compact shortcut to trackers */}
           <Button
             variant="outline"
-            size="icon"
-            onClick={() => onSelectMonth(getNextMonth(currentMonth))}
-            className="h-9 w-9 rounded-lg"
-            title="Bulan Berikutnya"
-            aria-label="Bulan Berikutnya"
+            size="sm"
+            onClick={onNavigateToTrackers}
+            className="sm:hidden h-8 text-xs font-semibold rounded-lg gap-1 px-2.5"
+            title="Buka Tracker Harian"
           >
-            <Icon name="chevron-right" className="w-4 h-4" />
+            <Icon name="coffee" className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Tracker</span>
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 w-full sm:w-auto">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2">
           <Button
             onClick={() => onOpenAddPlan()}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-sm px-2.5 sm:px-4"
+            className="flex-1 sm:flex-none h-8 sm:h-9 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-lg gap-1.5 shadow-xs px-3 sm:px-4"
           >
-            <Icon name="plus" className="w-4 h-4 shrink-0" />
-            <span className="truncate">Tambah Pos</span>
+            <Icon name="plus" className="w-3.5 h-3.5 shrink-0" />
+            <span>Tambah Rencana</span>
           </Button>
 
           <Button
             variant="outline"
             onClick={onNavigateToTrackers}
-            className="text-xs font-semibold rounded-lg gap-1.5 px-2.5 sm:px-4"
+            className="hidden sm:inline-flex h-9 text-xs font-semibold rounded-lg gap-1.5 px-3 sm:px-4"
           >
-            <Icon name="coffee" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span className="truncate">Tracker Harian</span>
+            <Icon name="coffee" className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span>Tracker Harian</span>
           </Button>
         </div>
       </div>
 
-      {/* Top 6 Summary Cards (Sesuai Template Excel OTWSATUMILYAR) */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3">
-        {/* 1. Pendapatan */}
-        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
-          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-            <span className="text-xs font-medium text-muted-foreground truncate">Pendapatan</span>
-            <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-              <Icon name="trending-up" className="w-3.5 h-3.5" />
+      {/* Ringkasan Finansial Rencana (Unified Financial Health Hero Card) */}
+      <Card className="p-4 sm:p-5 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm space-y-4">
+        {/* Top Headline: Surplus / Defisit & Net Free Cash */}
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-muted-foreground">
+                Ringkasan Rencana
+              </span>
+              <Badge
+                variant={sisaUangActual >= 0 ? 'success' : 'destructive'}
+                className="text-[10px] py-0 px-2 font-bold"
+              >
+                {sisaUangActual >= 0 ? 'Surplus' : 'Defisit'}
+              </Badge>
+              <InfoReminder
+                title="Sisa Dana Bebas (Surplus / Defisit)"
+                content={`Selisih antara total pendapatan dengan target tabungan (${savingPercent}%) dan rencana pengeluaran (${expensePercent}%).`}
+              />
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold tabular-nums tracking-tight font-heading mt-1 text-foreground">
+              <span className={sisaUangActual >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
+                {sisaUangActual < 0 ? '-' : ''}{formatRupiah(Math.abs(sisaUangActual))}
+              </span>
             </div>
           </div>
-          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
-            {formatRupiah(totalIncome)}
-          </p>
-          <span className="text-[10px] text-muted-foreground mt-1 truncate">Bulan {formatMonthIndo(currentMonth)}</span>
-        </Card>
+        </div>
 
-        {/* 2. Uang yang Ditabung */}
-        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
-          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-            <span className="text-xs font-medium text-muted-foreground truncate">Ditabung</span>
-            <div className="w-6 h-6 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-              <Icon name="target" className="w-3.5 h-3.5" />
+        {/* Visual Allocation Breakdown Bar */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] font-medium text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <span>Alokasi Anggaran</span>
+              <InfoReminder
+                title="Proporsi Alokasi"
+                content="Pembagian pendapatan bulanan ke dalam tabungan, kebutuhan pengeluaran, dan sisa dana bebas."
+              />
             </div>
+            <span className="tabular-nums font-semibold text-foreground">
+              Total {formatRupiah(totalIncome)}
+            </span>
           </div>
-          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
-            {formatRupiah(totalSavingActual)}
-          </p>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-muted-foreground mt-1 gap-0.5">
-            <span className="shrink-0">Rencana:</span>
-            <span className="font-semibold text-foreground tabular-nums truncate">{formatRupiah(totalSavingPlan)}</span>
-          </div>
-        </Card>
 
-        {/* 3. Total Pengeluaran */}
-        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
-          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-            <span className="text-xs font-medium text-muted-foreground truncate">Total Pengeluaran</span>
-            <div className="w-6 h-6 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-              <Icon name="trending-down" className="w-3.5 h-3.5" />
+          {/* Segmented Bar */}
+          <div className="w-full h-2 rounded-full bg-muted overflow-hidden flex">
+            {totalIncome > 0 ? (
+              <>
+                <div
+                  className="bg-blue-500 transition-all duration-300"
+                  style={{ width: `${savingBarWidth}%` }}
+                />
+                <div
+                  className="bg-rose-500 transition-all duration-300"
+                  style={{ width: `${expenseBarWidth}%` }}
+                />
+                <div
+                  className="bg-emerald-500 transition-all duration-300"
+                  style={{ width: `${sisaBarWidth}%` }}
+                />
+              </>
+            ) : (
+              <div className="w-full bg-muted" />
+            )}
+          </div>
+
+          {/* Clean minimal legend */}
+          <div className="flex items-center gap-3 pt-0.5 text-[10px] sm:text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+              Tabungan {savingPercent}%
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+              Pengeluaran {expensePercent}%
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+              Sisa {sisaPercent}%
+            </span>
+          </div>
+        </div>
+
+        {/* 3 Metric Columns: Pendapatan, Tabungan, Pengeluaran */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-2 border-t">
+          {/* Pendapatan */}
+          <div className="p-2 sm:p-2.5 rounded-lg bg-emerald-500/5 border border-emerald-500/15 min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300 mb-0.5">
+              <Icon name="trending-up" className="w-3 h-3 shrink-0" />
+              <span className="truncate">Pendapatan</span>
             </div>
+            <p className="text-xs sm:text-base font-extrabold text-foreground tabular-nums truncate">
+              {formatRupiah(totalIncome)}
+            </p>
+            <span className="text-[10px] text-muted-foreground truncate block">
+              {incomeItems.length} sumber
+            </span>
           </div>
-          <p className="text-sm sm:text-base md:text-lg font-extrabold text-rose-600 dark:text-rose-400 tabular-nums truncate">
-            {formatRupiah(totalExpenseActual)}
-          </p>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-muted-foreground mt-1 gap-0.5">
-            <span className="shrink-0">Rencana:</span>
-            <span className="font-semibold text-foreground tabular-nums truncate">{formatRupiah(totalExpensePlan)}</span>
-          </div>
-        </Card>
 
-        {/* 4. Sisa Uang Bulan Ini */}
-        <Card className={`p-3 sm:p-4 rounded-xl border flex flex-col justify-between shadow-sm min-w-0 ${
-          sisaUangActual >= 0
-            ? 'bg-emerald-500/5 border-emerald-500/20'
-            : 'bg-rose-500/5 border-rose-500/20'
-        }`}>
-          <div className="flex items-center justify-between mb-1.5 sm:mb-2 gap-1">
-            <span className="text-xs font-medium text-muted-foreground truncate">Sisa Uang</span>
-            <Badge variant={sisaUangActual >= 0 ? 'success' : 'destructive'} className="text-[10px] py-0 px-1.5 shrink-0">
-              {sisaUangActual >= 0 ? 'Surplus' : 'Defisit'}
-            </Badge>
-          </div>
-          <p className={`text-sm sm:text-base md:text-lg font-extrabold tabular-nums truncate ${
-            sisaUangActual >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
-          }`}>
-            {formatRupiah(sisaUangActual)}
-          </p>
-          <span className="text-[10px] text-muted-foreground mt-1 truncate">Setelah tabungan & belanja</span>
-        </Card>
-
-        {/* 5. Pengeluaran Sehari-Hari */}
-        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
-          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-            <span className="text-xs font-medium text-muted-foreground truncate">Sehari-Hari</span>
-            <div className="w-6 h-6 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-              <Icon name="shopping-bag" className="w-3.5 h-3.5" />
+          {/* Ditabung */}
+          <div className="p-2 sm:p-2.5 rounded-lg bg-blue-500/5 border border-blue-500/15 min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-semibold text-blue-800 dark:text-blue-300 mb-0.5">
+              <Icon name="target" className="w-3 h-3 shrink-0" />
+              <span className="truncate">Ditabung</span>
             </div>
+            <p className="text-xs sm:text-base font-extrabold text-foreground tabular-nums truncate">
+              {formatRupiah(totalSavingActual)}
+            </p>
+            <span className="text-[10px] text-muted-foreground truncate block">
+              Target {formatRupiah(totalSavingPlan)}
+            </span>
           </div>
-          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
-            {formatRupiah(totalDailyExpenseActual)}
-          </p>
-          <span className="text-[10px] text-muted-foreground mt-1 truncate">
-            {monthDailyExpenses.length} transaksi bulan ini
-          </span>
-        </Card>
 
-        {/* 6. Biaya Jajan & Nongkrong */}
-        <Card className="p-3 sm:p-4 rounded-xl border bg-card flex flex-col justify-between shadow-sm min-w-0">
-          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-            <span className="text-xs font-medium text-muted-foreground truncate">Jajan & Kopi</span>
-            <div className="w-6 h-6 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-              <Icon name="coffee" className="w-3.5 h-3.5" />
+          {/* Pengeluaran */}
+          <div className="p-2 sm:p-2.5 rounded-lg bg-rose-500/5 border border-rose-500/15 min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-semibold text-rose-800 dark:text-rose-300 mb-0.5">
+              <Icon name="trending-down" className="w-3 h-3 shrink-0" />
+              <span className="truncate">Pengeluaran</span>
             </div>
+            <p className="text-xs sm:text-base font-extrabold text-rose-600 dark:text-rose-400 tabular-nums truncate">
+              {formatRupiah(totalExpenseActual)}
+            </p>
+            <span className="text-[10px] text-muted-foreground truncate block">
+              Target {formatRupiah(totalExpensePlan)}
+            </span>
           </div>
-          <p className="text-sm sm:text-base md:text-lg font-extrabold text-foreground tabular-nums truncate">
-            {formatRupiah(totalJajanActual)}
-          </p>
-          <span className="text-[10px] text-muted-foreground mt-1 truncate">
-            {monthJajanItems.length} kali jajan bulan ini
-          </span>
-        </Card>
-      </div>
+        </div>
+
+        {/* Quick Tracker Integration Footer */}
+        <div className="pt-2 border-t flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-1 text-muted-foreground font-medium text-[11px]">
+            <span>Tracker:</span>
+            <InfoReminder
+              title="Sinkronisasi Tracker Harian"
+              content="Akumulasi pengeluaran harian dan catatan jajan yang tercatat pada tab Tracker Harian bulan ini."
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <button
+              type="button"
+              onClick={onNavigateToTrackers}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border bg-amber-500/10 hover:bg-amber-500/15 text-amber-800 dark:text-amber-300 text-[11px] font-semibold transition-colors"
+              title="Buka Tracker Pengeluaran Sehari-Hari"
+            >
+              <Icon name="shopping-bag" className="w-3 h-3" />
+              <span>Sehari-Hari: {formatRupiah(totalDailyExpenseActual)}</span>
+            </button>
+            <button
+              type="button"
+              onClick={onNavigateToTrackers}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border bg-purple-500/10 hover:bg-purple-500/15 text-purple-800 dark:text-purple-300 text-[11px] font-semibold transition-colors"
+              title="Buka Tracker Jajan & Nongkrong"
+            >
+              <Icon name="coffee" className="w-3 h-3" />
+              <span>Jajan: {formatRupiah(totalJajanActual)}</span>
+            </button>
+          </div>
+        </div>
+      </Card>
 
       {/* 4 Pilar Manajemen Keuangan Bulanan */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -245,9 +327,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <Icon name="dollar-sign" className="w-4 h-4" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">Pendapatan / Income</h3>
-                <p className="text-[11px] text-muted-foreground">Sumber penghasilan bulan ini</p>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-foreground">Sumber Pendapatan</h3>
+                <InfoReminder
+                  title="Sumber Pendapatan"
+                  content="Daftar seluruh penghasilan bulan ini, baik pemasukan gaji pokok, freelance, maupun passive income."
+                />
               </div>
             </div>
             <div className="text-right">
@@ -287,8 +372,8 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <Popconfirm
-                      title="Hapus Pos Pendapatan?"
-                      description={`Hapus pos "${item.title}"?`}
+                      title="Hapus Sumber Pendapatan?"
+                      description={`Hapus "${item.title}" dari daftar pendapatan?`}
                       confirmText="Hapus"
                       cancelText="Batal"
                       onConfirm={() => onDeletePlan(item.id)}
@@ -314,7 +399,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             className="w-full text-xs font-semibold rounded-lg gap-1.5"
           >
             <Icon name="plus" className="w-3.5 h-3.5" />
-            <span>Tambah Sumber Pendapatan</span>
+            <span>Tambah Pendapatan</span>
           </Button>
         </Card>
 
@@ -325,9 +410,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                 <Icon name="target" className="w-4 h-4" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">Nabung / Saving & Investasi</h3>
-                <p className="text-[11px] text-muted-foreground">Alokasi dana darurat & tabungan masa depan</p>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-foreground">Nabung & Investasi</h3>
+                <InfoReminder
+                  title="Tabungan & Investasi"
+                  content="Alokasi dana darurat, tabungan impian, reksadana, atau instrumen investasi masa depan."
+                />
               </div>
             </div>
             <div className="text-right">
@@ -341,7 +429,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
           <div className="space-y-2">
             {savingItems.length === 0 ? (
               <div className="py-6 text-center text-xs text-muted-foreground">
-                Belum ada pos tabungan atau investasi bulan ini.
+                Belum ada rencana tabungan atau investasi bulan ini.
               </div>
             ) : (
               savingItems.map((item) => (
@@ -380,8 +468,8 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <Popconfirm
-                      title="Hapus Pos Pengeluaran Tetap?"
-                      description={`Hapus pos "${item.title}"?`}
+                      title="Hapus Rencana Tabungan?"
+                      description={`Hapus "${item.title}" dari daftar tabungan?`}
                       confirmText="Hapus"
                       cancelText="Batal"
                       onConfirm={() => onDeletePlan(item.id)}
@@ -407,7 +495,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             className="w-full text-xs font-semibold rounded-lg gap-1.5"
           >
             <Icon name="plus" className="w-3.5 h-3.5" />
-            <span>Tambah Pos Tabungan</span>
+            <span>Tambah Tabungan</span>
           </Button>
         </Card>
 
@@ -418,9 +506,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                 <Icon name="layers" className="w-4 h-4" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">Pengeluaran Tetap / Fixed Cost</h3>
-                <p className="text-[11px] text-muted-foreground">Kebutuhan pokok rutin wajib setiap bulan</p>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-foreground">Pengeluaran Tetap</h3>
+                <InfoReminder
+                  title="Pengeluaran Tetap (Fixed Cost)"
+                  content="Kebutuhan rutin wajib dengan nominal pasti yang harus dibayar setiap bulan, seperti sewa tempat tinggal, listrik rutin, wifi, atau iuran wajib."
+                />
               </div>
             </div>
             <div className="text-right">
@@ -466,8 +557,8 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <Popconfirm
-                      title="Hapus Pos Tabungan?"
-                      description={`Hapus pos "${item.title}"?`}
+                      title="Hapus Pengeluaran Tetap?"
+                      description={`Hapus "${item.title}" dari pengeluaran tetap?`}
                       confirmText="Hapus"
                       cancelText="Batal"
                       onConfirm={() => onDeletePlan(item.id)}
@@ -493,7 +584,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             className="w-full text-xs font-semibold rounded-lg gap-1.5"
           >
             <Icon name="plus" className="w-3.5 h-3.5" />
-            <span>Tambah Pos Fixed Cost</span>
+            <span>Tambah Pengeluaran Tetap</span>
           </Button>
         </Card>
 
@@ -504,9 +595,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                 <Icon name="shopping-bag" className="w-4 h-4" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">Pengeluaran Tidak Tetap / Variable</h3>
-                <p className="text-[11px] text-muted-foreground">Belanja harian, makan di luar & nongkrong</p>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-foreground">Pengeluaran Variabel</h3>
+                <InfoReminder
+                  title="Pengeluaran Variabel"
+                  content="Pengeluaran fleksibel yang nominalnya berubah-ubah sesuai konsumsi harian, seperti belanja dapur dan nongkrong/jajan."
+                />
               </div>
             </div>
             <div className="text-right">
@@ -537,12 +631,14 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                       {item.priority}
                     </Badge>
                     <div className="min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-foreground block truncate">{item.title}</span>
-                      {(isJajan || isSehari) && (
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block truncate">
-                          Sinkron otomatis dari tracker
-                        </span>
-                      )}
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
+                        {(isJajan || isSehari) && (
+                          <span className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded shrink-0">
+                            Sinkron
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -564,8 +660,8 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     </button>
                     {!item.isAutoCalculated && (
                       <Popconfirm
-                        title="Hapus Pos Pengeluaran Variabel?"
-                        description={`Hapus pos "${item.title}"?`}
+                        title="Hapus Pengeluaran Variabel?"
+                        description={`Hapus "${item.title}" dari pengeluaran variabel?`}
                         confirmText="Hapus"
                         cancelText="Batal"
                         onConfirm={() => onDeletePlan(item.id)}
@@ -592,7 +688,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             className="w-full text-xs font-semibold rounded-lg gap-1.5"
           >
             <Icon name="plus" className="w-3.5 h-3.5" />
-            <span>Tambah Pos Variable Cost</span>
+            <span>Tambah Pengeluaran Variabel</span>
           </Button>
         </Card>
 
@@ -603,9 +699,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
                 <Icon name="file-text" className="w-4 h-4" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">Biaya Langganan & Hutang / Subscription Cost & Debt</h3>
-                <p className="text-[11px] text-muted-foreground">Cicilan, PayLater, langganan digital & kuota</p>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-foreground">Langganan & Cicilan</h3>
+                <InfoReminder
+                  title="Langganan & Cicilan"
+                  content="Kewajiban berkala meliputi cicilan barang, PayLater, tagihan kredit, kuota internet, dan langganan aplikasi digital bulanan."
+                />
               </div>
             </div>
             <div className="text-right">
@@ -651,8 +750,8 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                       <Icon name="edit" className="w-3.5 h-3.5" />
                     </button>
                     <Popconfirm
-                      title="Hapus Pos Pembayaran Hutang?"
-                      description={`Hapus pos "${item.title}"?`}
+                      title="Hapus Langganan / Cicilan?"
+                      description={`Hapus "${item.title}" dari daftar tagihan?`}
                       confirmText="Hapus"
                       cancelText="Batal"
                       onConfirm={() => onDeletePlan(item.id)}
@@ -678,7 +777,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             className="w-full text-xs font-semibold rounded-lg gap-1.5"
           >
             <Icon name="plus" className="w-3.5 h-3.5" />
-            <span>Tambah Pos Langganan / Cicilan</span>
+            <span>Tambah Langganan / Cicilan</span>
           </Button>
         </Card>
       </div>

@@ -59,7 +59,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
-      setError('Keterangan / nama pos wajib diisi');
+      setError('Nama rencana / keperluan wajib diisi');
       return;
     }
 
@@ -87,29 +87,29 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Icon name="layers" className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Icon name="layers" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>
-              {editItem ? 'Ubah Pos Anggaran Bulanan' : 'Tambah Pos Anggaran Baru'}
+              {editItem ? 'Ubah Rencana Keuangan' : 'Tambah Rencana Baru'}
             </DialogTitle>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {error && (
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+            <div className="p-2.5 sm:p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
               {error}
             </div>
           )}
 
-          {/* Kelompok Pos */}
+          {/* Kategori Rencana */}
           <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              Kelompok Pos Keuangan
+            <label className="block text-xs font-bold text-foreground mb-1">
+              Kategori Rencana
             </label>
             <div className="grid grid-cols-2 gap-1.5">
               {[
@@ -123,7 +123,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
                   key={g.id}
                   type="button"
                   onClick={() => setGroup(g.id as PlanGroupType)}
-                  className={`p-2 rounded-lg border text-xs font-semibold transition-all ${
+                  className={`p-1.5 sm:p-2 rounded-lg border text-xs font-semibold transition-all ${
                     group === g.id
                       ? 'bg-primary text-primary-foreground border-primary shadow-sm'
                       : 'bg-card text-foreground hover:bg-accent'
@@ -138,7 +138,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
           {/* Keterangan / Sumber */}
           <div>
             <label htmlFor="plan-title" className="block text-xs font-bold text-foreground mb-1.5">
-              {group === 'income' ? 'Sumber Pendapatan' : 'Keterangan Pos'}
+              {group === 'income' ? 'Sumber Pendapatan' : 'Nama Rencana / Keperluan'}
             </label>
             <Input
               id="plan-title"
@@ -172,7 +172,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
                     key={t}
                     type="button"
                     onClick={() => setIncomeType(t)}
-                    className={`py-2 px-1 rounded-lg border text-xs font-semibold text-center transition-all ${
+                    className={`py-1.5 sm:py-2 px-1 rounded-lg border text-xs font-semibold text-center transition-all ${
                       incomeType === t
                         ? 'bg-primary text-primary-foreground border-primary shadow-sm'
                         : 'bg-card text-foreground hover:bg-accent'
@@ -197,7 +197,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
                     key={p}
                     type="button"
                     onClick={() => setPriority(p)}
-                    className={`py-2 rounded-lg border text-xs font-semibold transition-all ${
+                    className={`py-1.5 sm:py-2 rounded-lg border text-xs font-semibold transition-all ${
                       priority === p
                         ? p === 'High'
                           ? 'bg-rose-600 text-white border-rose-600'
@@ -276,7 +276,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
               type="submit"
               className="flex-[2] bg-primary text-primary-foreground font-bold"
             >
-              {editItem ? 'Simpan Perubahan' : 'Tambah Pos'}
+              {editItem ? 'Simpan Perubahan' : 'Tambah Rencana'}
             </Button>
           </div>
         </form>

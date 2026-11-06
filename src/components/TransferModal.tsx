@@ -101,19 +101,19 @@ export const TransferModal: React.FC<TransferModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="p-5 sm:max-w-md">
+      <DialogContent className="p-4 sm:p-5 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Icon name="arrow-left-right" className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Icon name="arrow-left-right" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             <DialogTitle>Pindah Saldo / Transfer</DialogTitle>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 pt-1">
           {/* Nominal Transfer */}
-          <div className="bg-muted/40 p-4 rounded-xl border flex flex-col items-center">
+          <div className="bg-muted/40 p-3 sm:p-4 rounded-xl border flex flex-col items-center">
             <label htmlFor="transfer-amount" className="text-xs font-medium text-muted-foreground mb-1">
               Nominal yang Ditransfer
             </label>

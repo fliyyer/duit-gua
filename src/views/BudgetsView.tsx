@@ -39,7 +39,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
     return {
       ...b,
-      categoryName: category?.name || 'Pos Pengeluaran',
+      categoryName: category?.name || 'Kategori Pengeluaran',
       categoryIcon: category?.icon || 'target',
       categoryColor: category?.color || '#059669',
       spent,
@@ -60,10 +60,10 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
       <Card className="p-5 sm:p-6 rounded-xl border bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-semibold text-muted-foreground">
-            Rencana Anggaran Bulan Ini
+            Batas Anggaran Bulan Ini
           </span>
           <span className="text-xs px-2 py-0.5 rounded-md bg-muted font-medium text-foreground">
-            {state.budgets.length} Pos Aktif
+            {state.budgets.length} Kategori Aktif
           </span>
         </div>
 
@@ -73,7 +73,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
               {formatRupiah(totalBudgetSpent)}
             </p>
             <p className="text-xs text-muted-foreground">
-              dari total pagu {formatRupiah(totalBudgetLimit)}
+              dari batas anggaran {formatRupiah(totalBudgetLimit)}
             </p>
           </div>
           <Badge
@@ -99,11 +99,11 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
           className="w-full h-9 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs gap-1.5 shadow-sm"
         >
           <Icon name="plus" className="w-4 h-4" />
-          <span>Pasang Anggaran Pos Baru</span>
+          <span>Pasang Batas Anggaran Baru</span>
         </Button>
       </Card>
 
-      {/* List Pos Anggaran */}
+      {/* List Kategori Anggaran */}
       {budgetStats.length === 0 ? (
         <Card className="p-8 text-center flex flex-col items-center justify-center">
           <div className="w-11 h-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-2">
@@ -113,7 +113,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
             Belum Ada Anggaran Bulanan
           </h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-[240px]">
-            Buat batas belanja untuk pos seperti makanan, bensin, atau nongkrong agar keuangan tetap terkendali.
+            Buat batas belanja untuk kategori seperti makanan, bensin, atau nongkrong agar keuangan tetap terkendali.
           </p>
           <Button
             onClick={onOpenAddBudget}
@@ -126,8 +126,8 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
       ) : (
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between text-xs px-1 text-muted-foreground font-medium">
-            <span>Daftar Pos Pengeluaran</span>
-            <span>Terpakai vs Batas Pagu</span>
+            <span>Daftar Kategori</span>
+            <span>Terpakai vs Batas Anggaran</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -179,7 +179,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                   </Button>
                   <Popconfirm
                     title="Hapus Batas Anggaran?"
-                    description={`Hapus batas anggaran untuk pos "${item.categoryName}"?`}
+                    description={`Hapus batas anggaran untuk kategori "${item.categoryName}"?`}
                     confirmText="Hapus"
                     cancelText="Batal"
                     onConfirm={() => onDeleteBudget(item.id)}
@@ -211,7 +211,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
               <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground tabular-nums gap-2">
                 <span className="truncate">{formatRupiah(item.spent)} terpakai</span>
-                <span className="shrink-0">Pagu: {formatRupiah(item.monthlyLimit)}</span>
+                <span className="shrink-0">Batas: {formatRupiah(item.monthlyLimit)}</span>
               </div>
             </Card>
           ))}
