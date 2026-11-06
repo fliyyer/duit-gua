@@ -11,7 +11,6 @@ interface NavbarProps {
   onOpenSettings: () => void;
   user?: AuthUser | null;
   onLogout?: () => void;
-  syncStatus?: 'idle' | 'syncing' | 'synced' | 'error';
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -20,7 +19,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSettings,
   user,
   onLogout,
-  syncStatus = 'idle',
 }) => {
   return (
     <header className="lg:hidden sticky top-0 z-30 w-full bg-background/95 backdrop-blur-md border-b-2 border-border transition-colors">
@@ -34,14 +32,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <h1 className="text-sm font-extrabold text-foreground leading-tight tracking-tight font-heading">
               Duit Gua
             </h1>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                syncStatus === 'syncing' ? 'bg-amber-500 animate-ping' : syncStatus === 'synced' ? 'bg-emerald-500' : 'bg-muted-foreground/50'
-              }`} />
-              <p className="text-[11px] font-medium text-muted-foreground leading-none truncate">
-                {syncStatus === 'syncing' ? 'Menyinkronkan...' : user?.isGuest ? 'Mode Tamu (Lokal)' : 'Cloud Firebase'}
-              </p>
-            </div>
+            <p className="text-[11px] font-medium text-muted-foreground leading-none truncate mt-0.5">
+              Catatan Keuangan
+            </p>
           </div>
         </div>
 

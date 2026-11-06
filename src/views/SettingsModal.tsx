@@ -327,7 +327,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Info App */}
           <div className="pt-1 text-center text-[11px] text-muted-foreground">
-            <p className="font-semibold text-foreground">Duit Gua • v1.0.0</p>
+            <p className="font-semibold text-foreground">Duit Gua • v1.1.0</p>
             <p>Aplikasi Pengelola Keuangan Pribadi Mobile First</p>
           </div>
         </div>

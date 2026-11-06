@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   AppState,
   Budget,
@@ -89,16 +89,18 @@ export const App: React.FC = () => {
     saveState(state);
   }, [state]);
 
-  // Initial cloud hydration when user logs in
+  const isHydratedRef = useRef(false);
+  const lastSavedStateRef = useRef<AppState | null>(null);
+
+  // Initial cloud hydration once when user logs in
   useEffect(() => {
     if (user && !user.isGuest) {
       let isCancelled = false;
-      setSyncStatus('syncing');
       fetchUserFinancialState(user.uid)
         .then((cloudData) => {
           if (isCancelled) return;
           if (cloudData) {
-            // Auto clean legacy sample data (like tx-1 or dummy plans)
+            // Auto clean legacy sample data if present
             const hasLegacySample =
               (Array.isArray(cloudData.transactions) &&
                 cloudData.transactions.some((t: any) => t.id === 'tx-1' || t.id === 'tx-2')) ||
@@ -108,50 +110,63 @@ export const App: React.FC = () => {
             if (hasLegacySample) {
               const cleanState = clearAllData();
               setState(cleanState);
-              saveUserFinancialState(user.uid, cleanState);
-              setSyncStatus('synced');
+              lastSavedStateRef.current = cleanState;
+              saveUserFinancialState(user.uid, cleanState).catch(() => {});
             } else {
               setState(cloudData);
-              setSyncStatus('synced');
+              lastSavedStateRef.current = cloudData;
             }
           } else {
             // New user on cloud: seed with clean empty state
             const cleanState = clearAllData();
             setState(cleanState);
-            saveUserFinancialState(user.uid, cleanState).then(() => {
-              if (!isCancelled) setSyncStatus('synced');
-            });
+            lastSavedStateRef.current = cleanState;
+            saveUserFinancialState(user.uid, cleanState).catch(() => {});
           }
+          isHydratedRef.current = true;
+          setSyncStatus('synced');
         })
         .catch(() => {
-          if (!isCancelled) setSyncStatus('idle');
+          if (!isCancelled) {
+            isHydratedRef.current = true;
+            setSyncStatus('idle');
+          }
         });
       return () => {
         isCancelled = true;
       };
     } else {
+      isHydratedRef.current = true;
       setSyncStatus('idle');
     }
   }, [user?.uid]);
 
-  // Debounced Auto-sync to Firebase Cloud
+  // Sync to Firebase Cloud ONLY when financial data actually changes (add/edit/delete/transfer)
   useEffect(() => {
     if (!user || user.isGuest) return;
-    const timer = setTimeout(async () => {
-      setSyncStatus('syncing');
-      try {
-        const success = await saveUserFinancialState(user.uid, state);
-        if (success) {
-          setSyncStatus('synced');
-        } else {
-          setSyncStatus('idle');
-        }
-      } catch {
-        setSyncStatus('error');
-      }
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [state, user?.uid]);
+    if (!isHydratedRef.current) return;
+
+    const prev = lastSavedStateRef.current;
+    if (prev) {
+      const hasFinancialDataChanged =
+        prev.transactions !== state.transactions ||
+        prev.wallets !== state.wallets ||
+        prev.budgets !== state.budgets ||
+        prev.plans !== state.plans ||
+        prev.dailyExpenses !== state.dailyExpenses ||
+        prev.jajanItems !== state.jajanItems;
+
+      if (!hasFinancialDataChanged) return;
+    }
+
+    lastSavedStateRef.current = state;
+    // Send directly to Firestore in the background
+    saveUserFinancialState(user.uid, state)
+      .then((ok) => {
+        if (ok) setSyncStatus('synced');
+      })
+      .catch(() => {});
+  }, [state, user]);
 
   // Sync theme to HTML class
   useEffect(() => {
@@ -804,7 +819,6 @@ export const App: React.FC = () => {
         onOpenSettings={() => setIsSettingsOpen(true)}
         user={user}
         onLogout={handleLogout}
-        syncStatus={syncStatus}
         onOpenAddTransaction={() => {
           setEditingTx(null);
           setIsTxModalOpen(true);
@@ -830,7 +844,6 @@ export const App: React.FC = () => {
           onOpenSettings={() => setIsSettingsOpen(true)}
           user={user}
           onLogout={handleLogout}
-          syncStatus={syncStatus}
         />
 
         {/* Content Container (Full width responsive) */}

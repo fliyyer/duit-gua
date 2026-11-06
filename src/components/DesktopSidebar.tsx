@@ -19,7 +19,6 @@ interface DesktopSidebarProps {
   onOpenAddJajan: () => void;
   user?: AuthUser | null;
   onLogout?: () => void;
-  syncStatus?: 'idle' | 'syncing' | 'synced' | 'error';
 }
 
 export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
@@ -35,7 +34,6 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   onOpenAddJajan,
   user,
   onLogout,
-  syncStatus = 'idle',
 }) => {
   const navItems: { id: TabType; label: string; icon: string; badge?: string }[] = [
     { id: 'dashboard', label: 'Ringkasan', icon: 'pie-chart' },
@@ -176,14 +174,9 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                 <p className="text-xs font-extrabold text-foreground truncate leading-tight">
                   {user.displayName || 'Pengguna'}
                 </p>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                    syncStatus === 'syncing' ? 'bg-amber-500 animate-ping' : syncStatus === 'synced' ? 'bg-emerald-500' : 'bg-muted-foreground/50'
-                  }`} />
-                  <p className="text-[10px] text-muted-foreground truncate leading-tight">
-                    {syncStatus === 'syncing' ? 'Menyinkronkan...' : user.isGuest ? 'Mode Tamu (Lokal)' : 'Firebase Cloud'}
-                  </p>
-                </div>
+                <p className="text-[10px] text-muted-foreground truncate leading-tight mt-0.5">
+                  {user.isGuest ? 'Mode Tamu (Lokal)' : user.email}
+                </p>
               </div>
             </div>
 

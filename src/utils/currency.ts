@@ -39,9 +39,15 @@ export function parseNumberInput(value: string): number {
   return parseInt(clean, 10);
 }
 
-export function formatDateIndo(dateStr: string): string {
+export function formatDateIndo(dateStr: string, includeFullDateForRecent: boolean = false): string {
   try {
     const [year, month, day] = dateStr.split('-').map(Number);
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
+    const monthName = months[month - 1] || '';
+
     const today = new Date();
     const isToday = 
       today.getFullYear() === year &&
@@ -55,15 +61,14 @@ export function formatDateIndo(dateStr: string): string {
       yesterday.getMonth() === month - 1 &&
       yesterday.getDate() === day;
 
-    if (isToday) return 'Hari ini';
-    if (isYesterday) return 'Kemarin';
+    if (isToday) {
+      return includeFullDateForRecent ? `Hari ini, ${day} ${monthName}` : 'Hari ini';
+    }
+    if (isYesterday) {
+      return includeFullDateForRecent ? `Kemarin, ${day} ${monthName}` : 'Kemarin';
+    }
 
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
-    ];
-    
-    return `${day} ${months[month - 1]} ${year}`;
+    return `${day} ${monthName} ${year}`;
   } catch {
     return dateStr;
   }

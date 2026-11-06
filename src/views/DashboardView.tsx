@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppState, TabType, Transaction } from '../types';
-import { formatRupiah, getCurrentMonthString, formatMonthIndo } from '../utils/currency';
+import { formatRupiah, getCurrentMonthString, formatMonthIndo, formatDateIndo } from '../utils/currency';
 import { Icon } from '../components/Icon';
 import { CategoryExpenseChart } from '../components/Charts';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
@@ -357,9 +357,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                 ? `Pindah: ${wallet?.name || 'Dompet'} ke ${toWallet?.name || 'Dompet'}`
                                 : category?.name || 'Transaksi'}
                             </p>
-                            <p className="text-[11px] text-muted-foreground truncate">
-                              {tx.note || wallet?.name || 'Tanpa catatan'}
-                            </p>
+                            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground truncate mt-0.5">
+                              <span className="font-semibold text-foreground/80 shrink-0">
+                                {formatDateIndo(tx.date, true)}
+                              </span>
+                              <span>•</span>
+                              <span className="truncate">{wallet?.name || 'Dompet'}</span>
+                              {tx.note && (
+                                <>
+                                  <span>•</span>
+                                  <span className="italic truncate">{tx.note}</span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
 
@@ -376,9 +386,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                             >
                               {isIncome ? '+' : isTransfer ? '' : '-'}
                               {formatRupiah(tx.amount)}
-                            </p>
-                            <p className="text-[10px] text-muted-foreground font-medium truncate max-w-[80px] sm:max-w-none">
-                              {tx.date}
                             </p>
                           </div>
 

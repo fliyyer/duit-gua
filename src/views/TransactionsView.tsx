@@ -291,9 +291,19 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                                 ? `Transfer: ${wallet?.name} -> ${toWallet?.name}`
                                 : category?.name || 'Transaksi'}
                             </p>
-                            <p className="text-[11px] text-muted-foreground truncate">
-                              {tx.note || wallet?.name || 'Tanpa catatan'}
-                            </p>
+                            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground truncate mt-0.5">
+                              <span className="font-semibold text-foreground/80 shrink-0">
+                                {formatDateIndo(tx.date, true)}
+                              </span>
+                              <span>•</span>
+                              <span className="truncate">{wallet?.name || 'Dompet'}</span>
+                              {tx.note && (
+                                <>
+                                  <span>•</span>
+                                  <span className="italic truncate">{tx.note}</span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
 
