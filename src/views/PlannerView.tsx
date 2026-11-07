@@ -349,46 +349,57 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 Belum ada catatan sumber pendapatan bulan ini.
               </div>
             ) : (
-              incomeItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
-                >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
-                      {item.incomeType || 'Utama'}
-                    </Badge>
-                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-bold text-foreground tabular-nums">
-                      {formatRupiah(item.actualAmount || item.plannedAmount)}
-                    </span>
-                    <button
-                      onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
-                      title="Edit"
-                    >
-                      <Icon name="edit" className="w-3.5 h-3.5" />
-                    </button>
-                    <Popconfirm
-                      title="Hapus Sumber Pendapatan?"
-                      description={`Hapus "${item.title}" dari daftar pendapatan?`}
-                      confirmText="Hapus"
-                      cancelText="Batal"
-                      onConfirm={() => onDeletePlan(item.id)}
-                    >
+              incomeItems.map((item) => {
+                const linkedWallet = state.wallets.find((w) => w.id === item.walletId);
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
+                        {item.incomeType || 'Utama'}
+                      </Badge>
+                      <div className="min-w-0 flex-1">
+                        <span className="text-xs font-semibold text-foreground truncate block">{item.title}</span>
+                        {linkedWallet && (
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <Icon name="wallet" className="w-2.5 h-2.5" />
+                            {linkedWallet.name}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs font-bold text-foreground tabular-nums">
+                        {formatRupiah(item.actualAmount || item.plannedAmount)}
+                      </span>
                       <button
-                        type="button"
-                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                        title="Hapus"
+                        onClick={() => onEditPlan(item)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                        title="Edit"
                       >
-                        <Icon name="trash" className="w-3.5 h-3.5" />
+                        <Icon name="edit" className="w-3.5 h-3.5" />
                       </button>
-                    </Popconfirm>
+                      <Popconfirm
+                        title="Hapus Sumber Pendapatan?"
+                        description={`Hapus "${item.title}" dari daftar pendapatan?`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeletePlan(item.id)}
+                      >
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -432,59 +443,70 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 Belum ada rencana tabungan atau investasi bulan ini.
               </div>
             ) : (
-              savingItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
-                >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <Badge
-                      variant="outline"
-                      className={`text-[10px] font-semibold py-0.5 px-2 shrink-0 ${
-                        item.priority === 'High'
-                          ? 'border-rose-500/40 text-rose-600 dark:text-rose-400'
-                          : 'border-amber-500/40 text-amber-600 dark:text-amber-400'
-                      }`}
-                    >
-                      {item.priority}
-                    </Badge>
-                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="text-right">
-                      <span className="text-xs font-bold text-foreground tabular-nums block">
-                        {formatRupiah(item.actualAmount)}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums block">
-                        Target: {formatRupiah(item.plannedAmount)}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
-                      title="Edit"
-                    >
-                      <Icon name="edit" className="w-3.5 h-3.5" />
-                    </button>
-                    <Popconfirm
-                      title="Hapus Rencana Tabungan?"
-                      description={`Hapus "${item.title}" dari daftar tabungan?`}
-                      confirmText="Hapus"
-                      cancelText="Batal"
-                      onConfirm={() => onDeletePlan(item.id)}
-                    >
-                      <button
-                        type="button"
-                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                        title="Hapus"
+              savingItems.map((item) => {
+                const linkedWallet = state.wallets.find((w) => w.id === item.walletId);
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] font-semibold py-0.5 px-2 shrink-0 ${
+                          item.priority === 'High'
+                            ? 'border-rose-500/40 text-rose-600 dark:text-rose-400'
+                            : 'border-amber-500/40 text-amber-600 dark:text-amber-400'
+                        }`}
                       >
-                        <Icon name="trash" className="w-3.5 h-3.5" />
+                        {item.priority}
+                      </Badge>
+                      <div className="min-w-0 flex-1">
+                        <span className="text-xs font-semibold text-foreground truncate block">{item.title}</span>
+                        {linkedWallet && (
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <Icon name="wallet" className="w-2.5 h-2.5" />
+                            {linkedWallet.name}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="text-right">
+                        <span className="text-xs font-bold text-foreground tabular-nums block">
+                          {formatRupiah(item.actualAmount)}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground tabular-nums block">
+                          Target: {formatRupiah(item.plannedAmount)}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => onEditPlan(item)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                        title="Edit"
+                      >
+                        <Icon name="edit" className="w-3.5 h-3.5" />
                       </button>
-                    </Popconfirm>
+                      <Popconfirm
+                        title="Hapus Rencana Tabungan?"
+                        description={`Hapus "${item.title}" dari daftar tabungan?`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeletePlan(item.id)}
+                      >
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -528,52 +550,63 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 Belum ada pengeluaran tetap bulan ini.
               </div>
             ) : (
-              fixedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
-                >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
-                      {item.priority}
-                    </Badge>
-                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="text-right">
-                      <span className="text-xs font-bold text-foreground tabular-nums block">
-                        {formatRupiah(item.actualAmount)}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums block">
-                        Target: {formatRupiah(item.plannedAmount)}
-                      </span>
+              fixedItems.map((item) => {
+                const linkedWallet = state.wallets.find((w) => w.id === item.walletId);
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
+                        {item.priority}
+                      </Badge>
+                      <div className="min-w-0 flex-1">
+                        <span className="text-xs font-semibold text-foreground truncate block">{item.title}</span>
+                        {linkedWallet && (
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <Icon name="wallet" className="w-2.5 h-2.5" />
+                            {linkedWallet.name}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <button
-                      onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
-                      title="Edit"
-                    >
-                      <Icon name="edit" className="w-3.5 h-3.5" />
-                    </button>
-                    <Popconfirm
-                      title="Hapus Pengeluaran Tetap?"
-                      description={`Hapus "${item.title}" dari pengeluaran tetap?`}
-                      confirmText="Hapus"
-                      cancelText="Batal"
-                      onConfirm={() => onDeletePlan(item.id)}
-                    >
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="text-right">
+                        <span className="text-xs font-bold text-foreground tabular-nums block">
+                          {formatRupiah(item.actualAmount)}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground tabular-nums block">
+                          Target: {formatRupiah(item.plannedAmount)}
+                        </span>
+                      </div>
                       <button
-                        type="button"
-                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                        title="Hapus"
+                        onClick={() => onEditPlan(item)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                        title="Edit"
                       >
-                        <Icon name="trash" className="w-3.5 h-3.5" />
+                        <Icon name="edit" className="w-3.5 h-3.5" />
                       </button>
-                    </Popconfirm>
+                      <Popconfirm
+                        title="Hapus Pengeluaran Tetap?"
+                        description={`Hapus "${item.title}" dari pengeluaran tetap?`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeletePlan(item.id)}
+                      >
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -620,6 +653,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 : isSehari && totalDailyExpenseActual > 0
                 ? totalDailyExpenseActual
                 : item.actualAmount;
+              const linkedWallet = state.wallets.find((w) => w.id === item.walletId);
 
               return (
                 <div
@@ -639,6 +673,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                           </span>
                         )}
                       </div>
+                      {!isJajan && !isSehari && linkedWallet && (
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                          <Icon name="wallet" className="w-2.5 h-2.5" />
+                          {linkedWallet.name}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -721,52 +761,63 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 Tidak ada cicilan atau biaya langganan bulan ini.
               </div>
             ) : (
-              subDebtItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
-                >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
-                      {item.priority}
-                    </Badge>
-                    <span className="text-xs font-semibold text-foreground truncate">{item.title}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="text-right">
-                      <span className="text-xs font-bold text-foreground tabular-nums block">
-                        {formatRupiah(item.actualAmount)}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground tabular-nums block">
-                        Target: {formatRupiah(item.plannedAmount)}
-                      </span>
+              subDebtItems.map((item) => {
+                const linkedWallet = state.wallets.find((w) => w.id === item.walletId);
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors gap-2"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <Badge variant="outline" className="text-[10px] font-semibold py-0.5 px-2 shrink-0">
+                        {item.priority}
+                      </Badge>
+                      <div className="min-w-0 flex-1">
+                        <span className="text-xs font-semibold text-foreground truncate block">{item.title}</span>
+                        {linkedWallet && (
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <Icon name="wallet" className="w-2.5 h-2.5" />
+                            {linkedWallet.name}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <button
-                      onClick={() => onEditPlan(item)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
-                      title="Edit"
-                    >
-                      <Icon name="edit" className="w-3.5 h-3.5" />
-                    </button>
-                    <Popconfirm
-                      title="Hapus Langganan / Cicilan?"
-                      description={`Hapus "${item.title}" dari daftar tagihan?`}
-                      confirmText="Hapus"
-                      cancelText="Batal"
-                      onConfirm={() => onDeletePlan(item.id)}
-                    >
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="text-right">
+                        <span className="text-xs font-bold text-foreground tabular-nums block">
+                          {formatRupiah(item.actualAmount)}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground tabular-nums block">
+                          Target: {formatRupiah(item.plannedAmount)}
+                        </span>
+                      </div>
                       <button
-                        type="button"
-                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
-                        title="Hapus"
+                        onClick={() => onEditPlan(item)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
+                        title="Edit"
                       >
-                        <Icon name="trash" className="w-3.5 h-3.5" />
+                        <Icon name="edit" className="w-3.5 h-3.5" />
                       </button>
-                    </Popconfirm>
+                      <Popconfirm
+                        title="Hapus Langganan / Cicilan?"
+                        description={`Hapus "${item.title}" dari daftar tagihan?`}
+                        confirmText="Hapus"
+                        cancelText="Batal"
+                        onConfirm={() => onDeletePlan(item.id)}
+                      >
+                        <button
+                          type="button"
+                          className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Hapus"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                        </button>
+                      </Popconfirm>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 

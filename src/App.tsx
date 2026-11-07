@@ -4,6 +4,7 @@ import {
   Budget,
   DailyExpenseItem,
   FinancialPlanItem,
+  IncomeCategoryType,
   JajanItem,
   PlanGroupType,
   TabType,
@@ -484,45 +485,175 @@ export const App: React.FC = () => {
     });
   };
 
-  // Financial Plans (4 Pilar) CRUD
+  const getPlanCategory = (group: PlanGroupType, incType?: IncomeCategoryType): string => {
+    if (group === 'income') {
+      if (incType === 'Utama') return 'cat-salary';
+      if (incType === 'Sampingan') return 'cat-freelance';
+      return 'cat-other-inc';
+    }
+    if (group === 'fixed_cost' || group === 'subscription_debt') return 'cat-bills';
+    if (group === 'saving') return 'cat-investment';
+    return 'cat-other-exp';
+  };
+
   const handleSavePlan = (planData: Omit<FinancialPlanItem, 'id'>, existingId?: string) => {
     setState((prev) => {
+      let updatedWallets = [...prev.wallets];
+      let updatedTxs = [...prev.transactions];
+      let updatedPlans = [...prev.plans];
+
+      const planDate = (() => {
+        const today = new Date().toISOString().slice(0, 10);
+        if (today.startsWith(planData.month)) return today;
+        return `${planData.month}-01`;
+      })();
+
       if (existingId) {
-        return {
-          ...prev,
-          plans: prev.plans.map((p) => (p.id === existingId ? { ...p, ...planData } : p)),
-        };
+        const oldPlan = prev.plans.find((p) => p.id === existingId);
+        if (oldPlan) {
+          if (oldPlan.actualAmount > 0 && oldPlan.walletId) {
+            updatedWallets = updatedWallets.map((w) => {
+              if (w.id === oldPlan.walletId) {
+                const revertAmount = oldPlan.group === 'income' ? -oldPlan.actualAmount : oldPlan.actualAmount;
+                return { ...w, balance: w.balance + revertAmount };
+              }
+              return w;
+            });
+          }
+
+          let finalTxId = oldPlan.transactionId;
+          if (planData.actualAmount > 0 && planData.walletId) {
+            updatedWallets = updatedWallets.map((w) => {
+              if (w.id === planData.walletId) {
+                const applyAmount = planData.group === 'income' ? planData.actualAmount : -planData.actualAmount;
+                return { ...w, balance: w.balance + applyAmount };
+              }
+              return w;
+            });
+
+            if (oldPlan.transactionId && updatedTxs.some((t) => t.id === oldPlan.transactionId)) {
+              updatedTxs = updatedTxs.map((t) =>
+                t.id === oldPlan.transactionId
+                  ? {
+                      ...t,
+                      type: planData.group === 'income' ? 'income' : 'expense',
+                      amount: planData.actualAmount,
+                      walletId: planData.walletId!,
+                      categoryId: getPlanCategory(planData.group, planData.incomeType),
+                      note: `[Rencana] ${planData.title}`,
+                    }
+                  : t
+              );
+            } else {
+              const newTxId = 'tx-plan-' + Date.now();
+              finalTxId = newTxId;
+              updatedTxs = [
+                {
+                  id: newTxId,
+                  type: planData.group === 'income' ? 'income' : 'expense',
+                  amount: planData.actualAmount,
+                  walletId: planData.walletId,
+                  categoryId: getPlanCategory(planData.group, planData.incomeType),
+                  date: planDate,
+                  note: `[Rencana] ${planData.title}`,
+                  createdAt: Date.now(),
+                },
+                ...updatedTxs,
+              ];
+            }
+          } else if (oldPlan.transactionId) {
+            updatedTxs = updatedTxs.filter((t) => t.id !== oldPlan.transactionId);
+            finalTxId = undefined;
+          }
+
+          updatedPlans = updatedPlans.map((p) =>
+            p.id === existingId ? { ...p, ...planData, transactionId: finalTxId } : p
+          );
+        }
       } else {
-        const newPlan: FinancialPlanItem = {
-          ...planData,
-          id: 'plan-' + Date.now(),
-        };
-        return {
-          ...prev,
-          plans: [...prev.plans, newPlan],
-        };
+        const newPlanId = 'plan-' + Date.now();
+        let newTxId: string | undefined = undefined;
+
+        if (planData.actualAmount > 0 && planData.walletId) {
+          updatedWallets = updatedWallets.map((w) => {
+            if (w.id === planData.walletId) {
+              const applyAmount = planData.group === 'income' ? planData.actualAmount : -planData.actualAmount;
+              return { ...w, balance: w.balance + applyAmount };
+            }
+            return w;
+          });
+
+          newTxId = 'tx-plan-' + Date.now();
+          updatedTxs = [
+            {
+              id: newTxId,
+              type: planData.group === 'income' ? 'income' : 'expense',
+              amount: planData.actualAmount,
+              walletId: planData.walletId,
+              categoryId: getPlanCategory(planData.group, planData.incomeType),
+              date: planDate,
+              note: `[Rencana] ${planData.title}`,
+              createdAt: Date.now(),
+            },
+            ...updatedTxs,
+          ];
+        }
+
+        updatedPlans = [
+          ...updatedPlans,
+          {
+            ...planData,
+            id: newPlanId,
+            transactionId: newTxId,
+          },
+        ];
       }
+
+      return {
+        ...prev,
+        plans: updatedPlans,
+        wallets: updatedWallets,
+        transactions: updatedTxs,
+      };
     });
-    showToast('Rencana berhasil disimpan.', 'success');
+    showToast('Rencana & saldo dompet berhasil diperbarui.', 'success');
   };
 
   const handleDeletePlan = (id: string) => {
     const plan = state.plans.find((p) => p.id === id);
-    const planTitle = plan ? `"${plan.title}"` : 'ini';
+    if (!plan) return;
+    const planTitle = `"${plan.title}"`;
 
     setConfirmDialog({
       isOpen: true,
       title: 'Hapus Rencana',
-      description: `Hapus rencana ${planTitle}?`,
+      description: `Hapus rencana ${planTitle}? Saldo dompet akan disesuaikan kembali jika realisasi sudah pernah diisi.`,
       confirmText: 'Ya, Hapus',
       cancelText: 'Batal',
       variant: 'destructive',
       onConfirm: () => {
-        setState((prev) => ({
-          ...prev,
-          plans: prev.plans.filter((p) => p.id !== id),
-        }));
-        showToast('Rencana berhasil dihapus.', 'info');
+        setState((prev) => {
+          let updatedWallets = [...prev.wallets];
+          if (plan.actualAmount > 0 && plan.walletId) {
+            updatedWallets = updatedWallets.map((w) => {
+              if (w.id === plan.walletId) {
+                const revertAmount = plan.group === 'income' ? -plan.actualAmount : plan.actualAmount;
+                return { ...w, balance: w.balance + revertAmount };
+              }
+              return w;
+            });
+          }
+
+          return {
+            ...prev,
+            wallets: updatedWallets,
+            plans: prev.plans.filter((p) => p.id !== id),
+            transactions: plan.transactionId
+              ? prev.transactions.filter((t) => t.id !== plan.transactionId)
+              : prev.transactions,
+          };
+        });
+        showToast('Rencana berhasil dihapus & saldo dipulihkan.', 'info');
       },
     });
   };
@@ -1026,6 +1157,7 @@ export const App: React.FC = () => {
         editItem={editingPlan}
         defaultGroup={defaultPlanGroup}
         month={state.selectedMonth || getCurrentMonthString()}
+        wallets={state.wallets}
       />
 
       <DailyExpenseModal

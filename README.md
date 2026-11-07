@@ -2,7 +2,7 @@
   <img src="public/pwa-192x192.png" width="96" height="96" alt="Logo Duit Gua" style="border-radius: 20px;" />
 </p>
 
-<h1 align="center">Duit Gua (v1.1.0)</h1>
+<h1 align="center">Duit Gua (v1.2.0)</h1>
 
 <p align="center">
   <strong>Aplikasi Pengelola Keuangan Pribadi Mobile-First</strong><br />

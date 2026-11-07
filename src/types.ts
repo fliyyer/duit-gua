@@ -53,6 +53,8 @@ export interface FinancialPlanItem {
   priority: PlanPriority;
   plannedAmount: number; // Rencana (Rp)
   actualAmount: number; // Realisasi / Aktual (Rp)
+  walletId?: string; // Dompet sumber/tujuan terkait
+  transactionId?: string; // ID transaksi yang tersinkronisasi
   isAutoCalculated?: boolean; // True jika dihitung otomatis dari tracker harian
 }
 

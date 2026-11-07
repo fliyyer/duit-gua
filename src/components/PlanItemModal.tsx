@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FinancialPlanItem, IncomeCategoryType, PlanGroupType, PlanPriority } from '../types';
+import { FinancialPlanItem, IncomeCategoryType, PlanGroupType, PlanPriority, Wallet } from '../types';
 import { Icon } from './Icon';
 import { formatRupiah, parseNumberInput } from '../utils/currency';
 import {
@@ -10,6 +10,13 @@ import {
 } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
 
 interface PlanItemModalProps {
   isOpen: boolean;
@@ -18,6 +25,7 @@ interface PlanItemModalProps {
   editItem?: FinancialPlanItem | null;
   defaultGroup?: PlanGroupType;
   month: string;
+  wallets: Wallet[];
 }
 
 export const PlanItemModal: React.FC<PlanItemModalProps> = ({
@@ -27,11 +35,13 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
   editItem,
   defaultGroup = 'fixed_cost',
   month,
+  wallets,
 }) => {
   const [group, setGroup] = useState<PlanGroupType>(defaultGroup);
   const [title, setTitle] = useState('');
   const [incomeType, setIncomeType] = useState<IncomeCategoryType>('Utama');
   const [priority, setPriority] = useState<PlanPriority>('High');
+  const [walletId, setWalletId] = useState<string>('');
   const [rawPlanned, setRawPlanned] = useState('');
   const [rawActual, setRawActual] = useState('');
   const [error, setError] = useState('');
@@ -43,6 +53,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
       setTitle(editItem.title);
       setIncomeType(editItem.incomeType || 'Utama');
       setPriority(editItem.priority);
+      setWalletId(editItem.walletId || wallets[0]?.id || '');
       setRawPlanned(editItem.plannedAmount > 0 ? editItem.plannedAmount.toString() : '');
       setRawActual(editItem.actualAmount > 0 ? editItem.actualAmount.toString() : '');
     } else {
@@ -50,11 +61,12 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
       setTitle('');
       setIncomeType('Utama');
       setPriority('High');
+      setWalletId(wallets[0]?.id || '');
       setRawPlanned('');
       setRawActual('');
     }
     setError('');
-  }, [isOpen, editItem, defaultGroup]);
+  }, [isOpen, editItem, defaultGroup, wallets]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +87,7 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
         priority,
         plannedAmount: planned,
         actualAmount: actual,
+        walletId: walletId || undefined,
       },
       editItem?.id
     );
@@ -262,6 +275,32 @@ export const PlanItemModal: React.FC<PlanItemModalProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Dompet Terkait */}
+          {wallets.length > 0 && (
+            <div>
+              <label htmlFor="plan-wallet" className="block text-xs font-bold text-foreground mb-1.5">
+                {group === 'income' ? 'Dompet Tujuan' : 'Dompet Sumber'}
+              </label>
+              <Select value={walletId} onValueChange={setWalletId}>
+                <SelectTrigger id="plan-wallet">
+                  <SelectValue placeholder="Pilih dompet" />
+                </SelectTrigger>
+                <SelectContent>
+                  {wallets.map((w) => (
+                    <SelectItem key={w.id} value={w.id}>
+                      {w.name} ({formatRupiah(w.balance)})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="text-[10px] text-muted-foreground mt-1 block">
+                {group === 'income'
+                  ? 'Saldo dompet ini akan bertambah otomatis saat realisasi diisi.'
+                  : 'Saldo dompet ini akan dipotong otomatis saat realisasi diisi.'}
+              </span>
+            </div>
+          )}
 
           <div className="pt-2 flex gap-2">
             <Button
