@@ -160,7 +160,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </Button>
                 </div>
 
-                {!user.isGuest && onManualSync && (
+                {user.isGuest ? (
+                  <div className="pt-2 border-t border-border/60">
+                    <p className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold leading-relaxed">
+                      💡 Mode Tamu hanya tersimpan di browser ini. Masuk dengan Google atau Email agar data otomatis tersinkron saat berpindah browser & perangkat.
+                    </p>
+                  </div>
+                ) : onManualSync ? (
                   <div className="pt-2 border-t border-border/60 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                       <span className={`w-2 h-2 rounded-full ${
@@ -178,7 +184,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <span>Cadangkan Sekarang</span>
                     </button>
                   </div>
-                )}
+                ) : null}
               </div>
             </div>
           )}
@@ -327,7 +333,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Info App */}
           <div className="pt-1 text-center text-[11px] text-muted-foreground">
-            <p className="font-semibold text-foreground">Duit Gua • v1.2.1</p>
+            <p className="font-semibold text-foreground">Duit Gua • v1.2.2</p>
             <p>Aplikasi Pengelola Keuangan Pribadi Mobile First</p>
           </div>
         </div>

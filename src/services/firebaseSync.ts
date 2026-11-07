@@ -1,7 +1,15 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { ref, get, set } from 'firebase/database';
 import { firestoreDb, realtimeDb } from '../lib/firebase';
 import { AppState } from '../types';
+
+/**
+ * Deep-clean undefined fields before saving to Firebase.
+ * Firestore throws an error if any property in an object is `undefined`.
+ */
+export const sanitizeForCloud = <T>(obj: T): T => {
+  return JSON.parse(JSON.stringify(obj));
+};
 
 /**
  * Fetch financial state for a given user from Firebase Cloud (Firestore or Realtime Database)
@@ -20,8 +28,8 @@ export const fetchUserFinancialState = async (uid: string): Promise<AppState | n
           return data.state as AppState;
         }
       }
-    } catch (_err) {
-      // Quiet fallback to Realtime Database
+    } catch (err) {
+      console.warn('Firestore fetch failed, checking fallback...', err);
     }
   }
 
@@ -42,11 +50,51 @@ export const fetchUserFinancialState = async (uid: string): Promise<AppState | n
 };
 
 /**
+ * Listen to real-time changes from Firestore for instant cross-device/browser synchronization
+ */
+export const subscribeUserFinancialState = (
+  uid: string,
+  onUpdate: (state: AppState) => void,
+  onError?: (err: any) => void
+): (() => void) => {
+  if (!uid || uid === 'guest_user' || !firestoreDb) {
+    return () => {};
+  }
+
+  try {
+    const userDocRef = doc(firestoreDb, 'users', uid);
+    return onSnapshot(
+      userDocRef,
+      (snapshot) => {
+        // Skip local pending writes to avoid feedback loops
+        if (snapshot.metadata.hasPendingWrites) {
+          return;
+        }
+        if (snapshot.exists()) {
+          const data = snapshot.data();
+          if (data && data.state) {
+            onUpdate(data.state as AppState);
+          }
+        }
+      },
+      (err) => {
+        console.warn('Real-time sync subscription error:', err);
+        if (onError) onError(err);
+      }
+    );
+  } catch (err) {
+    console.error('Failed to attach real-time listener:', err);
+    return () => {};
+  }
+};
+
+/**
  * Save financial state for a given user to Firebase Cloud
  */
 export const saveUserFinancialState = async (uid: string, state: AppState): Promise<boolean> => {
   if (!uid || uid === 'guest_user') return false;
 
+  const sanitized = sanitizeForCloud(state);
   let saved = false;
 
   // 1. Try Firestore
@@ -54,23 +102,29 @@ export const saveUserFinancialState = async (uid: string, state: AppState): Prom
     try {
       const userDocRef = doc(firestoreDb, 'users', uid);
       await setDoc(userDocRef, {
-        state,
+        state: sanitized,
         updatedAt: new Date().toISOString(),
       }, { merge: true });
       saved = true;
-    } catch (_err) {
-      // Fallback to Realtime DB
+    } catch (err) {
+      console.error('Firestore save error:', err);
     }
   }
 
-  // 2. Try Realtime Database
-  if (realtimeDb) {
+  // 2. Try Realtime Database (with timeout guard)
+  if (!saved && realtimeDb) {
     try {
       const dbRef = ref(realtimeDb, `users/${uid}/state`);
-      await set(dbRef, {
-        ...state,
-        _updatedAt: new Date().toISOString(),
-      });
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('RTDB timeout')), 3000)
+      );
+      await Promise.race([
+        set(dbRef, {
+          ...sanitized,
+          _updatedAt: new Date().toISOString(),
+        }),
+        timeoutPromise,
+      ]);
       saved = true;
     } catch (_err) {
       // Ignored
@@ -79,3 +133,4 @@ export const saveUserFinancialState = async (uid: string, state: AppState): Prom
 
   return saved;
 };
+

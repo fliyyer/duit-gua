@@ -35,7 +35,7 @@ import { getCurrentMonthString } from './utils/currency';
 import { useAuth } from './context/AuthContext';
 import { AuthView } from './views/AuthView';
 import { Icon } from './components/Icon';
-import { fetchUserFinancialState, saveUserFinancialState } from './services/firebaseSync';
+import { fetchUserFinancialState, saveUserFinancialState, subscribeUserFinancialState } from './services/firebaseSync';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 
 export const App: React.FC = () => {
@@ -93,10 +93,12 @@ export const App: React.FC = () => {
   const isHydratedRef = useRef(false);
   const lastSavedStateRef = useRef<AppState | null>(null);
 
-  // Initial cloud hydration once when user logs in
+  // Initial cloud hydration and real-time subscription across browsers
   useEffect(() => {
     if (user && !user.isGuest) {
       let isCancelled = false;
+
+      // 1. Initial fetch from cloud
       fetchUserFinancialState(user.uid)
         .then((cloudData) => {
           if (isCancelled) return;
@@ -115,14 +117,28 @@ export const App: React.FC = () => {
               saveUserFinancialState(user.uid, cleanState).catch(() => {});
             } else {
               setState(cloudData);
+              saveState(cloudData);
               lastSavedStateRef.current = cloudData;
             }
           } else {
-            // New user on cloud: seed with clean empty state
-            const cleanState = clearAllData();
-            setState(cleanState);
-            lastSavedStateRef.current = cleanState;
-            saveUserFinancialState(user.uid, cleanState).catch(() => {});
+            // New cloud user: check if user has existing local data before wiping
+            setState((currentState) => {
+              const hasExistingData =
+                currentState.transactions.length > 0 ||
+                currentState.dailyExpenses.length > 0 ||
+                currentState.jajanItems.length > 0;
+
+              if (hasExistingData) {
+                lastSavedStateRef.current = currentState;
+                saveUserFinancialState(user.uid, currentState).catch(() => {});
+                return currentState;
+              } else {
+                const cleanState = clearAllData();
+                lastSavedStateRef.current = cleanState;
+                saveUserFinancialState(user.uid, cleanState).catch(() => {});
+                return cleanState;
+              }
+            });
           }
           isHydratedRef.current = true;
           setSyncStatus('synced');
@@ -133,14 +149,29 @@ export const App: React.FC = () => {
             setSyncStatus('idle');
           }
         });
+
+      // 2. Real-time subscription so changes made in another browser instantly sync
+      const unsubscribe = subscribeUserFinancialState(user.uid, (incomingState) => {
+        if (isCancelled) return;
+        const currentSavedStr = JSON.stringify(lastSavedStateRef.current);
+        const incomingStr = JSON.stringify(incomingState);
+        if (currentSavedStr !== incomingStr) {
+          lastSavedStateRef.current = incomingState;
+          setState(incomingState);
+          saveState(incomingState);
+          setSyncStatus('synced');
+        }
+      });
+
       return () => {
         isCancelled = true;
+        unsubscribe();
       };
     } else {
       isHydratedRef.current = true;
       setSyncStatus('idle');
     }
-  }, [user?.uid]);
+  }, [user?.uid, user?.isGuest]);
 
   // Sync to Firebase Cloud ONLY when financial data actually changes (add/edit/delete/transfer)
   useEffect(() => {
