@@ -376,12 +376,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         <div className="flex items-center gap-2 shrink-0">
                           <div className="text-right">
                             <p
-                              className={`text-xs font-bold tabular-nums ${
+                              className={`text-xs font-extrabold tabular-nums ${
                                 isIncome
                                   ? 'text-emerald-600 dark:text-emerald-400'
                                   : isTransfer
                                   ? 'text-sky-600 dark:text-sky-400'
-                                  : 'text-foreground'
+                                  : 'text-rose-600 dark:text-rose-400'
                               }`}
                             >
                               {isIncome ? '+' : isTransfer ? '' : '-'}
